@@ -1,0 +1,34 @@
+{
+  "name": "gamelan-editor",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "client": "cd client && npm start",
+    "knex": "knex",
+    "resetdb": "knex migrate:rollback; knex migrate:latest; knex seed:run",
+    "server": "nodemon server.js --ignore client/",
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Michael Park <thatmichaelpark@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt-as-promised": "^1.1.0",
+    "body-parser": "^1.17.2",
+    "boom": "^5.1.0",
+    "concurrently": "^3.4.0",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.15.3",
+    "express-validation": "^1.0.2",
+    "humps": "^2.0.0",
+    "jsonwebtoken": "^7.4.1",
+    "knex": "^0.13.0",
+    "morgan": "^1.8.2",
+    "pg": "^6.2.3"
+  },
+  "devDependencies": {
+    "dotenv": "^4.0.0"
+  }
+}
