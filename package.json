@@ -26,7 +26,8 @@
     "jsonwebtoken": "^7.4.1",
     "knex": "^0.13.0",
     "morgan": "^1.8.2",
-    "pg": "^6.2.3"
+    "pg": "^6.2.3",
+    "react-router": "^4.1.1"
   },
   "devDependencies": {
     "dotenv": "^4.0.0"

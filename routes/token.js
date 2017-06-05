@@ -30,34 +30,40 @@ router.post('/token', (req, res, next) => {
             expiresIn: '3h'
         });
 
-        res.cookie('budgieAccessToken', token, {
+        res.cookie('gamelanAccessToken', token, {
             httpOnly: true,
             expires: expiry,
             secure: router.get('env') === 'production'
         });
 
-        res.cookie('budgieLoggedIn', true, {
+        res.cookie('gamelanLoggedIn', true, {
             expires: expiry,
             secure: router.get('env') === 'production'
         });
 
-        res.cookie('budgieName', user.name, {
+        res.cookie('gamelanName', user.name, {
             expires: expiry,
             secure: router.get('env') === 'production'
         });
 
-        res.send({name: user.name});
-    // }).catch(bcrypt.MISMATCH_ERROR, () => {
-    //     throw boom.create(401, 'User could not be logged in');
+        res.cookie('gamelanUsername', user.username, {
+            expires: expiry,
+            secure: router.get('env') === 'production'
+        });
+
+        res.send({name: user.name, username: user.username});
+    }).catch(bcrypt.MISMATCH_ERROR, () => {
+        throw boom.create(401, 'User could not be logged in');
     }).catch((err) => {
         next(err);
     });
 });
 
 router.delete('/token', (req, res) => {
-    res.clearCookie('budgieAccessToken');
-    res.clearCookie('budgieLoggedIn');
-    res.clearCookie('budgieName');
+    res.clearCookie('gamelanAccessToken');
+    res.clearCookie('gamelanLoggedIn');
+    res.clearCookie('gamelanName');
+    res.clearCookie('gamelanUsername');
 
     res.sendStatus(200);
 });

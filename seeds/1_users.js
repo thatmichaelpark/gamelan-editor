@@ -5,6 +5,12 @@ exports.seed = function(knex) {
         return knex('users').insert([
             {
                 id: 1,
+                username: 'admin',
+                name: 'Administrator',
+                hashed_password: '$2a$12$YD2KiWMqD/qWiFQjjFbPdeDxiE71SW8YCTfk6l16jvlStEFOP3pRu'
+            },
+            {
+                id: 2,
                 username: 'test',
                 name: 'Testy McTestface',
                 hashed_password: '$2a$12$.MOSyQV85SWJrkyGTpRpGesPP6K4vt4mQspGuJvi5rK0THBFZF/y2'
