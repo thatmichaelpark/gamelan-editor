@@ -5,6 +5,7 @@ exports.up = function(knex) {
         table.increments();
         table.string('username').notNullable().defaultTo('');
         table.string('name').notNullable().defaultTo('');
+        table.bool('is_admin').notNullable();
         table.specificType('hashed_password', 'char(60)').notNullable().defaultTo('');
         table.timestamps(true, true);
     });

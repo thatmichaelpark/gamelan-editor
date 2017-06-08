@@ -25,7 +25,8 @@ router.post('/token', (req, res, next) => {
         const expiry = new Date(Date.now() + 1000 * 60 * 60 * 3); // 3 hrs
         const token = jwt.sign({
             username: req.body.username,
-            userId: user.id
+            userId: user.id,
+            isAdmin: user.isAdmin
         }, process.env.JWT_SECRET, {
             expiresIn: '3h'
         });
@@ -36,7 +37,7 @@ router.post('/token', (req, res, next) => {
             secure: router.get('env') === 'production'
         });
 
-        res.cookie('gamelanLoggedIn', true, {
+        res.cookie('gamelanIsAdmin', user.isAdmin, {
             expires: expiry,
             secure: router.get('env') === 'production'
         });
@@ -51,7 +52,7 @@ router.post('/token', (req, res, next) => {
             secure: router.get('env') === 'production'
         });
 
-        res.send({name: user.name, username: user.username});
+        res.send({name: user.name, username: user.username, isAdmin: user.isAdmin});
     }).catch(bcrypt.MISMATCH_ERROR, () => {
         throw boom.create(401, 'User could not be logged in');
     }).catch((err) => {
@@ -61,7 +62,7 @@ router.post('/token', (req, res, next) => {
 
 router.delete('/token', (req, res) => {
     res.clearCookie('gamelanAccessToken');
-    res.clearCookie('gamelanLoggedIn');
+    res.clearCookie('gamelanIsAdmin');
     res.clearCookie('gamelanName');
     res.clearCookie('gamelanUsername');
 

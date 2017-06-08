@@ -41,9 +41,11 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 const users = require('./routes/users');
+const pieces = require('./routes/pieces');
 const token = require('./routes/token');
 
 app.use('/api', users);
+app.use('/api', pieces);
 app.use('/api', token);
 
 app.use((_req, res) => {

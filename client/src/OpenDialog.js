@@ -5,29 +5,30 @@ class OpenDialog extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            title: '',
-            titles: []
+            selectedPieceId: '',
+            pieces: []
         }
     }
     componentWillReceiveProps(nextProps) {
         if (!this.props.isVisible && nextProps.isVisible) {
-            const titles = piecesStore.pieces
-                .map(piece => piece.title)
-                .sort((a, b) => a < b ? -1 : a > b ? 1 : 0);
-            this.setState({
-                titles,
-                title: titles[0] || ''
+            piecesStore.getPieces()
+            .then(pieces => {
+                pieces.sort((a, b) => a.piece.title < b.piece.title ? -1 : a.piece.title > b.piece.title ? 1 : 0);
+                this.setState({
+                    pieces,
+                    selectedPieceId: pieces[0] ? pieces[0].id : null
+                });
             });
         }
     }
     handleChange = (e) => {
         this.setState({
-            title: e.target.value
+            selectedPieceId: e.target.value
         });
     }
     handleClick = (e) => {
         if (e.target.name === 'open') {
-            this.props.onOpen(this.state.title);
+            this.props.onOpen(Number(this.state.selectedPieceId));
         }
         else {
             this.props.onOpen(null);
@@ -38,9 +39,9 @@ class OpenDialog extends React.Component {
             <div className="dialogparent">
                 <div className="dialog">
                     <h1>Open</h1>
-                    <select onChange={this.handleChange} value={this.state.title}>
-                        {this.state.titles.map((title, i) =>
-                            <option key={i} value={title}>{title}</option>
+                    <select onChange={this.handleChange} value={this.state.selectedPieceId}>
+                        {this.state.pieces.map((piece, i) =>
+                            <option key={i} value={piece.id}>{piece.piece.title}</option>
                         )}
                     </select>
                     <button onClick={this.handleClick} name="open">Open</button>

@@ -1,5 +1,7 @@
 import { observable } from 'mobx';
 import gamelansStore from './gamelansStore';
+import axios from 'axios';
+import Boo from '../Boo';
 
 class Part {
     @observable instrument;
@@ -45,14 +47,9 @@ class Piece {
 }
 
 class PiecesStore {
-    @observable pieces;
     @observable currentPiece;
+
     constructor() {
-        this.pieces = [
-            new Piece('Ricik Ricik', 'slendro', [], []),
-            new Piece('Udan Mas', 'pelog', [], []),
-            new Piece('Something Something', 'slendro', [], [])
-        ];
         this.currentPiece = new Piece(
             '',
             'slendro',
@@ -91,17 +88,38 @@ class PiecesStore {
                     name: 'phrase B',
                     length: 8
                 }
-            ]);
+            ]
+        );
     }
     new(title, scale) {
         this.currentPiece = new Piece(title, scale, [], []);
     }
+    getPieces() {
+        return axios.get('/api/pieces')
+        .then(res => {
+            const pieces = res.data;
+            return pieces;
+        })
+        .catch(Boo.boo);
+    }
     save(title) {
         this.currentPiece.title = title;
-        this.pieces.push(this.currentPiece);
+        axios.post('/api/pieces', {
+            piece: this.currentPiece
+        })
+        .then(result => {
+            console.log('save:', result.data.id);
+            this.currentPiece.userId = result.data.id;
+        })
+        .catch(Boo.boo);
     }
-    open(title) {
-        this.currentPiece = this.pieces.find(piece => piece.title === title);
+    open(id) {
+        axios.get(`/api/pieces/${id}`)
+        .then(result => {
+            console.log('result', result);
+            this.currentPiece = result.data.piece;;;
+        })
+        .catch(Boo.boo);
     }
 }
 

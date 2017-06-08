@@ -6,22 +6,22 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt-as-promised');
 const knex = require('../knex');
-const {decamelizeKeys} = require('humps');
+const { camelizeKeys, decamelizeKeys } = require('humps');
 const boom = require('boom');
 const ev = require('express-validation');
 const validations = require('../validations/users');
 const {checkAuth} = require('./checkAuth');
 
 router.get('/users', (req, res, next) => {
-    knex('users').select('username', 'name', 'id').then((users) => {
-        res.send(users);
+    knex('users').select('username', 'name', 'id', 'is_admin').then((users) => {
+        res.send(camelizeKeys(users));
     }).catch((err) => {
         next(err);
     });
 });
 
 router.get('/users/:id', (req, res, next) => {
-    knex('users').select('username', 'name', 'id').where('id', req.params.id).then((users) => {
+    knex('users').select('username', 'name', 'id', 'is_admin').where('id', req.params.id).then((users) => {
         res.send(users[0]);
     }).catch((err) => {
         next(err);

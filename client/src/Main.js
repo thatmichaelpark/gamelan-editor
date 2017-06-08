@@ -11,7 +11,7 @@ import piecesStore from './stores/piecesStore';
 import Part from './Part';
 import DropdownMenu from './DropdownMenu';
 import displayStuff from './stores/displayStuff';
-import Boo from './Boo';
+// import Boo from './Boo';
 import account from './stores/accountStore';
 
 import { observer } from 'mobx-react';
@@ -47,12 +47,12 @@ class Main extends React.Component {
             [e.target.name]: e.target.value
         });
     }
-    handleOpen = (title) => {
+    handleOpen = (id) => {
         this.setState({
             openDialogIsVisible: false
         });
-        if (title) {
-            piecesStore.open(title);
+        if (id) {
+            piecesStore.open(id);
         }
     }
     handleSave = (title) => {
@@ -232,13 +232,13 @@ class Main extends React.Component {
                             Log In
                         </div>
                     )}
-                    {account.username === 'admin' && (
+                    {account.isAdmin && (
                         <div className="dropdowntitle">
                             <Link to="/admin">Admin</Link>
                         </div>
                     )}
                 </div>
-                <h1>{piece.title || 'Untitled'} ({piece.scale}) {displayStuff.numParts}</h1>
+                <h1>{piece.title || 'Untitled'} ({piece.scale})</h1>
                 <div
                     style={{
                         width: '50%',
