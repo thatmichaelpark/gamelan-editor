@@ -1,116 +1,53 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="utf-8">
-    <title>test</title>
-    <style>
-    #parent {
-        border: 2px solid green;
-        width: 300px;
-    }
-    .part {
-        border: 2px solid lime;
-        display: flex;
-        flex-wrap: nowrap;
-    }
-    .left {
-        background: yellow;
-        width: 100px;
-        flex-shrink: 0;
-        /*position: absolute;*/
-    }
-    .right {
-        background: red;
-        /*position: absolute;*/
-        /*left: 150px;
-        right: 0;*/
-        overflow: hidden;
-    }
-    .phrase {
-
-    }
-    .name {
-        background: pink;
-    }
-    .notes {
-        overflow: scroll;
-        display: flex;
-    }
-    .note {
-        flex-shrink: 0;
-        background: blue;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    </style>
-</head>
-
-<body>
-    <div id="parent">
-        <div class="part">
-            <div class="left">
-                Saron
-            </div>
-            <div class="right">
-                <div class="phrase">
-                    <div class="name">
-                            
-                    </div>
-                    <div class="notes">
-                        <div class="note">A</div>
-                        <div class="note">B</div>
-                        <div class="note">C</div>
-                    </div>
-                </div>
-                <div class="phrase">
-                    <div class="name">
-                        Second
-                    </div>
-                    <div class="notes">
-                        <div class="note">A</div>
-                        <div class="note">B</div>
-                        <div class="note">C</div>
-                        <div class="note">D</div>
-                        <div class="note">E</div>
-                    </div>
+    <head>
+        <meta charset="utf-8">
+        <title>key test</title>
+        <style>
+            #body {
+                background: aliceblue;
+                padding: 20px 0;
+                left: 0;
+                right: 0;
+                width: 100%;
+                position: absolute;
+            }
+            #big {
+                background: lightgreen;
+                padding: 20px 0;
+            }
+            #smol {
+                background: yellow;
+                padding: 20px 0;
+            }
+            #smol:focus {
+                /*background: red;
+                outline: none;*/
+            }
+            #body:focus #smol {
+                background: black;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="body" tabindex="1">
+            <div id="big" tabindex="2">
+                <div id="smol" tabindex="3">
                 </div>
             </div>
         </div>
-        <div class="part">
-            <div class="left">
-                Bonang barung
-            </div>
-            <div class="right">
-                <div class="phrase">
-                    <div class="name">
-                        First
-                    </div>
-                    <div class="notes">
-                        <div class="note">A</div>
-                        <div class="note">B</div>
-                        <div class="note">C</div>
-                    </div>
-                </div>
-                <div class="phrase">
-                    <div class="name">
-                        Second
-                    </div>
-                    <div class="notes">
-                        <div class="note">A</div>
-                        <div class="note">B</div>
-                        <div class="note">C</div>
-                        <div class="note">D</div>
-                        <div class="note">E</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</body>
 
+        <script>
+'use strict';
+
+console.log('testing');
+document.querySelector('#smol').addEventListener('click', e => console.log('smol click'));
+document.querySelector('#big').addEventListener('click', e => console.log('big click'));
+document.querySelector('#body').addEventListener('click', e => console.log('body click'));
+document.querySelector('#smol').addEventListener('keydown', e => console.log('smol', e.code));
+document.querySelector('#big').addEventListener('keydown', e => console.log('big', e.code));
+document.querySelector('#body').addEventListener('keydown', e => console.log('body', e.code));
+
+        </script>
+    </body>
 </html>

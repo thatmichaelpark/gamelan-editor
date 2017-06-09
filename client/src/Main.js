@@ -29,14 +29,6 @@ class Main extends React.Component {
             loginDialogIsVisible: false
         }
     }
-    componentDidMount() {
-        window.addEventListener('keypress', this.handleKeyPress);
-        window.addEventListener('keydown', this.handleKeyDown);
-    }
-    componentWillUnmount() {
-        window.removeEventListener('keypress', this.handleKeyPress);
-        window.removeEventListener('keydown', this.handleKeyDown);
-    }
     handleClick = (e) => {
         this.setState({
             [`${e.target.name}DialogIsVisible`]: true
@@ -99,42 +91,6 @@ class Main extends React.Component {
         this.setState({
             loginDialogIsVisible: false
         });
-    }
-    handleKeyDown = (e) => {
-        if (e.code.startsWith('Arrow')) {
-            displayStuff.handleArrow(e.code);
-            e.preventDefault();
-        }
-    }
-    handleKeyPress = (e) => {
-        let key;
-        if (e.code.startsWith('Key')) {
-            key = e.code.substring(3);
-            if (!e.shiftKey) {
-                key = key.toLowerCase();
-            }
-        }
-        else if (e.code.startsWith('Digit')) {
-            key = e.code.substring(5);
-            if (e.shiftKey) {
-                key += '\u0307';
-            }
-            if (e.ctrlKey) {
-                key += '\u0323';
-            }
-        }
-        else if (e.code === 'Space') {
-            key = ' ';
-        }
-        else if (e.code === 'Period') {
-            key = '·';
-        }
-        if (key) {
-            const success = piecesStore.currentPiece.setNote(key, displayStuff.selectedPartIndex, displayStuff.selectedPhraseIndex, displayStuff.selectedNoteIndex);
-            if (success) {
-                displayStuff.handleArrow('ArrowRight');
-            }
-        }
     }
     render() {
         const piece = piecesStore.currentPiece;

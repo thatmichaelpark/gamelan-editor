@@ -106,6 +106,7 @@ h1 {
 	font-family: monospace;
 	margin-bottom: 5px;
 	overflow: scroll;
+	padding: 5px;
 }
 
 .note {
@@ -115,10 +116,6 @@ h1 {
 	height: 28px;
 	justify-content: center;
 	width: 14px;
-}
-
-.note.selected {
-	border: 1px solid red;
 }
 
 .note.active {

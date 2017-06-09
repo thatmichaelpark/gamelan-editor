@@ -33,6 +33,47 @@ class Note extends React.Component {
         document.removeEventListener('click', this.hideMenu);
         document.removeEventListener('contextmenu', this.hideMenu);
     }
+    handleKeyDown = (e) => {
+        const code = e.nativeEvent.code;
+
+        if (code.startsWith('Arrow')) {
+            displayStuff.handleArrow(code);
+            e.preventDefault();
+        }
+    }
+    handleKeyPress = (e) => {
+        let key;
+        const code = e.nativeEvent.code;
+
+        if (code.startsWith('Key')) {
+            key = code.substring(3);
+            if (!e.shiftKey) {
+                key = key.toLowerCase();
+            }
+        }
+        else if (code.startsWith('Digit')) {
+            key = code.substring(5);
+            if (e.shiftKey) {
+                key += '\u0307';
+            }
+            if (e.ctrlKey) {
+                key += '\u0323';
+            }
+        }
+        else if (code === 'Space') {
+            key = ' ';
+        }
+        else if (code === 'Period') {
+            key = '·';
+        }
+        if (key) {
+            displayStuff.setSelected(this.props.partIndex, this.props.phraseIndex, this.props.noteIndex);
+            const success = piecesStore.currentPiece.setNote(key, this.props.partIndex, this.props.phraseIndex, this.props.noteIndex);
+            if (success) {
+                displayStuff.handleArrow('ArrowRight');
+            }
+        }
+    }
     render() {
         const gamut = [' ', '·'].concat(gamelansStore.gamut(piecesStore.currentPiece.scale, this.props.part.instrument));
         const selected = this.props.partIndex === displayStuff.selectedPartIndex &&
@@ -40,7 +81,8 @@ class Note extends React.Component {
                          this.props.noteIndex === displayStuff.selectedNoteIndex;
         const setNote = (e, x) => {
             e.preventDefault();
-            piecesStore.currentPiece.setNote(x, displayStuff.selectedPartIndex, displayStuff.selectedPhraseIndex, displayStuff.selectedNoteIndex);
+            displayStuff.setSelected(this.props.partIndex, this.props.phraseIndex, this.props.noteIndex);
+            piecesStore.currentPiece.setNote(x, this.props.partIndex, this.props.phraseIndex, this.props.noteIndex);
             this.setState({
                 menuIsVisible: false
             });
@@ -49,9 +91,17 @@ class Note extends React.Component {
         return (
             <div>
                 <div
-                    className={`note ${this.state.menuIsVisible ? 'active' : ''} ${selected ? 'selected' : ''}`}
+                    className={`note ${this.state.menuIsVisible ? 'active' : ''}`}
                     onClick={this.handleClick}
                     onContextMenu={this.handleContextMenu}
+                    tabIndex={1}
+                    ref={x => {
+                        if (x && selected) {
+                            x.focus();
+                        }
+                    }}
+                    onKeyDown={this.handleKeyDown}
+                    onKeyPress={this.handleKeyPress}
                 >
                     {this.props.note}
                 </div>
