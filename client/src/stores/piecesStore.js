@@ -17,6 +17,9 @@ class Piece {
     @observable scale;
     @observable parts;
     @observable phraseInfos;
+    @observable id;
+    @observable userId;
+
     constructor(title, scale, parts, phraseInfos) {
         this.title = title;
         this.scale = scale;
@@ -108,8 +111,9 @@ class PiecesStore {
             piece: this.currentPiece
         })
         .then(result => {
-            console.log('save:', result.data.id);
-            this.currentPiece.userId = result.data.id;
+            console.log('save:', result.data.id, result.data.userId);
+            this.currentPiece.id = result.data.id;
+            this.currentPiece.userId = result.data.userId;
         })
         .catch(Boo.boo);
     }
@@ -117,7 +121,12 @@ class PiecesStore {
         axios.get(`/api/pieces/${id}`)
         .then(result => {
             console.log('result', result);
-            this.currentPiece = result.data.piece;;;
+            this.currentPiece.title = result.data.title;
+            this.currentPiece.scale = result.data.scale;
+            this.currentPiece.parts = result.data.parts;
+            this.currentPiece.phraseInfos = result.data.phraseInfos;
+            this.currentPiece.id = result.data.id;
+            this.currentPiece.userId = result.data.userId;
         })
         .catch(Boo.boo);
     }

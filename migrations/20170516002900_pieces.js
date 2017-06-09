@@ -3,7 +3,10 @@
 exports.up = function(knex) {
     return knex.schema.createTable('pieces', (table) => {
         table.increments();
-        table.string('piece', 10000).notNullable().defaultTo('');
+        table.string('title').notNullable();
+        table.string('scale').notNullable();
+        table.string('parts', 10000).notNullable();
+        table.string('phrase_infos', 10000).notNullable();
         table.integer('user_id')
           .notNullable()
           .references('id')

@@ -12,10 +12,13 @@ const boom = require('boom');
 const {checkAuth} = require('./checkAuth');
 
 router.get('/pieces', (req, res, next) => {
-    knex('pieces').select('id', 'piece', 'user_id')
+    knex('pieces').select('id', 'title', 'scale', 'parts', 'phrase_infos', 'user_id')
     .then((results) => {
         results.forEach(result => {
-            result.piece = JSON.parse(result.piece);
+            result.title = result.title;
+            result.scale = result.scale;
+            result.parts = JSON.parse(result.parts);
+            result.phrase_infos = JSON.parse(result.phrase_infos);
         });
         res.send(camelizeKeys(results));
     }).catch((err) => {
@@ -24,9 +27,12 @@ router.get('/pieces', (req, res, next) => {
 });
 
 router.get('/pieces/:id', (req, res, next) => {
-    knex('pieces').select('id', 'piece', 'user_id').where('id', req.params.id).first()
+    knex('pieces').select('id', 'title', 'scale', 'parts', 'phrase_infos', 'user_id').where('id', req.params.id).first()
     .then((result) => {
-        result.piece = JSON.parse(result.piece);
+        result.title = result.title;
+        result.scale = result.scale;
+        result.parts = JSON.parse(result.parts);
+        result.phrase_infos = JSON.parse(result.phrase_infos);
         res.send(camelizeKeys(result));
     }).catch((err) => {
         next(err);
@@ -34,12 +40,15 @@ router.get('/pieces/:id', (req, res, next) => {
 });
 
 router.post('/pieces', checkAuth, (req, res, next) => {
-    const piece = JSON.stringify(req.body.piece);
+    const title = req.body.piece.title;
+    const scale = req.body.piece.scale;
+    const parts = JSON.stringify(req.body.piece.parts);
+    const phraseInfos = JSON.stringify(req.body.piece.phraseInfos);
     const userId = req.token.userId;
 
-    knex('pieces').insert(decamelizeKeys({piece, userId}), '*')
+    knex('pieces').insert(decamelizeKeys({title, scale, parts, phraseInfos, userId}), '*')
     .then((result) => {
-        res.send({id: result[0].id});
+        res.send({id: result[0].id, userId: result[0].user_id});
     }).catch((err) => {
         next(err);
     });
@@ -56,7 +65,10 @@ router.patch('/pieces/:id', checkAuth, (req, res, next) => {
             return next(boom.create(401, 'Not allowed to modify this piece'));
         }
         return knex('pieces').update({
-            piece: req.body.piece
+            title: req.body.piece.title,
+            scale: req.body.piece.scale,
+            parts: JSON.stringify(req.body.piece.parts),
+            phraseInfos: JSON.stringify(req.body.piece.phraseInfos)
         }, ['id']).where('id', req.params.id);
     })
     .then((ids) => {
