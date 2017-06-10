@@ -72,6 +72,7 @@ class Note extends React.Component {
             if (success) {
                 displayStuff.handleArrow('ArrowRight');
             }
+            e.preventDefault();
         }
     }
     render() {

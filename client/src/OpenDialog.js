@@ -13,7 +13,7 @@ class OpenDialog extends React.Component {
         if (!this.props.isVisible && nextProps.isVisible) {
             piecesStore.getPieces()
             .then(pieces => {
-                pieces.sort((a, b) => a.piece.title < b.piece.title ? -1 : a.piece.title > b.piece.title ? 1 : 0);
+                pieces.sort((a, b) => a.title < b.title ? -1 : a.title > b.title ? 1 : 0);
                 this.setState({
                     pieces,
                     selectedPieceId: pieces[0] ? pieces[0].id : null
@@ -41,7 +41,7 @@ class OpenDialog extends React.Component {
                     <h1>Open</h1>
                     <select onChange={this.handleChange} value={this.state.selectedPieceId}>
                         {this.state.pieces.map((piece, i) =>
-                            <option key={i} value={piece.id}>{piece.piece.title}</option>
+                            <option key={i} value={piece.id}>{piece.title}</option>
                         )}
                     </select>
                     <button onClick={this.handleClick} name="open">Open</button>

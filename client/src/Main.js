@@ -194,7 +194,7 @@ class Main extends React.Component {
                         </div>
                     )}
                 </div>
-                <h1>{piece.title || 'Untitled'} ({piece.scale})</h1>
+                <h1>{piece.title || 'Untitled'} ({piece.scale}) {piecesStore.modified ? '*' : ''}</h1>
                 <div
                     style={{
                         width: '50%',
