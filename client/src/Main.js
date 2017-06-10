@@ -85,7 +85,7 @@ class Main extends React.Component {
         if (data) {
             piecesStore.currentPiece.addPhrase(data.name, +data.length);
         }
-        displayStuff.setPhraseIndex(piecesStore.currentPiece.phraseInfos.length - 1);
+        displayStuff.setDisplayPhraseIndex(piecesStore.currentPiece.phraseInfos.length - 1);
     }
     handleLogin = () => {
         this.setState({
