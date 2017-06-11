@@ -15,6 +15,7 @@ class GamelansStore {
         new Gamelan('pelog', [
             {
                 name: 'Bonang barung',
+                nHands: 2,
                 tones: [
                     { pitch: '1̣' },
                     { pitch: '2̣' },
@@ -34,6 +35,7 @@ class GamelansStore {
             },
             {
                 name: 'Bonang panerus',
+                nHands: 2,
                 tones: [
                     { pitch: '1̣' },
                     { pitch: '2̣' },
@@ -53,18 +55,21 @@ class GamelansStore {
             },
             {
                 name: 'Gong ageng',
+                nHands: 1,
                 tones: [
                     { pitch: 'G' }
                 ]
             },
             {
                 name: 'Gong suwuk',
+                nHands: 1,
                 tones: [
                     { pitch: 'S' }
                 ]
             },
             {
                 name: 'Nong',
+                nHands: 1,
                 tones: [
                     { pitch: '1' },
                     { pitch: '2' },
@@ -75,7 +80,21 @@ class GamelansStore {
                 ]
             },
             {
+                name: 'Peking',
+                nHands: 1,
+                tones: [
+                    { pitch: '1' },
+                    { pitch: '2' },
+                    { pitch: '3' },
+                    { pitch: '4' },
+                    { pitch: '5' },
+                    { pitch: '6' },
+                    { pitch: '7' }
+                ]
+            },
+            {
                 name: 'Pul',
+                nHands: 1,
                 tones: [
                     { pitch: '1' },
                     { pitch: '3' },
@@ -86,6 +105,7 @@ class GamelansStore {
             },
             {
                 name: 'Saron',
+                nHands: 1,
                 tones: [
                     { pitch: '1' },
                     { pitch: '2' },
@@ -98,14 +118,16 @@ class GamelansStore {
             },
             {
                 name: 'Tuk',
+                nHands: 1,
                 tones: [
-                    { pitch: 't' }
+                    { pitch: '+' }
                 ]
             }
         ]),
         new Gamelan('slendro', [
             {
                 name: 'Bonang barung',
+                nHands: 2,
                 tones: [
                     { pitch: '1̣' },
                     { pitch: '2̣' },
@@ -123,6 +145,7 @@ class GamelansStore {
             },
             {
                 name: 'Bonang panerus',
+                nHands: 2,
                 tones: [
                     { pitch: '1̣' },
                     { pitch: '2̣' },
@@ -140,29 +163,45 @@ class GamelansStore {
             },
             {
                 name: 'Gong ageng',
+                nHands: 1,
                 tones: [
                     { pitch: 'G' }
                 ]
             },
             {
                 name: 'Gong suwuk',
+                nHands: 1,
                 tones: [
                     { pitch: 'S' }
                 ]
             },
             {
                 name: 'Nong',
+                nHands: 1,
                 tones: [
-                    { pitch: '1̇' },
                     { pitch: '2' },
                     { pitch: '3' },
                     { pitch: '5' },
-                    { pitch: '6' }
-
+                    { pitch: '6' },
+                    { pitch: '1̇' }
+                ]
+            },
+            {
+                name: 'Peking',
+                nHands: 1,
+                tones: [
+                    { pitch: '6̣' },
+                    { pitch: '1' },
+                    { pitch: '2' },
+                    { pitch: '3' },
+                    { pitch: '5' },
+                    { pitch: '6' },
+                    { pitch: '1̇' }
                 ]
             },
             {
                 name: 'Pul',
+                nHands: 1,
                 tones: [
                     { pitch: '1̇' },
                     { pitch: '3' },
@@ -172,6 +211,7 @@ class GamelansStore {
             },
             {
                 name: 'Saron',
+                nHands: 1,
                 tones: [
                     { pitch: '6̣' },
                     { pitch: '1' },
@@ -186,8 +226,9 @@ class GamelansStore {
             },
             {
                 name: 'Tuk',
+                nHands: 1,
                 tones: [
-                    { pitch: 't' }
+                    { pitch: '+' }
                 ]
             }
         ])
