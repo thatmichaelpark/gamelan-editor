@@ -49,18 +49,21 @@ class Part extends React.Component {
                                 <div className="phraseName">
                                     {this.props.displayMode === 'byParts' && this.props.phraseNames[phraseIndex]}
                                 </div>
-                                <div className="notes">
-                                    {phrase.map((note, noteIndex) =>
-                                        <Note
-                                            key={noteIndex}
-                                            note={note}
-                                            noteIndex={noteIndex}
-                                            part={part}
-                                            partIndex={this.props.partIndex}
-                                            phraseIndex={this.props.phraseIndex === undefined ? phraseIndex : this.props.phraseIndex}
-                                        />
-                                    )}
-                                </div>
+                                {phrase.map((hand, handIndex) =>
+                                    <div className="notes" key={handIndex}>
+                                        {hand.map((note, noteIndex) =>
+                                            <Note
+                                                key={noteIndex}
+                                                note={note}
+                                                handIndex={handIndex}
+                                                noteIndex={noteIndex}
+                                                part={part}
+                                                partIndex={this.props.partIndex}
+                                                phraseIndex={this.props.phraseIndex === undefined ? phraseIndex : this.props.phraseIndex}
+                                            />
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>

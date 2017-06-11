@@ -35,7 +35,7 @@ class Piece {
             part.phrases.push(Array(length).fill(' '));
         });
     }
-    setNote(note, partIndex, phraseIndex, noteIndex) {
+    setNote(note, partIndex, phraseIndex, handIndex, noteIndex) {
         if (partIndex < 0) {
             return false;
         }
@@ -44,7 +44,8 @@ class Piece {
         if (gamut.indexOf(note) < 0) {
             return false;
         }
-        this.parts[partIndex].phrases[phraseIndex][noteIndex] = note;
+        console.log(partIndex, phraseIndex, handIndex, noteIndex);
+        this.parts[partIndex].phrases[phraseIndex][handIndex][noteIndex] = note;
         return true;
     }
 }
@@ -63,9 +64,15 @@ class PiecesStore {
                     isVisible: true,
                     muteSolo: 'mute',
                     phrases: [
-                        [' ', ' ', ' ', ' ', '4', '·', '3', '6'],
-                        ['2', '·', '2', '·', '2', '·', '2', '·'],
-                        ['3', '·', '3', '·', '3', '·', '3', '·']
+                        [[' ', ' ', ' ', ' ', '4', '·', '3', '6']],
+                        [
+                            ['2', '·', '2', '·', '2', '·', '2', '·'],
+                            ['·', '2', '·', '2', '·', '2', '·', '2']
+                        ],
+                        [
+                            ['5', '·', '5', '·', '5', '·', '5', '·'],
+                            ['6', '·', '6', '·', '6', '·', '6', '·']
+                        ]
                     ]
                 },
                 {
@@ -73,9 +80,16 @@ class PiecesStore {
                     isVisible: true,
                     muteSolo: 'solo',
                     phrases: [
-                        [' ', ' ', ' ', ' ', '1', '2', '·', '5'],
-                        ['·', '2', '·', '2', '·', '2', '·', '2'],
-                        ['·', '3', '·', '3', '·', '3', '·', '3']
+                        [[' ', ' ', ' ', ' ', '1', '2', '·', '5']],
+                        [
+                            ['1', '2', '1', '2', '1', '2', '1', '2'],
+                            ['·', '2', '·', '2', '·', '2', '·', '2']
+                        ],
+                        [
+                            ['·', '1', '·', '1', '·', '1', '·', '1'],
+                            ['·', '2', '·', '2', '·', '2', '·', '2'],
+                            ['·', '3', '·', '3', '·', '3', '·', '3'],
+                        ]
                     ]
                 },
             ],

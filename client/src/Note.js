@@ -14,7 +14,7 @@ class Note extends React.Component {
     }
     handleClick = (e) => {
         e.preventDefault();
-        displayStuff.setSelected(this.props.partIndex, this.props.phraseIndex, this.props.noteIndex);
+        displayStuff.setSelected(this.props.partIndex, this.props.phraseIndex, this.props.handIndex, this.props.noteIndex);
     }
     handleContextMenu = (e) => {
         e.preventDefault();
@@ -67,8 +67,8 @@ class Note extends React.Component {
             key = '·';
         }
         if (key) {
-            displayStuff.setSelected(this.props.partIndex, this.props.phraseIndex, this.props.noteIndex);
-            const success = piecesStore.currentPiece.setNote(key, this.props.partIndex, this.props.phraseIndex, this.props.noteIndex);
+            displayStuff.setSelected(this.props.partIndex, this.props.phraseIndex, this.props.handIndex, this.props.noteIndex);
+            const success = piecesStore.currentPiece.setNote(key, this.props.partIndex, this.props.phraseIndex, this.props.handIndex, this.props.noteIndex);
             if (success) {
                 displayStuff.handleArrow('ArrowRight');
             }
@@ -79,11 +79,12 @@ class Note extends React.Component {
         const gamut = [' ', '·'].concat(gamelansStore.gamut(piecesStore.currentPiece.scale, this.props.part.instrument));
         const selected = this.props.partIndex === displayStuff.selectedPartIndex &&
                          this.props.phraseIndex === displayStuff.selectedPhraseIndex &&
+                         this.props.handIndex === displayStuff.selectedHandIndex &&
                          this.props.noteIndex === displayStuff.selectedNoteIndex;
         const setNote = (e, x) => {
             e.preventDefault();
-            displayStuff.setSelected(this.props.partIndex, this.props.phraseIndex, this.props.noteIndex);
-            piecesStore.currentPiece.setNote(x, this.props.partIndex, this.props.phraseIndex, this.props.noteIndex);
+            displayStuff.setSelected(this.props.partIndex, this.props.phraseIndex, this.props.handIndex, this.props.noteIndex);
+            piecesStore.currentPiece.setNote(x, this.props.partIndex, this.props.phraseIndex, this.props.handIndex, this.props.noteIndex);
             this.setState({
                 menuIsVisible: false
             });
