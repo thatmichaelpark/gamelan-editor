@@ -44,8 +44,9 @@ class Part extends React.Component {
                         <input type="checkbox" onChange={this.handleCheck} checked={part.muteSolo === 'mute'}/> */}
                     </div>
                     <div className="right">
-                        {phrases.map((phrase, phraseIndex) =>
-                            <div key={phraseIndex}>
+                        {phrases.map((phrase, phraseIndex) => {
+                            // console.log(part.instrument, JSON.stringify(phrase));
+                            return <div key={phraseIndex}>
                                 <div className="phraseName">
                                     {this.props.displayMode === 'byParts' && this.props.phraseNames[phraseIndex]}
                                 </div>
@@ -65,6 +66,7 @@ class Part extends React.Component {
                                     </div>
                                 )}
                             </div>
+                        }
                         )}
                     </div>
                 </div>

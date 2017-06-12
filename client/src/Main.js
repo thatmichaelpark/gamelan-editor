@@ -69,13 +69,8 @@ class Main extends React.Component {
         });
         if (instrument) {
             const { currentPiece } = piecesStore;
-            const partIndex = currentPiece.parts.length; // index of new part
+
             currentPiece.addPart(instrument);
-            if (partIndex) {
-                currentPiece.parts[partIndex].phrases = currentPiece.parts[0].phrases.map(phrase =>
-                    Array(phrase.length).fill(' ')
-                );
-            }
         }
     }
     handleAddPhrase = (data) => {
@@ -83,7 +78,7 @@ class Main extends React.Component {
             addPhraseDialogIsVisible: false
         });
         if (data) {
-            piecesStore.currentPiece.addPhrase(data.name, +data.length);
+            piecesStore.currentPiece.addPhrase(data.name, Number(data.length));
         }
         displayStuff.setDisplayPhraseIndex(piecesStore.currentPiece.phraseInfos.length - 1);
     }

@@ -27,7 +27,19 @@ class Piece {
         this.phraseInfos = phraseInfos;
     }
     addPart(instrument) {
-        this.parts.push(new Part(instrument));
+        const part = new Part(instrument);
+        const nParts = this.parts.push(part);
+
+        const nHands = gamelansStore
+                        .gamelans.find(g => g.scale === this.scale)
+                        .instruments.find(i => i.name === instrument)
+                        .nHands;
+        if (nParts > 1) {
+            this.parts[0].phrases.forEach(phrase => {
+                const length = phrase[0].length;
+                part.phrases.push(Array(nHands).fill(0).map(h => Array(length).fill(' ')));
+            });
+        }
     }
     addPhrase(name, length) {
         this.phraseInfos.push({ name, length});
@@ -44,7 +56,6 @@ class Piece {
         if (gamut.indexOf(note) < 0) {
             return false;
         }
-        console.log(partIndex, phraseIndex, handIndex, noteIndex);
         this.parts[partIndex].phrases[phraseIndex][handIndex][noteIndex] = note;
         return true;
     }
@@ -65,14 +76,8 @@ class PiecesStore {
                     muteSolo: 'mute',
                     phrases: [
                         [[' ', ' ', ' ', ' ', '4', '·', '3', '6']],
-                        [
-                            ['2', '·', '2', '·', '2', '·', '2', '·'],
-                            ['·', '2', '·', '2', '·', '2', '·', '2']
-                        ],
-                        [
-                            ['5', '·', '5', '·', '5', '·', '5', '·'],
-                            ['6', '·', '6', '·', '6', '·', '6', '·']
-                        ]
+                        [['2', '·', '2', '·', '2', '·', '2', '·']],
+                        [['5', '·', '5', '·', '5', '·', '5', '·']]
                     ]
                 },
                 {
@@ -80,15 +85,16 @@ class PiecesStore {
                     isVisible: true,
                     muteSolo: 'solo',
                     phrases: [
-                        [[' ', ' ', ' ', ' ', '1', '2', '·', '5']],
+                        [
+                            [' ', ' ', ' ', ' ', '1', '2', '·', '5']
+                        ],
                         [
                             ['1', '2', '1', '2', '1', '2', '1', '2'],
                             ['·', '2', '·', '2', '·', '2', '·', '2']
                         ],
                         [
                             ['·', '1', '·', '1', '·', '1', '·', '1'],
-                            ['·', '2', '·', '2', '·', '2', '·', '2'],
-                            ['·', '3', '·', '3', '·', '3', '·', '3'],
+                            ['·', '2', '·', '2', '·', '2', '·', '2']
                         ]
                     ]
                 },
