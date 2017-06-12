@@ -3,7 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import OpenDialog from './OpenDialog';
 import SaveDialog from './SaveDialog';
 import NewDialog from './NewDialog';
-import AddPartDialog from './AddPartDialog';
+import ManagePartsDialog from './ManagePartsDialog';
 import AddPhraseDialog from './AddPhraseDialog';
 import LoginDialog from './LoginDialog';
 import './App.css';
@@ -24,7 +24,7 @@ class Main extends React.Component {
             openDialogIsVisible: false,
             saveDialogIsVisible: false,
             newDialogIsVisible: false,
-            addPartDialogIsVisible: false,
+            managePartsDialogIsVisible: false,
             addPhraseDialogIsVisible: false,
             loginDialogIsVisible: false
         }
@@ -63,15 +63,10 @@ class Main extends React.Component {
             piecesStore.new(data.title, data.scale);
         }
     }
-    handleAddPart = (instrument) => {
+    handleManageParts = () => {
         this.setState({
-            addPartDialogIsVisible: false
+            managePartsDialogIsVisible: false
         });
-        if (instrument) {
-            const { currentPiece } = piecesStore;
-
-            currentPiece.addPart(instrument);
-        }
     }
     handleAddPhrase = (data) => {
         this.setState({
@@ -144,14 +139,14 @@ class Main extends React.Component {
                         menuItems={[
                             { text: 'New', action: () => this.setState({ newDialogIsVisible: true })},
                             { text: 'Open', action: () => this.setState({ openDialogIsVisible: true })},
-                            { text: 'Save', action: () => this.setState({ saveDialogIsVisible: true }), disabled: true },
+                            { text: 'Save', action: () => this.setState({ saveDialogIsVisible: true }), disabled: !piecesStore.modified },
                             { text: 'Save As', action: () => this.setState({ saveDialogIsVisible: true })},
                         ]}
                     />
                     <DropdownMenu
-                        title="Part"
+                        title="Parts"
                         menuItems={[
-                            { text: 'New', action: () => this.setState({ addPartDialogIsVisible: true })}
+                            { text: 'Manage', action: () => this.setState({ managePartsDialogIsVisible: true })}
                         ]}
                     />
                     <DropdownMenu
@@ -201,7 +196,7 @@ class Main extends React.Component {
                 <OpenDialog isVisible={this.state.openDialogIsVisible} onOpen={this.handleOpen}/>
                 <SaveDialog isVisible={this.state.saveDialogIsVisible} title={piece.title} onSave={this.handleSave}/>
                 <NewDialog isVisible={this.state.newDialogIsVisible} onNew={this.handleNew}/>
-                <AddPartDialog isVisible={this.state.addPartDialogIsVisible} scale={piece.scale} onAddPart={this.handleAddPart}/>
+                <ManagePartsDialog isVisible={this.state.managePartsDialogIsVisible} scale={piece.scale} onManageParts={this.handleManageParts}/>
                 <AddPhraseDialog isVisible={this.state.addPhraseDialogIsVisible} onAddPhrase={this.handleAddPhrase}/>
                 <LoginDialog isVisible={this.state.loginDialogIsVisible} onLogin={this.handleLogin}/>
             </div>

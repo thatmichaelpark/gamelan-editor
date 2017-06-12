@@ -72,6 +72,11 @@ h1 {
 	z-index: 10;
 }
 
+.dialog-large {
+	width: 600px;
+	height: 300px;
+}
+
 .part {
 	display: flex;
 	flex-wrap: nowrap;
