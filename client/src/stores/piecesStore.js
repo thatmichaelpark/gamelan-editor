@@ -44,7 +44,11 @@ class Piece {
     addPhrase(name, length) {
         this.phraseInfos.push({ name, length});
         this.parts.forEach(part => {
-            part.phrases.push(Array(length).fill(' '));
+            const nHands = gamelansStore
+                            .gamelans.find(g => g.scale === this.scale)
+                            .instruments.find(i => i.name === part.instrument)
+                            .nHands;
+            part.phrases.push(Array(nHands).fill(0).map(h => Array(length).fill(' ')));
         });
     }
     setNote(note, partIndex, phraseIndex, handIndex, noteIndex) {
