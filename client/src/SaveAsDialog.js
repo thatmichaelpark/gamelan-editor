@@ -1,6 +1,6 @@
 import React from 'react';
 
-class SaveDialog extends React.Component {
+class SaveAsDialog extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -21,7 +21,7 @@ class SaveDialog extends React.Component {
     }
     handleClick = (e) => {
         if (e.target.name === 'save') {
-            this.props.onSave(this.state.title);
+            this.props.onSave(this.state.title.trim().replace(/\s+/g,' '));
         }
         else {
             this.props.onSave(null);
@@ -31,7 +31,7 @@ class SaveDialog extends React.Component {
         return this.props.isVisible && (
             <div className="dialogparent">
                 <div className="dialog">
-                    <h1>Save</h1>
+                    <h1>Save As</h1>
                     <input onChange={this.handleChange} value={this.state.title}/>
                     <button onClick={this.handleClick} name="save">Save</button>
                     <button onClick={this.handleClick} name="cancel">Cancel</button>
@@ -41,4 +41,4 @@ class SaveDialog extends React.Component {
     }
 }
 
-export default SaveDialog;
+export default SaveAsDialog;

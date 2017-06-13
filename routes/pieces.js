@@ -46,7 +46,15 @@ router.post('/pieces', checkAuth, (req, res, next) => {
     const phraseInfos = JSON.stringify(req.body.piece.phraseInfos);
     const userId = req.token.userId;
 
-    knex('pieces').insert(decamelizeKeys({title, scale, parts, phraseInfos, userId}), '*')
+    knex('pieces')
+    .whereRaw("title ilike ?", [title])
+    .then((result) => {
+        console.log('result', result);
+        if (result.length) {
+            throw boom.create(400, 'Duplicate title');
+        }
+        return knex('pieces').insert(decamelizeKeys({title, scale, parts, phraseInfos, userId}), '*')
+    })
     .then((result) => {
         res.send({id: result[0].id, userId: result[0].user_id});
     }).catch((err) => {

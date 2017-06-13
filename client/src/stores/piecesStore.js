@@ -137,7 +137,11 @@ class PiecesStore {
         })
         .catch(Boo.boo);
     }
-    save(title) {
+    save(title, callback) {
+        if (!title) {
+            Boo.boo({message: "Title cannot be blank"});
+            return;
+        }
         this.currentPiece.title = title;
         axios.post('/api/pieces', {
             piece: this.currentPiece
@@ -151,6 +155,7 @@ class PiecesStore {
             this.savedPiece.scale = this.currentPiece.scale;
             this.savedPiece.parts = JSON.parse(JSON.stringify(this.currentPiece.parts));
             this.savedPiece.phraseInfos = JSON.parse(JSON.stringify(this.currentPiece.phraseInfos));
+            callback && callback();
         })
         .catch(Boo.boo);
     }

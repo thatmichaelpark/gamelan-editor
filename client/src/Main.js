@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import OpenDialog from './OpenDialog';
-import SaveDialog from './SaveDialog';
+import SaveAsDialog from './SaveAsDialog';
 import NewDialog from './NewDialog';
 import ManagePartsDialog from './ManagePartsDialog';
 import AddPhraseDialog from './AddPhraseDialog';
@@ -22,7 +22,7 @@ class Main extends React.Component {
         super(props);
         this.state = {
             openDialogIsVisible: false,
-            saveDialogIsVisible: false,
+            saveAsDialogIsVisible: false,
             newDialogIsVisible: false,
             managePartsDialogIsVisible: false,
             addPhraseDialogIsVisible: false,
@@ -48,11 +48,17 @@ class Main extends React.Component {
         }
     }
     handleSave = (title) => {
-        this.setState({
-            saveDialogIsVisible: false
-        });
-        if (title) {
-            piecesStore.save(title);
+        if (title !== null) {
+            piecesStore.save(title, () => {
+                this.setState({
+                    saveAsDialogIsVisible: false
+                });
+            });
+        }
+        else {
+            this.setState({
+                saveAsDialogIsVisible: false
+            });
         }
     }
     handleNew = (data) => {
@@ -139,8 +145,8 @@ class Main extends React.Component {
                         menuItems={[
                             { text: 'New', action: () => this.setState({ newDialogIsVisible: true })},
                             { text: 'Open', action: () => this.setState({ openDialogIsVisible: true })},
-                            { text: 'Save', action: () => this.setState({ saveDialogIsVisible: true }), disabled: !piecesStore.modified },
-                            { text: 'Save As', action: () => this.setState({ saveDialogIsVisible: true })},
+                            { text: 'Save', action: () => this.setState({ saveAsDialogIsVisible: true }), disabled: !piecesStore.modified },
+                            { text: 'Save As', action: () => this.setState({ saveAsDialogIsVisible: true })},
                         ]}
                     />
                     <div
@@ -194,7 +200,7 @@ class Main extends React.Component {
                     {blah(piece)}
                 </div>
                 <OpenDialog isVisible={this.state.openDialogIsVisible} onOpen={this.handleOpen}/>
-                <SaveDialog isVisible={this.state.saveDialogIsVisible} title={piece.title} onSave={this.handleSave}/>
+                <SaveAsDialog isVisible={this.state.saveAsDialogIsVisible} title={piece.title} onSave={this.handleSave}/>
                 <NewDialog isVisible={this.state.newDialogIsVisible} onNew={this.handleNew}/>
                 <ManagePartsDialog isVisible={this.state.managePartsDialogIsVisible} scale={piece.scale} onManageParts={this.handleManageParts}/>
                 <AddPhraseDialog isVisible={this.state.addPhraseDialogIsVisible} onAddPhrase={this.handleAddPhrase}/>
