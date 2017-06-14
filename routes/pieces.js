@@ -47,7 +47,8 @@ router.post('/pieces', checkAuth, (req, res, next) => {
     const userId = req.token.userId;
 
     knex('pieces')
-    .whereRaw("title ilike ?", [title])
+    .whereRaw("title ilike ?", [title])     // ensure that title is not duplicated
+    .where('user_id', userId)               // in user's pieces
     .then((result) => {
         console.log('result', result);
         if (result.length) {
