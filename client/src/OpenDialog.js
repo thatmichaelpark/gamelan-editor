@@ -1,6 +1,9 @@
 import React from 'react';
 import piecesStore from './stores/piecesStore';
+import usersStore from './stores/usersStore';
+import { observer } from 'mobx-react';
 
+@observer
 class OpenDialog extends React.Component {
     constructor(props) {
         super(props);
@@ -11,6 +14,7 @@ class OpenDialog extends React.Component {
     }
     componentWillReceiveProps(nextProps) {
         if (!this.props.isVisible && nextProps.isVisible) {
+            usersStore.refresh();
             piecesStore.getPieces()
             .then(pieces => {
                 pieces.sort((a, b) => a.title < b.title ? -1 : a.title > b.title ? 1 : 0);
@@ -43,7 +47,7 @@ class OpenDialog extends React.Component {
                         (
                             <select onChange={this.handleChange} value={this.state.selectedPieceId}>
                                 {this.state.pieces.map((piece, i) =>
-                                    <option key={i} value={piece.id}>{piece.title}</option>
+                                    <option key={i} value={piece.id}>{`${piece.title} (${usersStore.nameById(piece.userId)})`}</option>
                                 )}
                             </select>
                         ) : (
