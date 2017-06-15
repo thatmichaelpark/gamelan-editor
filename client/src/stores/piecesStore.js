@@ -137,7 +137,7 @@ class PiecesStore {
         })
         .catch(Boo.boo);
     }
-    save(title, callback) {
+    saveAs(title, callback) {
         if (!title) {
             Boo.boo({message: "Title cannot be blank"});
             return;
@@ -156,6 +156,23 @@ class PiecesStore {
             this.savedPiece.parts = JSON.parse(JSON.stringify(this.currentPiece.parts));
             this.savedPiece.phraseInfos = JSON.parse(JSON.stringify(this.currentPiece.phraseInfos));
             callback && callback();
+        })
+        .catch(Boo.boo);
+    }
+    save() {
+        const piece = this.currentPiece;
+        axios.patch(`/api/pieces/${piece.id}`, {
+            piece: this.currentPiece
+        })
+        .then(result => {
+            this.currentPiece.id = result.data.id;
+            this.currentPiece.userId = result.data.userId;
+            this.savedPiece.id = this.currentPiece.id;
+            this.savedPiece.userId = this.currentPiece.userId;
+            this.savedPiece.title = this.currentPiece.title;
+            this.savedPiece.scale = this.currentPiece.scale;
+            this.savedPiece.parts = JSON.parse(JSON.stringify(this.currentPiece.parts));
+            this.savedPiece.phraseInfos = JSON.parse(JSON.stringify(this.currentPiece.phraseInfos));
         })
         .catch(Boo.boo);
     }

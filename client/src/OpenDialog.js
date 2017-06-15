@@ -39,12 +39,20 @@ class OpenDialog extends React.Component {
             <div className="dialogparent">
                 <div className="dialog">
                     <h1>Open</h1>
-                    <select onChange={this.handleChange} value={this.state.selectedPieceId}>
-                        {this.state.pieces.map((piece, i) =>
-                            <option key={i} value={piece.id}>{piece.title}</option>
-                        )}
-                    </select>
-                    <button onClick={this.handleClick} name="open">Open</button>
+                    {this.state.pieces.length > 0 ?
+                        (
+                            <select onChange={this.handleChange} value={this.state.selectedPieceId}>
+                                {this.state.pieces.map((piece, i) =>
+                                    <option key={i} value={piece.id}>{piece.title}</option>
+                                )}
+                            </select>
+                        ) : (
+                            <p>No saved pieces</p>
+                        )
+                    }
+                    {this.state.pieces.length > 0 &&
+                        <button onClick={this.handleClick} name="open">Open</button>
+                    }
                     <button onClick={this.handleClick} name="cancel">Cancel</button>
                 </div>
             </div>

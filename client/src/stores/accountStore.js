@@ -6,6 +6,7 @@ class Account {
     @observable isLoggedIn;
     @observable name;
     @observable username;
+    @observable userId;
     @observable isAdmin;
 
     constructor() {
@@ -27,10 +28,15 @@ class Account {
             }
             return "";
         }
-        this.isLoggedIn = getCookie('gamelanUsername') !== '';
-        this.name = getCookie('gamelanName');
-        this.username = getCookie('gamelanUsername');
-        this.isAdmin = getCookie('gamelanIsAdmin') === 'true';
+        const checkCookies = () => {
+            this.isLoggedIn = getCookie('gamelanUsername') !== '';
+            this.name = getCookie('gamelanName');
+            this.username = getCookie('gamelanUsername');
+            this.userId = Number(getCookie('gamelanUserId'));
+            this.isAdmin = getCookie('gamelanIsAdmin') === 'true';
+        }
+        checkCookies();
+        setInterval(checkCookies, 5000);
     }
     logIn(username, password) {
         axios.post('/api/token', { username, password })
@@ -39,6 +45,7 @@ class Account {
             this.isLoggedIn = true;
             this.name = result.data.name;
             this.username = result.data.username;
+            this.userId = result.data.userId;
             this.isAdmin = result.data.isAdmin;
         })
         .catch(Boo.boo);
@@ -50,6 +57,7 @@ class Account {
             this.isLoggedIn = false;
             this.name = '';
             this.username = '';
+            this.userId = 0;
             this.isAdmin = false;
         })
         .catch(Boo.boo);

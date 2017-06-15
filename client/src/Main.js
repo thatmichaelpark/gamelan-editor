@@ -11,7 +11,7 @@ import piecesStore from './stores/piecesStore';
 import Part from './Part';
 import DropdownMenu from './DropdownMenu';
 import displayStuff from './stores/displayStuff';
-// import Boo from './Boo';
+import Boo from './Boo';
 import account from './stores/accountStore';
 
 import { observer } from 'mobx-react';
@@ -47,9 +47,9 @@ class Main extends React.Component {
             piecesStore.open(id);
         }
     }
-    handleSave = (title) => {
+    handleSaveAs = (title) => {
         if (title !== null) {
-            piecesStore.save(title, () => {
+            piecesStore.saveAs(title, () => {
                 this.setState({
                     saveAsDialogIsVisible: false
                 });
@@ -60,6 +60,9 @@ class Main extends React.Component {
                 saveAsDialogIsVisible: false
             });
         }
+    }
+    handleSave = () => {
+        piecesStore.save();
     }
     handleNew = (data) => {
         this.setState({
@@ -145,7 +148,7 @@ class Main extends React.Component {
                         menuItems={[
                             { text: 'New', action: () => this.setState({ newDialogIsVisible: true })},
                             { text: 'Open', action: () => this.setState({ openDialogIsVisible: true })},
-                            { text: 'Save', action: () => this.setState({ saveAsDialogIsVisible: true }), disabled: !piecesStore.modified },
+                            { text: 'Save', action: this.handleSave, disabled: !(piecesStore.modified && piece.id && piece.userId === account.userId) },
                             { text: 'Save As', action: () => this.setState({ saveAsDialogIsVisible: true })},
                         ]}
                     />
@@ -200,7 +203,7 @@ class Main extends React.Component {
                     {blah(piece)}
                 </div>
                 <OpenDialog isVisible={this.state.openDialogIsVisible} onOpen={this.handleOpen}/>
-                <SaveAsDialog isVisible={this.state.saveAsDialogIsVisible} title={piece.title} onSave={this.handleSave}/>
+                <SaveAsDialog isVisible={this.state.saveAsDialogIsVisible} title={piece.title} onSave={this.handleSaveAs}/>
                 <NewDialog isVisible={this.state.newDialogIsVisible} onNew={this.handleNew}/>
                 <ManagePartsDialog isVisible={this.state.managePartsDialogIsVisible} scale={piece.scale} onManageParts={this.handleManageParts}/>
                 <AddPhraseDialog isVisible={this.state.addPhraseDialogIsVisible} onAddPhrase={this.handleAddPhrase}/>

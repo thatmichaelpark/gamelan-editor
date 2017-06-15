@@ -52,7 +52,12 @@ router.post('/token', (req, res, next) => {
             secure: router.get('env') === 'production'
         });
 
-        res.send({name: user.name, username: user.username, isAdmin: user.isAdmin});
+        res.cookie('gamelanUserId', user.id, {
+            expires: expiry,
+            secure: router.get('env') === 'production'
+        });
+
+        res.send({name: user.name, username: user.username, userId: user.id, isAdmin: user.isAdmin});
     }).catch(bcrypt.MISMATCH_ERROR, () => {
         throw boom.create(401, 'User could not be logged in');
     }).catch((err) => {
@@ -65,6 +70,7 @@ router.delete('/token', (req, res) => {
     res.clearCookie('gamelanIsAdmin');
     res.clearCookie('gamelanName');
     res.clearCookie('gamelanUsername');
+    res.clearCookie('gamelanUserId');
 
     res.sendStatus(200);
 });
