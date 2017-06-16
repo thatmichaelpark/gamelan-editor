@@ -17,7 +17,6 @@ class OpenDialog extends React.Component {
             usersStore.refresh();
             piecesStore.getPieces()
             .then(pieces => {
-                pieces.sort((a, b) => a.title < b.title ? -1 : a.title > b.title ? 1 : 0);
                 this.setState({
                     pieces,
                     selectedPieceId: pieces[0] ? pieces[0].id : null
@@ -39,6 +38,16 @@ class OpenDialog extends React.Component {
         }
     }
     render() {
+        const sortedPieces = this.state.pieces.slice(0);
+
+        sortedPieces.sort((a, b) => {
+            const aName = usersStore.nameById(a.userId);
+            const bName = usersStore.nameById(b.userId);
+
+            return aName < bName ? -1 : aName > bName ? 1 : 0;
+        })
+        .sort((a, b) => a.title < b.title ? -1 : a.title > b.title ? 1 : 0);
+
         return this.props.isVisible && (
             <div className="dialogparent">
                 <div className="dialog">
@@ -46,7 +55,7 @@ class OpenDialog extends React.Component {
                     {this.state.pieces.length > 0 ?
                         (
                             <select onChange={this.handleChange} value={this.state.selectedPieceId}>
-                                {this.state.pieces.map((piece, i) =>
+                                {sortedPieces.map((piece, i) =>
                                     <option key={i} value={piece.id}>{`${piece.title} (${usersStore.nameById(piece.userId)})`}</option>
                                 )}
                             </select>
