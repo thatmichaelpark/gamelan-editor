@@ -47,6 +47,13 @@ class Main extends React.Component {
             piecesStore.open(id);
         }
     }
+    showSaveAsDialog = () => {
+        if (!account.isLoggedIn) {
+            Boo.boo({ message: 'You must log in before saving'});
+            return;
+        }
+        this.setState({ saveAsDialogIsVisible: true });
+    }
     handleSaveAs = (title) => {
         if (title !== null) {
             piecesStore.saveAs(title, () => {
@@ -149,7 +156,7 @@ class Main extends React.Component {
                             { text: 'New', action: () => this.setState({ newDialogIsVisible: true })},
                             { text: 'Open', action: () => this.setState({ openDialogIsVisible: true })},
                             { text: 'Save', action: this.handleSave, disabled: !(piecesStore.modified && piece.id && piece.userId === account.userId) },
-                            { text: 'Save As', action: () => this.setState({ saveAsDialogIsVisible: true })},
+                            { text: 'Save As', action: this.showSaveAsDialog},
                         ]}
                     />
                     <div
@@ -193,7 +200,13 @@ class Main extends React.Component {
                         </div>
                     )}
                 </div>
-                <h1>{piece.title || 'Untitled'} ({piece.scale}) {piecesStore.modified ? '*' : ''}</h1>
+                <h1>
+                    {piece.title || 'Untitled'}
+                    ({piece.scale})
+                    {piecesStore.modified ? '*' : ''}
+                    [{piece.id}]
+                    [{piece.userId}]
+                </h1>
                 <div
                     style={{
                         width: '50%',

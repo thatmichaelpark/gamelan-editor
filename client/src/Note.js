@@ -66,6 +66,9 @@ class Note extends React.Component {
         else if (code === 'Period') {
             key = '·';
         }
+        else if (code === 'Equal' && e.shiftKey) {
+            key = '+';
+        }
         if (key) {
             displayStuff.setSelected(this.props.partIndex, this.props.phraseIndex, this.props.handIndex, this.props.noteIndex);
             const success = piecesStore.currentPiece.setNote(key, this.props.partIndex, this.props.phraseIndex, this.props.handIndex, this.props.noteIndex);
