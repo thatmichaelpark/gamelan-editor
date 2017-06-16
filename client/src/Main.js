@@ -137,7 +137,16 @@ class Main extends React.Component {
                 return (
                     piece.phraseInfos.map((phraseInfo, i) =>
                         <div key={i}>
-                            {phraseInfo.name}
+                            <div className='part'>
+                                <div className='left'>
+
+                                </div>
+                                <div className='right-noborder'>
+                                    <div className='phraseName'>
+                                        {phraseInfo.name}
+                                    </div>
+                                </div>
+                            </div>
                             {piece.parts.map((part, idx) =>
                                 <Part key={idx} part={part} partIndex={idx} displayMode='compact' phraseIndex={i}/>
                             )}
