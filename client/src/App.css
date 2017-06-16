@@ -91,7 +91,7 @@ h1 {
 }
 
 .right {
-	overflow: hidden;
+	/*overflow: hidden;*/
 	border-left: 1px solid black;
 	padding-left: 12px;
 }
@@ -103,13 +103,14 @@ h1 {
 
 .phraseName {
 	font-size: 18px;
-	margin-top: 5px;
+	margin-bottom: 8px;
+	margin-top: 3px;
 }
 
 .notes {
 	display: flex;
 	font-family: monospace;
-	margin-bottom: 5px;
+	margin-top: -11px;
 	overflow: scroll;
 	padding: 5px;
 }

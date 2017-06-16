@@ -209,8 +209,9 @@ class Main extends React.Component {
                 </h1>
                 <div
                     style={{
-                        width: '50%',
-                        margin: '0 auto'
+                        alignItems: 'center',
+                        display: 'flex',
+                        flexDirection: 'column'
                     }}
                 >
                     {blah(piece)}
