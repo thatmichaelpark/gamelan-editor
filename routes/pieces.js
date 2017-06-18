@@ -89,10 +89,10 @@ router.patch('/pieces/:id', checkAuth, (req, res, next) => {
             scale: req.body.piece.scale,
             parts: JSON.stringify(req.body.piece.parts),
             phraseInfos: JSON.stringify(req.body.piece.phraseInfos)
-        }), ['id']).where('id', req.params.id);
+        }), ['id', 'user_id']).where('id', req.params.id);
     })
     .then((ids) => {
-        res.send(ids[0]);
+        res.send(camelizeKeys(ids[0]));
     }).catch((err) => {
         next(err);
     });
