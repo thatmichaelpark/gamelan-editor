@@ -33,10 +33,18 @@ class LoginDialog extends React.Component {
             <div className="dialogparent">
                 <div className="dialog">
                     <h1>Log In</h1>
-                    <input onChange={this.handleChange} value={this.state.username} name="username"/>
-                    <input onChange={this.handleChange} value={this.state.password} name="password" type="password"/>
-                    <button onClick={this.handleClick} name="login">Log In</button>
-                    <button onClick={this.handleClick} name="cancel">Cancel</button>
+                    <div>
+                        <label for="username">Username</label>
+                        <input onChange={this.handleChange} value={this.state.username} id="username" name="username"/>
+                    </div>
+                    <div>
+                        <label for="password">Password</label>
+                        <input onChange={this.handleChange} value={this.state.password} name="password" type="password"/>
+                    </div>
+                    <div className="dialog-buttonrow">
+                        <button className="dialog-button ok" onClick={this.handleClick} name="login">Log In</button>
+                        <button className="dialog-button cancel" onClick={this.handleClick} name="cancel">Cancel</button>
+                    </div>
                 </div>
             </div>
         );

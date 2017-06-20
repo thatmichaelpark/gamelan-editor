@@ -64,12 +64,12 @@ class AddPartDialog extends React.Component {
             <div className="dialogparent">
                 <div className="dialog dialog-large">
                     <h1>Manage Parts</h1>
-                    <div>
+                    <div className="dialog-contents">
                         {this.piece.parts.map((part, partIndex) =>
                             <div key={partIndex}>
-                                <button onClick={() => moveUp(partIndex)}>Up</button>
-                                <button onClick={() => moveDown(partIndex)}>Down</button>
-                                <button onClick={() => deleet(partIndex)}>Delete</button>
+                                <button onClick={() => moveUp(partIndex)}>▲</button>
+                                <button onClick={() => moveDown(partIndex)}>▼</button>
+                                <button onClick={() => deleet(partIndex)}>❌</button> {/* ×❌❎*/}
                                 {part.instrument}
                             </div>
                         )}
@@ -80,9 +80,9 @@ class AddPartDialog extends React.Component {
                         )}
                     </select>
                     <button onClick={this.handleClick} name="add">Add</button>
-                    <div>
-                        <button onClick={this.handleClick} name="ok">OK</button>
-                        <button onClick={this.handleClick} name="cancel">Cancel</button>
+                    <div className="dialog-buttonrow">
+                        <button className="dialog-button ok" onClick={this.handleClick} name="ok">OK</button>
+                        <button className="dialog-button cancel" onClick={this.handleClick} name="cancel">Cancel</button>
                     </div>
                 </div>
             </div>
