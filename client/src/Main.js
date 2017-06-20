@@ -106,7 +106,7 @@ class Main extends React.Component {
             if (displayStuff.displayMode === 'compact') {
                 return (
                     <div>
-                        <div className="part">
+                        {phraseNames.length > 0 && <div className="part">
                             <div className="left">
                             </div>
                             <div className="right-noborder">
@@ -119,7 +119,7 @@ class Main extends React.Component {
                                     )}
                                 </select>
                             </div>
-                        </div>
+                        </div>}
                         {piece.parts.map((part, i) =>
                             <Part key={i} part={part} partIndex={i} displayMode='compact' phraseIndex={displayStuff.displayPhraseIndex}/>
                         )}
