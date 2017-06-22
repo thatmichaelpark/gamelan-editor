@@ -63,10 +63,12 @@ class OpenDialog extends React.Component {
                             <p>No saved pieces</p>
                         )
                     }
-                    {this.state.pieces.length > 0 &&
-                        <button onClick={this.handleClick} name="open">Open</button>
-                    }
-                    <button onClick={this.handleClick} name="cancel">Cancel</button>
+                    <div className="dialog-buttonrow">
+                        {this.state.pieces.length > 0 &&
+                            <button className="dialog-button ok" onClick={this.handleClick} name="open">Open</button>
+                        }
+                        <button className="dialog-button cancel" onClick={this.handleClick} name="cancel">Cancel</button>
+                    </div>
                 </div>
             </div>
         );

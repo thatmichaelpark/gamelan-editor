@@ -33,8 +33,10 @@ class SaveAsDialog extends React.Component {
                 <div className="dialog">
                     <h1>Save As</h1>
                     <input onChange={this.handleChange} value={this.state.title}/>
-                    <button onClick={this.handleClick} name="save">Save</button>
-                    <button onClick={this.handleClick} name="cancel">Cancel</button>
+                    <div className="dialog-buttonrow">
+                        <button className="dialog-button ok" onClick={this.handleClick} name="save">Save</button>
+                        <button className="dialog-button cancel" onClick={this.handleClick} name="cancel">Cancel</button>
+                    </div>
                 </div>
             </div>
         );
