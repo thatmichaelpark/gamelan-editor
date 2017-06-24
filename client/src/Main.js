@@ -4,7 +4,7 @@ import OpenDialog from './OpenDialog';
 import SaveAsDialog from './SaveAsDialog';
 import NewDialog from './NewDialog';
 import ManagePartsDialog from './ManagePartsDialog';
-import AddPhraseDialog from './AddPhraseDialog';
+import ManagePhrasesDialog from './ManagePhrasesDialog';
 import LoginDialog from './LoginDialog';
 import './App.css';
 import piecesStore from './stores/piecesStore';
@@ -25,7 +25,7 @@ class Main extends React.Component {
             saveAsDialogIsVisible: false,
             newDialogIsVisible: false,
             managePartsDialogIsVisible: false,
-            addPhraseDialogIsVisible: false,
+            managePhrasesDialogIsVisible: false,
             loginDialogIsVisible: false
         }
     }
@@ -84,9 +84,9 @@ class Main extends React.Component {
             managePartsDialogIsVisible: false
         });
     }
-    handleAddPhrase = (data) => {
+    handleManagePhrases = (data) => {
         this.setState({
-            addPhraseDialogIsVisible: false
+            managePhrasesDialogIsVisible: false
         });
         if (data) {
             piecesStore.currentPiece.addPhrase(data.name, Number(data.length));
@@ -177,7 +177,7 @@ class Main extends React.Component {
                     <DropdownMenu
                         title="Phrase"
                         menuItems={[
-                            { text: 'New', action: () => this.setState({ addPhraseDialogIsVisible: true }), disabled: piece.parts.length === 0 }
+                            { text: 'New', action: () => this.setState({ managePhrasesDialogIsVisible: true }), disabled: piece.parts.length === 0 }
                         ]}
                     />
                     <DropdownMenu
@@ -229,7 +229,7 @@ class Main extends React.Component {
                 <SaveAsDialog isVisible={this.state.saveAsDialogIsVisible} title={piece.title} onSave={this.handleSaveAs}/>
                 <NewDialog isVisible={this.state.newDialogIsVisible} onNew={this.handleNew}/>
                 <ManagePartsDialog isVisible={this.state.managePartsDialogIsVisible} scale={piece.scale} onManageParts={this.handleManageParts}/>
-                <AddPhraseDialog isVisible={this.state.addPhraseDialogIsVisible} onAddPhrase={this.handleAddPhrase}/>
+                <ManagePhrasesDialog isVisible={this.state.managePhrasesDialogIsVisible} onManagePhrases={this.handleManagePhrases}/>
                 <LoginDialog isVisible={this.state.loginDialogIsVisible} onLogin={this.handleLogin}/>
             </div>
         );

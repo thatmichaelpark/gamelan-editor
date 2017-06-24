@@ -1,6 +1,6 @@
 import React from 'react';
 
-class AddPhraseDialog extends React.Component {
+class ManagePhrasesDialog extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -22,17 +22,17 @@ class AddPhraseDialog extends React.Component {
     }
     handleClick = (e) => {
         if (e.target.name === 'add') {
-            this.props.onAddPhrase(this.state); // name, length
+            this.props.onManagePhrases(this.state); // name, length
         }
         else {
-            this.props.onAddPhrase(null);
+            this.props.onManagePhrases(null);
         }
     }
     render() {
         return this.props.isVisible && (
             <div className="dialogparent">
                 <div className="dialog">
-                    <h1>Add Phrase</h1>
+                    <h1>Manage Phrases</h1>
                     <input onChange={this.handleChange} name="name" value={this.state.name}/>
                     <input type="number" onChange={this.handleChange} name="length" value={this.state.length}/>
                     <button onClick={this.handleClick} name="add">Add</button>
@@ -43,4 +43,4 @@ class AddPhraseDialog extends React.Component {
     }
 }
 
-export default AddPhraseDialog;
+export default ManagePhrasesDialog;
