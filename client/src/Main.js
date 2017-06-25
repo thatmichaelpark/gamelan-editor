@@ -84,14 +84,10 @@ class Main extends React.Component {
             managePartsDialogIsVisible: false
         });
     }
-    handleManagePhrases = (data) => {
+    handleManagePhrases = () => {
         this.setState({
             managePhrasesDialogIsVisible: false
         });
-        if (data) {
-            piecesStore.currentPiece.addPhrase(data.name, Number(data.length));
-            displayStuff.setDisplayPhraseIndex(piecesStore.currentPiece.phraseInfos.length - 1);
-        }
     }
     handleLogin = () => {
         this.setState({
