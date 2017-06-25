@@ -54,6 +54,13 @@ class Main extends React.Component {
         }
         this.setState({ saveAsDialogIsVisible: true });
     }
+    showManagePhrasesDialog = () => {
+        if (piecesStore.currentPiece.parts.length === 0) {
+            Boo.boo({ message: "Can't add phrases without parts"});
+            return;
+        }
+        this.setState({ managePhrasesDialogIsVisible: true });
+    }
     handleSaveAs = (title) => {
         if (title !== null) {
             piecesStore.saveAs(title, () => {
@@ -172,7 +179,7 @@ class Main extends React.Component {
                     </div>
                     <div
                         className="dropdowntitle"
-                        onClick={() => this.setState({ managePhrasesDialogIsVisible: true })}
+                        onClick={this.showManagePhrasesDialog}
                     >
                         Phrases
                     </div>

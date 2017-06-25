@@ -72,40 +72,28 @@ class ManagePhrasesDialog extends React.Component {
         }
 
         return this.props.isVisible && (
-            this.piece.parts.length === 0 ? (
-                <div className="dialogparent">
-                    <div className="dialog">
-                        <p>Can't add phrases without parts.</p>
-                        <div className="dialog-buttonrow">
-                            <button className="dialog-button ok" onClick={this.handleClick} name="ok">OK</button>
-                        </div>
+            <div className="dialogparent">
+                <div className="dialog dialog-large">
+                    <h1>Manage Phrases</h1>
+                    <div className="dialog-contents">
+                        {this.piece.phraseInfos.map((phrase, phraseIndex) =>
+                            <div key={phraseIndex}>
+                                <button onClick={() => moveUp(phraseIndex)}>▲</button>
+                                <button onClick={() => moveDown(phraseIndex)}>▼</button>
+                                <button onClick={() => deleet(phraseIndex)}>❌</button> {/* ×❌❎*/}
+                                {phrase.name}
+                            </div>
+                        )}
+                    </div>
+                    <input onChange={this.handleChange} name="name" value={this.state.name}/>
+                    <input type="number" onChange={this.handleChange} name="length" value={this.state.length}/>
+                    <button onClick={this.handleClick} name="add">Add</button>
+                    <div className="dialog-buttonrow">
+                        <button className="dialog-button ok" onClick={this.handleClick} name="ok">OK</button>
+                        <button className="dialog-button cancel" onClick={this.handleClick} name="cancel">Cancel</button>
                     </div>
                 </div>
-
-            ) : (
-                <div className="dialogparent">
-                    <div className="dialog dialog-large">
-                        <h1>Manage Phrases</h1>
-                        <div className="dialog-contents">
-                            {this.piece.phraseInfos.map((phrase, phraseIndex) =>
-                                <div key={phraseIndex}>
-                                    <button onClick={() => moveUp(phraseIndex)}>▲</button>
-                                    <button onClick={() => moveDown(phraseIndex)}>▼</button>
-                                    <button onClick={() => deleet(phraseIndex)}>❌</button> {/* ×❌❎*/}
-                                    {phrase.name}
-                                </div>
-                            )}
-                        </div>
-                        <input onChange={this.handleChange} name="name" value={this.state.name}/>
-                        <input type="number" onChange={this.handleChange} name="length" value={this.state.length}/>
-                        <button onClick={this.handleClick} name="add">Add</button>
-                        <div className="dialog-buttonrow">
-                            <button className="dialog-button ok" onClick={this.handleClick} name="ok">OK</button>
-                            <button className="dialog-button cancel" onClick={this.handleClick} name="cancel">Cancel</button>
-                        </div>
-                    </div>
-                </div>
-            )
+            </div>
         );
     }
 }
