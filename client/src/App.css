@@ -166,6 +166,7 @@ label {
 .notes {
 	display: flex;
 	font-family: monospace;
+	justify-content: flex-end;
 	margin-top: -11px;
 	overflow: scroll;
 	padding: 5px;
