@@ -42,6 +42,10 @@ class Piece {
         }
     }
     addPhrase(name, length) {
+        if (!name.trim()) {
+            Boo.boo({message: "Phrase name cannot be blank"});
+            return;
+        }
         this.phraseInfos.push({ name, length});
         this.parts.forEach(part => {
             const nHands = gamelansStore
@@ -140,7 +144,7 @@ class PiecesStore {
         .catch(Boo.boo);
     }
     saveAs(title, callback) {
-        if (!title) {
+        if (!title.trim()) {
             Boo.boo({message: "Title cannot be blank"});
             return;
         }
