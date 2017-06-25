@@ -81,6 +81,10 @@ h1 {
 	font-size: 80%;
 }
 
+.dialog p {
+	font-size: 70%;
+}
+
 label {
 	display: inline-block;
 	font-size: 70%;

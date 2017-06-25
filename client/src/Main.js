@@ -168,14 +168,14 @@ class Main extends React.Component {
                         className="dropdowntitle"
                         onClick={() => this.setState({ managePartsDialogIsVisible: true })}
                     >
-                        Manage Parts
+                        Parts
                     </div>
-                    <DropdownMenu
-                        title="Phrase"
-                        menuItems={[
-                            { text: 'New', action: () => this.setState({ managePhrasesDialogIsVisible: true }), disabled: piece.parts.length === 0 }
-                        ]}
-                    />
+                    <div
+                        className="dropdowntitle"
+                        onClick={() => this.setState({ managePhrasesDialogIsVisible: true })}
+                    >
+                        Phrases
+                    </div>
                     <DropdownMenu
                         title="View"
                         menuItems={[
