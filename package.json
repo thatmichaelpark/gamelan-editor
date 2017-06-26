@@ -9,8 +9,8 @@
   },
   "scripts": {
     "client": "cd client && npm start",
+    "heroku-postbuild": "cd client/ && npm install --only=dev && npm install && npm run build",
     "knex": "knex",
-    "postinstall": "npm --prefix client install",
     "resetdb": "knex migrate:rollback; knex migrate:latest; knex seed:run",
     "server": "nodemon server.js --ignore client/",
     "start": "concurrently \"node server\" \"npm run client\"",
