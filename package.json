@@ -3,9 +3,14 @@
   "version": "0.1.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "7.4.0",
+    "npm": "4.0.5"
+  },
   "scripts": {
     "client": "cd client && npm start",
     "knex": "knex",
+    "postinstall": "npm --prefix client install",
     "resetdb": "knex migrate:rollback; knex migrate:latest; knex seed:run",
     "server": "nodemon server.js --ignore client/",
     "start": "concurrently \"npm run server\" \"npm run client\"",
