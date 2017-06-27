@@ -13,7 +13,7 @@
     "knex": "knex",
     "resetdb": "knex migrate:rollback; knex migrate:latest; knex seed:run",
     "server": "nodemon server.js --ignore client/",
-    "start": "concurrently \"node server\" \"npm run client\"",
+    "start": "concurrently \"npm run server\" \"npm run client\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
