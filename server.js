@@ -23,7 +23,7 @@ switch (app.get('env')) { // enhanced process.env.NODE_ENV
 
 const path = require('path');
 
-app.use(express.static(path.join(__dirname, 'client/public/build/')));
+app.use(express.static(path.join(__dirname, 'client/build/')));
 
 // CSRF protection
 app.use('/api', (req, res, next) => {
@@ -49,7 +49,7 @@ app.use('/api', pieces);
 app.use('/api', token);
 
 app.use((_req, res) => {
-    res.sendFile(path.join(__dirname, 'client/public/build/', 'index.html'));
+    res.sendFile(path.join(__dirname, 'client/build/', 'index.html'));
 });
 
 // eslint-disable-next-line max-params
