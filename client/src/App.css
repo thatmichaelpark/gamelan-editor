@@ -83,6 +83,7 @@ h1 {
 
 .dialog p {
 	font-size: 70%;
+	margin: 0;
 }
 
 label {
@@ -101,8 +102,16 @@ label {
 	position: absolute;
 	right: 10px;
 	top: 80px;
-
 }
+
+.dialog-contents-large {
+	top: 60px;
+}
+
+.dialog-contents .selected {
+	background: dodgerblue;
+}
+
 .dialog-buttonrow {
 	bottom: 10px;
 	position: absolute;

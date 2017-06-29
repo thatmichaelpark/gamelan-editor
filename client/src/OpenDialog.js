@@ -8,7 +8,7 @@ class OpenDialog extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedPieceId: '',
+            selectedPieceId: null,
             pieces: []
         }
     }
@@ -19,14 +19,14 @@ class OpenDialog extends React.Component {
             .then(pieces => {
                 this.setState({
                     pieces,
-                    selectedPieceId: pieces[0] ? pieces[0].id : null
+                    selectedPieceId: null
                 });
             });
         }
     }
-    handleChange = (e) => {
+    handleSelect = (id) => {
         this.setState({
-            selectedPieceId: e.target.value
+            selectedPieceId: id
         });
     }
     handleClick = (e) => {
@@ -50,21 +50,21 @@ class OpenDialog extends React.Component {
 
         return this.props.isVisible && (
             <div className="dialogparent">
-                <div className="dialog">
+                <div className="dialog dialog-large">
                     <h1>Open</h1>
-                    {this.state.pieces.length > 0 ?
-                        (
-                            <select onChange={this.handleChange} value={this.state.selectedPieceId}>
-                                {sortedPieces.map((piece, i) =>
-                                    <option key={i} value={piece.id}>{`${piece.title} (${usersStore.nameById(piece.userId)})`}</option>
-                                )}
-                            </select>
-                        ) : (
-                            <p>No saved pieces</p>
-                        )
-                    }
+                    <div className="dialog-contents dialog-contents-large">
+                        {sortedPieces.map((piece, i) =>
+                            <p
+                                className={ piece.id === this.state.selectedPieceId ? 'selected' : '' }
+                                key={i}
+                                onClick={() => this.handleSelect(piece.id)}
+                            >
+                                {`${piece.title} (${usersStore.nameById(piece.userId)})`}
+                            </p>
+                        )}
+                    </div>
                     <div className="dialog-buttonrow">
-                        {this.state.pieces.length > 0 &&
+                        {this.state.selectedPieceId &&
                             <button className="dialog-button ok" onClick={this.handleClick} name="open">Open</button>
                         }
                         <button className="dialog-button cancel" onClick={this.handleClick} name="cancel">Cancel</button>
