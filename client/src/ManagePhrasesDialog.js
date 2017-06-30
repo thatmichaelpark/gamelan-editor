@@ -86,6 +86,9 @@ class ManagePhrasesDialog extends React.Component {
             <div className="dialogparent">
                 <div className="dialog dialog-large">
                     <h1>Manage Phrases</h1>
+                    <input onChange={this.handleChange} name="name" value={this.state.name}/>
+                    <input type="number" onChange={this.handleChange} name="length" value={this.state.length} style={{ width: '20%' }}/>
+                    <button onClick={this.handleClick} name="add">Add</button>
                     <div className="dialog-contents">
                         {this.piece.phraseInfos.map((phrase, phraseIndex) =>
                             <div key={phraseIndex}>
@@ -106,9 +109,6 @@ class ManagePhrasesDialog extends React.Component {
                             </div>
                         )}
                     </div>
-                    <input onChange={this.handleChange} name="name" value={this.state.name}/>
-                    <input type="number" onChange={this.handleChange} name="length" value={this.state.length}/>
-                    <button onClick={this.handleClick} name="add">Add</button>
                     <div className="dialog-buttonrow">
                         <button className="dialog-button ok" onClick={this.handleClick} name="ok">OK</button>
                         <button className="dialog-button cancel" onClick={this.handleClick} name="cancel">Cancel</button>
