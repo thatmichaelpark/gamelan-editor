@@ -38,7 +38,7 @@ class OpenDialog extends React.Component {
         }
     }
     render() {
-        const sortedPieces = this.state.pieces.slice(0);
+        const sortedPieces = this.state.pieces ? this.state.pieces.slice(0) : [];
 
         sortedPieces.sort((a, b) => {
             const aName = usersStore.nameById(a.userId);
