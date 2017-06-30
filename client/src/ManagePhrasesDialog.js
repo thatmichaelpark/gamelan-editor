@@ -6,12 +6,14 @@ class ManagePhrasesDialog extends React.Component {
         super(props);
         this.state = {
             name: '',
-            length: 8
+            length: 8,
+            editPhraseIndex: -1
         }
     }
     componentWillReceiveProps(nextProps) {
         if (!this.props.isVisible && nextProps.isVisible) {
             this.setState({
+                editPhraseIndex: -1,
                 name: ''
             });
             this.piece = piecesStore.currentPiece;
@@ -70,6 +72,15 @@ class ManagePhrasesDialog extends React.Component {
                 part.phrases.splice(i, 1);                      // remove ith phrase
             });
         }
+        const edit = (phraseIndex) => {
+            this.setState({ editPhraseIndex: phraseIndex });
+        }
+        const handleEdit = (e) => {
+            this.piece.phraseInfos[this.state.editPhraseIndex].name = e.target.value;
+        }
+        const handleBlur = (e) => {
+            this.setState({ editPhraseIndex: -1 });
+        }
 
         return this.props.isVisible && (
             <div className="dialogparent">
@@ -81,7 +92,17 @@ class ManagePhrasesDialog extends React.Component {
                                 <button onClick={() => moveUp(phraseIndex)}>▲</button>
                                 <button onClick={() => moveDown(phraseIndex)}>▼</button>
                                 <button onClick={() => deleet(phraseIndex)}>❌</button> {/* ×❌❎*/}
-                                {phrase.name}
+                                {phraseIndex === this.state.editPhraseIndex ? (
+                                    <input
+                                        onBlur={handleBlur}
+                                        onChange={handleEdit} value={phrase.name}
+                                        ref={x => x && x.focus()}
+                                    />
+                                ) : (
+                                    <span onClick={() => edit(phraseIndex)}>
+                                        {phrase.name}
+                                    </span>
+                                )}
                             </div>
                         )}
                     </div>
