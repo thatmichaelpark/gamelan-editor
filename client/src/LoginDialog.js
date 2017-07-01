@@ -34,11 +34,11 @@ class LoginDialog extends React.Component {
                 <div className="dialog">
                     <h1>Log In</h1>
                     <div>
-                        <label for="username">Username</label>
+                        <label htmlFor="username">Username</label>
                         <input onChange={this.handleChange} value={this.state.username} id="username" name="username"/>
                     </div>
                     <div>
-                        <label for="password">Password</label>
+                        <label htmlFor="password">Password</label>
                         <input onChange={this.handleChange} value={this.state.password} name="password" type="password"/>
                     </div>
                     <div className="dialog-buttonrow">

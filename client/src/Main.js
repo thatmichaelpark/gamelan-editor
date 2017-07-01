@@ -64,6 +64,10 @@ class Main extends React.Component {
         this.setState({ managePhrasesDialogIsVisible: true });
     }
     showManagePiecesDialog = () => {
+        if (!account.isLoggedIn) {
+            Boo.boo({ message: "Must be logged in"});
+            return;
+        }
         this.setState({ managePiecesDialogIsVisible: true });
     }
     handleSaveAs = (title) => {
@@ -94,7 +98,7 @@ class Main extends React.Component {
         this.setState({ managePhrasesDialogIsVisible: false });
     }
     handleManagePieces = () => {
-        this.setState({ managePiecesDialogIsVisible: true });
+        this.setState({ managePiecesDialogIsVisible: false });
     }
     handleLogin = () => {
         this.setState({ loginDialogIsVisible: false });
