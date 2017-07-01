@@ -5,6 +5,7 @@ import SaveAsDialog from './SaveAsDialog';
 import NewDialog from './NewDialog';
 import ManagePartsDialog from './ManagePartsDialog';
 import ManagePhrasesDialog from './ManagePhrasesDialog';
+import ManagePiecesDialog from './ManagePiecesDialog';
 import LoginDialog from './LoginDialog';
 import './App.css';
 import piecesStore from './stores/piecesStore';
@@ -26,6 +27,7 @@ class Main extends React.Component {
             newDialogIsVisible: false,
             managePartsDialogIsVisible: false,
             managePhrasesDialogIsVisible: false,
+            managePiecesDialogIsVisible: false,
             loginDialogIsVisible: false
         }
     }
@@ -61,18 +63,17 @@ class Main extends React.Component {
         }
         this.setState({ managePhrasesDialogIsVisible: true });
     }
+    showManagePiecesDialog = () => {
+        this.setState({ managePiecesDialogIsVisible: true });
+    }
     handleSaveAs = (title) => {
         if (title !== null) {
             piecesStore.saveAs(title, () => {
-                this.setState({
-                    saveAsDialogIsVisible: false
-                });
+                this.setState({ saveAsDialogIsVisible: false });
             });
         }
         else {
-            this.setState({
-                saveAsDialogIsVisible: false
-            });
+            this.setState({ saveAsDialogIsVisible: false });
         }
     }
     handleSave = () => {
@@ -87,19 +88,16 @@ class Main extends React.Component {
         }
     }
     handleManageParts = () => {
-        this.setState({
-            managePartsDialogIsVisible: false
-        });
+        this.setState({ managePartsDialogIsVisible: false });
     }
     handleManagePhrases = () => {
-        this.setState({
-            managePhrasesDialogIsVisible: false
-        });
+        this.setState({ managePhrasesDialogIsVisible: false });
+    }
+    handleManagePieces = () => {
+        this.setState({ managePiecesDialogIsVisible: true });
     }
     handleLogin = () => {
-        this.setState({
-            loginDialogIsVisible: false
-        });
+        this.setState({ loginDialogIsVisible: false });
     }
     render() {
         const piece = piecesStore.currentPiece;
@@ -169,6 +167,7 @@ class Main extends React.Component {
                             { text: 'Open', action: () => this.setState({ openDialogIsVisible: true })},
                             { text: 'Save', action: this.handleSave, disabled: !(piecesStore.modified && piece.id && piece.userId === account.userId) },
                             { text: 'Save As', action: this.showSaveAsDialog},
+                            { text: 'Manage', action: this.showManagePiecesDialog},
                         ]}
                     />
                     <div
@@ -233,6 +232,7 @@ class Main extends React.Component {
                 <NewDialog isVisible={this.state.newDialogIsVisible} onNew={this.handleNew}/>
                 <ManagePartsDialog isVisible={this.state.managePartsDialogIsVisible} scale={piece.scale} onManageParts={this.handleManageParts}/>
                 <ManagePhrasesDialog isVisible={this.state.managePhrasesDialogIsVisible} onManagePhrases={this.handleManagePhrases}/>
+                <ManagePiecesDialog isVisible={this.state.managePiecesDialogIsVisible} onManagePieces={this.handleManagePieces}/>
                 <LoginDialog isVisible={this.state.loginDialogIsVisible} onLogin={this.handleLogin}/>
             </div>
         );
