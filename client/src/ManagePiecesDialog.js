@@ -8,17 +8,19 @@ class ManagePiecesDialog extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            pieces: []
+            pieces: [],
+            selectedPieceId: -1,
+            tempTitle: ''
         }
     }
     componentWillReceiveProps(nextProps) {
         if (!this.props.isVisible && nextProps.isVisible) {
             piecesStore.getPieces()
             .then(pieces => {
-                console.log(pieces, account.userId);
                 this.setState({
                     pieces: pieces.filter(p => p.userId === account.userId),
-                    selectedPieceId: null
+                    selectedPieceId: -1,
+                    tempTitle: ''
                 });
             });
         }
@@ -29,9 +31,7 @@ class ManagePiecesDialog extends React.Component {
         });
     }
     handleClick = (e) => {
-        if (e.target.name === 'add') {
-        }
-        else if (e.target.name === 'ok') {
+        if (e.target.name === 'ok') {
             this.props.onManagePieces();
         }
         else { // cancel
@@ -39,11 +39,27 @@ class ManagePiecesDialog extends React.Component {
         }
     }
     render() {
-        const rename = () => {
-
+        const rename = (piece) => {
+            this.setState({
+                selectedPieceId: piece.id,
+                tempTitle: piece.title
+            });
         }
         const deleet = () => {
 
+        }
+        const handleBlur = (piece) => {
+            piece.title = this.state.tempTitle;
+            piecesStore.savePiece(piece, () => {
+                piecesStore.getPieces()
+                .then(pieces => {
+                    this.setState({
+                        pieces: pieces.filter(p => p.userId === account.userId),
+                        selectedPieceId: -1,
+                        tempTitle: ''
+                    });
+                });
+            });
         }
         const sortedPieces = this.state.pieces ? this.state.pieces.slice(0) : [];
 
@@ -56,13 +72,24 @@ class ManagePiecesDialog extends React.Component {
                     <div className="dialog-contents dialog-contents-large">
                         {sortedPieces.map((piece, i) =>
                             <p
-                                className={ piece.id === this.state.selectedPieceId ? 'selected' : '' }
+                                // className={ piece.id === this.state.selectedPieceId ? 'selected' : '' }
                                 key={i}
-                                onClick={() => this.handleSelect(piece.id)}
                             >
-                                <button onClick={() => rename()}>Rename</button> {/* ×❌❎*/}
                                 <button onClick={() => deleet()}>❌</button> {/* ×❌❎*/}
-                                {piece.title}
+                                {piece.id === this.state.selectedPieceId ? (
+                                    <input
+                                        name="tempTitle"
+                                        onBlur={() => handleBlur(piece)}
+                                        onChange={this.handleChange}
+                                        ref={x => x && x.focus()}
+                                        value={this.state.tempTitle}
+                                    />
+                                ) : (
+                                    <span onClick={() => rename(piece)}
+                                    >
+                                        {piece.title}
+                                    </span>
+                                )}
                             </p>
                         )}
                     </div>

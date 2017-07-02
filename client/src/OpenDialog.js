@@ -8,7 +8,7 @@ class OpenDialog extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedPieceId: null,
+            selectedPieceId: -1,
             pieces: []
         }
     }
@@ -19,7 +19,7 @@ class OpenDialog extends React.Component {
             .then(pieces => {
                 this.setState({
                     pieces,
-                    selectedPieceId: null
+                    selectedPieceId: -1
                 });
             });
         }
