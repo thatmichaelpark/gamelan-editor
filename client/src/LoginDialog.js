@@ -1,5 +1,6 @@
 import React from 'react';
 import account from './stores/accountStore';
+import Boo from './Boo';
 
 class LoginDialog extends React.Component {
     constructor(props) {
@@ -15,6 +16,13 @@ class LoginDialog extends React.Component {
                 username: '',
                 password: ''
             });
+            this.shouldSetFocus = true;
+        }
+    }
+    setFocus = (x) => {
+        if (x && this.shouldSetFocus) {
+            x.focus();
+            this.shouldSetFocus = false;
         }
     }
     handleChange = (e) => {
@@ -24,9 +32,17 @@ class LoginDialog extends React.Component {
     }
     handleClick = (e) => {
         if (e.target.name === 'login') {
-            account.logIn(this.state.username, this.state.password);
+            account.logIn(this.state.username, this.state.password)
+            .then((result) => {
+                Boo.yeah(`Logged in as ${result.data.name}`);
+                this.props.onLogin();
+            })
+            .catch(Boo.boo);
         }
-        this.props.onLogin();
+        else { // cancel
+            console.log(this.activeElement);
+            this.props.onLogin();
+        }
     }
     render() {
         return this.props.isVisible && (
@@ -35,11 +51,23 @@ class LoginDialog extends React.Component {
                     <h1>Log In</h1>
                     <div>
                         <label htmlFor="username">Username</label>
-                        <input onChange={this.handleChange} value={this.state.username} id="username" name="username"/>
+                        <input
+                            id="username"
+                            name="username"
+                            onChange={this.handleChange}
+                            ref={x => this.setFocus(x)}
+                            value={this.state.username}
+                        />
                     </div>
                     <div>
                         <label htmlFor="password">Password</label>
-                        <input onChange={this.handleChange} value={this.state.password} name="password" type="password"/>
+                        <input
+                            id="password"
+                            name="password"
+                            onChange={this.handleChange}
+                            type="password"
+                            value={this.state.password}
+                        />
                     </div>
                     <div className="dialog-buttonrow">
                         <button className="dialog-button ok" onClick={this.handleClick} name="login">Log In</button>

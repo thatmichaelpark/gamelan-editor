@@ -1,6 +1,5 @@
 import { observable } from 'mobx';
 import axios from 'axios';
-import Boo from '../Boo';
 
 class Account {
     @observable isLoggedIn;
@@ -39,28 +38,25 @@ class Account {
         setInterval(checkCookies, 5000);
     }
     logIn(username, password) {
-        axios.post('/api/token', { username, password })
+        return axios.post('/api/token', { username, password })
         .then((result) => {
-            Boo.yeah(`Logged in as ${result.data.name}`);
             this.isLoggedIn = true;
             this.name = result.data.name;
             this.username = result.data.username;
             this.userId = result.data.userId;
             this.isAdmin = result.data.isAdmin;
-        })
-        .catch(Boo.boo);
+            return result;
+        });
     }
     logOut() {
-        axios.delete('/api/token')
+        return axios.delete('/api/token')
         .then((result) => {
-            Boo.yeah(`Logged out`);
             this.isLoggedIn = false;
             this.name = '';
             this.username = '';
             this.userId = 0;
             this.isAdmin = false;
-        })
-        .catch(Boo.boo);
+        });
     }
 }
 

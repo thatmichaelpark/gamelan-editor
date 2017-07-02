@@ -197,7 +197,10 @@ class Main extends React.Component {
                     {account.isLoggedIn ? (
                         <div
                             className="dropdowntitle"
-                            onClick={() => account.logOut()}
+                            onClick={() => account.logOut()
+                                .then(() => Boo.yeah(`Logged out`))
+                                .catch(Boo.boo)
+                            }
                         >
                             Log {account.name} Out
                         </div>
