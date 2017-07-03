@@ -42,11 +42,15 @@ class Main extends React.Component {
         });
     }
     handleOpen = (id) => {
-        this.setState({
-            openDialogIsVisible: false
-        });
         if (id) {
-            piecesStore.open(id);
+            piecesStore.open(id)
+            .then(() => {
+                this.setState({ openDialogIsVisible: false });
+            })
+            .catch(Boo.boo);
+        }
+        else {
+            this.setState({ openDialogIsVisible: false });
         }
     }
     showSaveAsDialog = () => {
@@ -72,16 +76,22 @@ class Main extends React.Component {
     }
     handleSaveAs = (title) => {
         if (title !== null) {
-            piecesStore.saveAs(title, () => {
+            if (!title.trim()) {
+                Boo.boo({ message: "Title cannot be blank"});
+                return;
+            }
+            piecesStore.saveAs(title)
+            .then(() => {
                 this.setState({ saveAsDialogIsVisible: false });
-            });
+            })
+            .catch(Boo.boo);
         }
         else {
             this.setState({ saveAsDialogIsVisible: false });
         }
     }
     handleSave = () => {
-        piecesStore.save();
+        piecesStore.save().catch(Boo.boo);
     }
     handleNew = (data) => {
         this.setState({

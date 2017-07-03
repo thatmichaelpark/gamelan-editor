@@ -2,6 +2,7 @@ import React from 'react';
 import piecesStore from './stores/piecesStore';
 import account from './stores/accountStore';
 import { observer } from 'mobx-react';
+import Boo from './Boo';
 
 @observer
 class ManagePiecesDialog extends React.Component {
@@ -49,17 +50,24 @@ class ManagePiecesDialog extends React.Component {
 
         }
         const handleBlur = (piece) => {
+            if (this.state.tempTitle.trim() === '') {
+                Boo.boo({ message: "Title can't be blank"});
+                // this.setState({ tempTitle: piece.title });
+                return;
+            }
             piece.title = this.state.tempTitle;
-            piecesStore.savePiece(piece, () => {
-                piecesStore.getPieces()
-                .then(pieces => {
-                    this.setState({
-                        pieces: pieces.filter(p => p.userId === account.userId),
-                        selectedPieceId: -1,
-                        tempTitle: ''
-                    });
+            piecesStore.savePiece(piece)
+            .then(() => {
+                return piecesStore.getPieces();
+            })
+            .then(pieces => {
+                this.setState({
+                    pieces: pieces.filter(p => p.userId === account.userId),
+                    selectedPieceId: -1,
+                    tempTitle: ''
                 });
-            });
+            })
+            .catch(Boo.boo);
         }
         const sortedPieces = this.state.pieces ? this.state.pieces.slice(0) : [];
 

@@ -37,6 +37,12 @@ class OpenDialog extends React.Component {
             this.props.onOpen(null);
         }
     }
+    handleDoubleClick = (id) => {
+        this.setState({
+            selectedPieceId: id
+        });
+        this.handleClick({ target: { name: 'open' } }); // fake click event
+    }
     render() {
         const sortedPieces = this.state.pieces ? this.state.pieces.slice(0) : [];
 
@@ -58,6 +64,7 @@ class OpenDialog extends React.Component {
                                 className={ piece.id === this.state.selectedPieceId ? 'selected' : '' }
                                 key={i}
                                 onClick={() => this.handleSelect(piece.id)}
+                                onDoubleClick={() => this.handleDoubleClick(piece.id)}
                             >
                                 {`${piece.title} (${usersStore.nameById(piece.userId)})`}
                             </p>

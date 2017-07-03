@@ -143,13 +143,9 @@ class PiecesStore {
         })
         .catch(Boo.boo);
     }
-    saveAs(title, callback) {
-        if (!title.trim()) {
-            Boo.boo({message: "Title cannot be blank"});
-            return;
-        }
+    saveAs(title) {
         this.currentPiece.title = title;
-        axios.post('/api/pieces', {
+        return axios.post('/api/pieces', {
             piece: this.currentPiece
         })
         .then(result => {
@@ -161,19 +157,14 @@ class PiecesStore {
             this.savedPiece.scale = this.currentPiece.scale;
             this.savedPiece.parts = JSON.parse(JSON.stringify(this.currentPiece.parts));
             this.savedPiece.phraseInfos = JSON.parse(JSON.stringify(this.currentPiece.phraseInfos));
-            callback && callback();
-        })
-        .catch(Boo.boo);
+        });
     }
-    savePiece(piece, callback) {
-        axios.patch(`/api/pieces/${piece.id}`, { piece })
-        .then(result => {
-            callback && callback(result);
-        })
-        .catch(Boo.boo);
+    savePiece(piece) {
+        return axios.patch(`/api/pieces/${piece.id}`, { piece });
     }
-    save(callback) {
-        this.savePiece(this.currentPiece, (result) => {
+    save() {
+        return this.savePiece(this.currentPiece)
+        .then((result) => {
             this.currentPiece.id = result.data.id;
             this.currentPiece.userId = result.data.userId;
             this.savedPiece.id = this.currentPiece.id;
@@ -182,11 +173,10 @@ class PiecesStore {
             this.savedPiece.scale = this.currentPiece.scale;
             this.savedPiece.parts = JSON.parse(JSON.stringify(this.currentPiece.parts));
             this.savedPiece.phraseInfos = JSON.parse(JSON.stringify(this.currentPiece.phraseInfos));
-            callback && callback();
         });
     }
-    open(id, callback) {
-        axios.get(`/api/pieces/${id}`)
+    open(id) {
+        return axios.get(`/api/pieces/${id}`)
         .then(result => {
             this.currentPiece.title = result.data.title;
             this.currentPiece.scale = result.data.scale;
@@ -200,9 +190,7 @@ class PiecesStore {
             this.savedPiece.scale = this.currentPiece.scale;
             this.savedPiece.parts = JSON.parse(JSON.stringify(this.currentPiece.parts));
             this.savedPiece.phraseInfos = JSON.parse(JSON.stringify(this.currentPiece.phraseInfos));
-            callback && callback();
-        })
-        .catch(Boo.boo);
+        });
     }
     @computed get modified() {
         return this.currentPiece.title !== this.savedPiece.title
