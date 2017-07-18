@@ -1,5 +1,5 @@
 import React from 'react';
-import piecesStore from './stores/piecesStore';
+import { piecesStore } from './stores/piecesStore';
 import usersStore from './stores/usersStore';
 import { observer } from 'mobx-react';
 

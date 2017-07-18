@@ -206,4 +206,5 @@ class PiecesStore {
 }
 
 const piecesStore = new PiecesStore();
-export default piecesStore;
+const currentPiece = piecesStore.currentPiece;
+export { currentPiece, piecesStore };

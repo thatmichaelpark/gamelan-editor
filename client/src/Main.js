@@ -8,7 +8,7 @@ import ManagePhrasesDialog from './ManagePhrasesDialog';
 import ManagePiecesDialog from './ManagePiecesDialog';
 import LoginDialog from './LoginDialog';
 import './App.css';
-import piecesStore from './stores/piecesStore';
+import { currentPiece, piecesStore } from './stores/piecesStore';
 import Part from './Part';
 import DropdownMenu from './DropdownMenu';
 import displayStuff from './stores/displayStuff';
@@ -61,7 +61,7 @@ class Main extends React.Component {
         this.setState({ saveAsDialogIsVisible: true });
     }
     showManagePhrasesDialog = () => {
-        if (piecesStore.currentPiece.parts.length === 0) {
+        if (currentPiece.parts.length === 0) {
             Boo.boo({ message: "Can't add phrases without parts"});
             return;
         }
@@ -114,9 +114,8 @@ class Main extends React.Component {
         this.setState({ loginDialogIsVisible: false });
     }
     render() {
-        const piece = piecesStore.currentPiece;
         const blah = () => {
-            const phraseNames = piece.phraseInfos.map(info => info.name);
+            const phraseNames = currentPiece.phraseInfos.map(info => info.name);
 
             if (displayStuff.displayMode === 'compact') {
                 return (
@@ -135,7 +134,7 @@ class Main extends React.Component {
                                 </select>
                             </div>
                         </div>}
-                        {piece.parts.map((part, i) =>
+                        {currentPiece.parts.map((part, i) =>
                             <Part key={i} part={part} partIndex={i} displayMode='compact' phraseIndex={displayStuff.displayPhraseIndex}/>
                         )}
                     </div>
@@ -143,14 +142,14 @@ class Main extends React.Component {
             }
             else if (displayStuff.displayMode === 'byParts') {
                 return (
-                    piece.parts.map((part, i) =>
+                    currentPiece.parts.map((part, i) =>
                         <Part key={i} part={part} partIndex={i} displayMode='byParts' phraseNames={phraseNames}/>
                     )
                 );
             }
             else { // byPhrases
                 return (
-                    piece.phraseInfos.map((phraseInfo, i) =>
+                    currentPiece.phraseInfos.map((phraseInfo, i) =>
                         <div key={i}>
                             <div className='part'>
                                 <div className='left'>
@@ -162,7 +161,7 @@ class Main extends React.Component {
                                     </div>
                                 </div>
                             </div>
-                            {piece.parts.map((part, idx) =>
+                            {currentPiece.parts.map((part, idx) =>
                                 <Part key={idx} part={part} partIndex={idx} displayMode='compact' phraseIndex={i}/>
                             )}
                         </div>
@@ -179,7 +178,7 @@ class Main extends React.Component {
                         menuItems={[
                             { text: 'New', action: () => this.setState({ newDialogIsVisible: true })},
                             { text: 'Open', action: () => this.setState({ openDialogIsVisible: true })},
-                            { text: 'Save', action: this.handleSave, disabled: !(piecesStore.modified && piece.id && piece.userId === account.userId) },
+                            { text: 'Save', action: this.handleSave, disabled: !(piecesStore.modified && currentPiece.id && currentPiece.userId === account.userId) },
                             { text: 'Save As', action: this.showSaveAsDialog},
                             { text: 'Manage', action: this.showManagePiecesDialog},
                         ]}
@@ -229,11 +228,11 @@ class Main extends React.Component {
                     )}
                 </div>
                 <h1>
-                    {piece.title || 'Untitled'}
-                    ({piece.scale})
+                    {currentPiece.title || 'Untitled'}
+                    ({currentPiece.scale})
                     {piecesStore.modified ? '*' : ''}
-                    [{piece.id}]
-                    [{piece.userId}]
+                    [{currentPiece.id}]
+                    [{currentPiece.userId}]
                 </h1>
                 <div
                     style={{
@@ -242,12 +241,12 @@ class Main extends React.Component {
                         flexDirection: 'column'
                     }}
                 >
-                    {blah(piece)}
+                    {blah(currentPiece)}
                 </div>
                 <OpenDialog isVisible={this.state.openDialogIsVisible} onOpen={this.handleOpen}/>
-                <SaveAsDialog isVisible={this.state.saveAsDialogIsVisible} title={piece.title} onSave={this.handleSaveAs}/>
+                <SaveAsDialog isVisible={this.state.saveAsDialogIsVisible} title={currentPiece.title} onSave={this.handleSaveAs}/>
                 <NewDialog isVisible={this.state.newDialogIsVisible} onNew={this.handleNew}/>
-                <ManagePartsDialog isVisible={this.state.managePartsDialogIsVisible} scale={piece.scale} onManageParts={this.handleManageParts}/>
+                <ManagePartsDialog isVisible={this.state.managePartsDialogIsVisible} scale={currentPiece.scale} onManageParts={this.handleManageParts}/>
                 <ManagePhrasesDialog isVisible={this.state.managePhrasesDialogIsVisible} onManagePhrases={this.handleManagePhrases}/>
                 <ManagePiecesDialog isVisible={this.state.managePiecesDialogIsVisible} onManagePieces={this.handleManagePieces}/>
                 <LoginDialog isVisible={this.state.loginDialogIsVisible} onLogin={this.handleLogin}/>

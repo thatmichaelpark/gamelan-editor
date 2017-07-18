@@ -1,5 +1,5 @@
 import React from 'react';
-import piecesStore from './stores/piecesStore';
+import { currentPiece } from './stores/piecesStore';
 
 class ManagePhrasesDialog extends React.Component {
     constructor(props) {
@@ -16,9 +16,8 @@ class ManagePhrasesDialog extends React.Component {
                 editPhraseIndex: -1,
                 name: ''
             });
-            this.piece = piecesStore.currentPiece;
-            this.savedParts = JSON.stringify(this.piece.parts);
-            this.savedPhraseInfos = JSON.stringify(this.piece.phraseInfos);
+            this.savedParts = JSON.stringify(currentPiece.parts);
+            this.savedPhraseInfos = JSON.stringify(currentPiece.phraseInfos);
         }
     }
     handleChange = (e) => {
@@ -28,14 +27,14 @@ class ManagePhrasesDialog extends React.Component {
     }
     handleClick = (e) => {
         if (e.target.name === 'add') {
-            this.piece.addPhrase(this.state.name, Number(this.state.length));
+            currentPiece.addPhrase(this.state.name, Number(this.state.length));
         }
         else if (e.target.name === 'ok') {
             this.props.onManagePhrases();
         }
         else { // cancel: restore saved parts
-            this.piece.parts = JSON.parse(this.savedParts);
-            this.piece.phraseInfos = JSON.parse(this.savedPhraseInfos);
+            currentPiece.parts = JSON.parse(this.savedParts);
+            currentPiece.phraseInfos = JSON.parse(this.savedPhraseInfos);
             this.props.onManagePhrases();
         }
     }
@@ -44,31 +43,31 @@ class ManagePhrasesDialog extends React.Component {
             if (i === 0) {
                 return;
             }
-            const movingPhraseInfo = this.piece.phraseInfos[i];
-            this.piece.phraseInfos.splice(i, 1);                        // remove ith element
-            this.piece.phraseInfos.splice(i - 1, 0, movingPhraseInfo);  // insert moved element
-            this.piece.parts.forEach(part => {
+            const movingPhraseInfo = currentPiece.phraseInfos[i];
+            currentPiece.phraseInfos.splice(i, 1);                        // remove ith element
+            currentPiece.phraseInfos.splice(i - 1, 0, movingPhraseInfo);  // insert moved element
+            currentPiece.parts.forEach(part => {
                 const movingPhrase = part.phrases[i];
                 part.phrases.splice(i, 1);                              // remove ith phrase
                 part.phrases.splice(i - 1, 0, movingPhrase);            // insert moved phrase
             });
         }
         const moveDown = (i) => {
-            if (i === this.piece.parts.length - 1) {
+            if (i === currentPiece.parts.length - 1) {
                 return;
             }
-            const movingPhraseInfo = this.piece.phraseInfos[i];
-            this.piece.phraseInfos.splice(i, 1);                        // remove ith element
-            this.piece.phraseInfos.splice(i + 1, 0, movingPhraseInfo);  // insert moved element
-            this.piece.parts.forEach(part => {
+            const movingPhraseInfo = currentPiece.phraseInfos[i];
+            currentPiece.phraseInfos.splice(i, 1);                        // remove ith element
+            currentPiece.phraseInfos.splice(i + 1, 0, movingPhraseInfo);  // insert moved element
+            currentPiece.parts.forEach(part => {
                 const movingPhrase = part.phrases[i];
                 part.phrases.splice(i, 1);                              // remove ith phrase
                 part.phrases.splice(i + 1, 0, movingPhrase);            // insert moved phrase
             });
         }
         const deleet = (i) => {
-            this.piece.phraseInfos.splice(i, 1);                // remove ith phraseInfo
-            this.piece.parts.forEach(part => {
+            currentPiece.phraseInfos.splice(i, 1);                // remove ith phraseInfo
+            currentPiece.parts.forEach(part => {
                 part.phrases.splice(i, 1);                      // remove ith phrase
             });
         }
@@ -76,7 +75,7 @@ class ManagePhrasesDialog extends React.Component {
             this.setState({ editPhraseIndex: phraseIndex });
         }
         const handleEdit = (e) => {
-            this.piece.phraseInfos[this.state.editPhraseIndex].name = e.target.value;
+            currentPiece.phraseInfos[this.state.editPhraseIndex].name = e.target.value;
         }
         const handleBlur = (e) => {
             this.setState({ editPhraseIndex: -1 });
@@ -90,7 +89,7 @@ class ManagePhrasesDialog extends React.Component {
                     <input type="number" onChange={this.handleChange} name="length" value={this.state.length} style={{ width: '20%' }}/>
                     <button onClick={this.handleClick} name="add">Add</button>
                     <div className="dialog-contents">
-                        {this.piece.phraseInfos.map((phrase, phraseIndex) =>
+                        {currentPiece.phraseInfos.map((phrase, phraseIndex) =>
                             <div key={phraseIndex}>
                                 <button onClick={() => moveUp(phraseIndex)}>▲</button>
                                 <button onClick={() => moveDown(phraseIndex)}>▼</button>

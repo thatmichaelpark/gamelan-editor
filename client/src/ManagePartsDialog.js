@@ -1,6 +1,6 @@
 import React from 'react';
 import gamelansStore from './stores/gamelansStore';
-import piecesStore from './stores/piecesStore';
+import { currentPiece } from './stores/piecesStore';
 
 class AddPartDialog extends React.Component {
     constructor(props) {
@@ -18,8 +18,7 @@ class AddPartDialog extends React.Component {
                 instruments,
                 instrument: instruments[0]
             });
-            this.piece = piecesStore.currentPiece;
-            this.savedParts = JSON.stringify(this.piece.parts);
+            this.savedParts = JSON.stringify(currentPiece.parts);
         }
     }
     handleSelect = (e) => {
@@ -29,13 +28,13 @@ class AddPartDialog extends React.Component {
     }
     handleClick = (e) => {
         if (e.target.name === 'add') {
-            this.piece.addPart(this.state.instrument);
+            currentPiece.addPart(this.state.instrument);
         }
         else if (e.target.name === 'ok') {
             this.props.onManageParts();
         }
         else { // cancel: restore saved parts
-            this.piece.parts = JSON.parse(this.savedParts);
+            currentPiece.parts = JSON.parse(this.savedParts);
             this.props.onManageParts();
         }
     }
@@ -44,20 +43,20 @@ class AddPartDialog extends React.Component {
             if (i === 0) {
                 return;
             }
-            const movingPart = this.piece.parts[i];
-            this.piece.parts.splice(i, 1);                   // remove ith element
-            this.piece.parts.splice(i - 1, 0, movingPart);   // insert moved element
+            const movingPart = currentPiece.parts[i];
+            currentPiece.parts.splice(i, 1);                   // remove ith element
+            currentPiece.parts.splice(i - 1, 0, movingPart);   // insert moved element
         }
         const moveDown = (i) => {
-            if (i === this.piece.parts.length - 1) {
+            if (i === currentPiece.parts.length - 1) {
                 return;
             }
-            const movingPart = this.piece.parts[i];
-            this.piece.parts.splice(i, 1);                   // remove ith element
-            this.piece.parts.splice(i + 1, 0, movingPart);   // insert moved element
+            const movingPart = currentPiece.parts[i];
+            currentPiece.parts.splice(i, 1);                   // remove ith element
+            currentPiece.parts.splice(i + 1, 0, movingPart);   // insert moved element
         }
         const deleet = (i) => {
-            this.piece.parts.splice(i, 1);                   // remove ith element
+            currentPiece.parts.splice(i, 1);                   // remove ith element
         }
 
         return this.props.isVisible && (
@@ -65,7 +64,7 @@ class AddPartDialog extends React.Component {
                 <div className="dialog dialog-large">
                     <h1>Manage Parts</h1>
                     <div className="dialog-contents">
-                        {this.piece.parts.map((part, partIndex) =>
+                        {currentPiece.parts.map((part, partIndex) =>
                             <div key={partIndex}>
                                 <button onClick={() => moveUp(partIndex)}>▲</button>
                                 <button onClick={() => moveDown(partIndex)}>▼</button>

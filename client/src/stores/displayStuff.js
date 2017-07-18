@@ -1,5 +1,5 @@
 import { computed, observable } from 'mobx';
-import piecesStore from './piecesStore';
+import { currentPiece } from './piecesStore';
 
 class DisplayStuff {
     @observable displayMode = 'byParts' // byParts | byPhrases | compact
@@ -10,18 +10,18 @@ class DisplayStuff {
     @observable selectedNoteIndex = 0;
 
     @computed get numParts() {
-        return piecesStore.currentPiece.parts.length;
+        return currentPiece.parts.length;
     }
 
     @computed get numPhrases() {
-        return piecesStore.currentPiece.parts.length ? piecesStore.currentPiece.parts[0].phrases.length : 0;
+        return currentPiece.parts.length ? currentPiece.parts[0].phrases.length : 0;
     }
 
     setDisplayMode(displayMode) {
         this.displayMode = displayMode;
         if (displayMode === 'compact' && this.selectedPhraseIndex >= 0) {
             this.displayPhraseIndex = this.selectedPhraseIndex;
-            const i = piecesStore.currentPiece.parts[this.selectedPartIndex].phrases[this.selectedPhraseIndex].length - 1;
+            const i = currentPiece.parts[this.selectedPartIndex].phrases[this.selectedPhraseIndex].length - 1;
             this.selectedHandIndex = Math.min(i, this.selectedHandIndex);
         }
     }
@@ -29,7 +29,7 @@ class DisplayStuff {
         this.displayPhraseIndex = Number(displayPhraseIndex);
         if (this.selectedPhraseIndex >= 0) {
             this.selectedPhraseIndex = this.displayPhraseIndex;
-            const i = piecesStore.currentPiece.parts[this.selectedPartIndex].phrases[this.selectedPhraseIndex].length - 1;
+            const i = currentPiece.parts[this.selectedPartIndex].phrases[this.selectedPhraseIndex].length - 1;
             this.selectedHandIndex = Math.min(i, this.selectedHandIndex);
         }
     }
@@ -56,7 +56,7 @@ class DisplayStuff {
                     this.selectedNoteIndex = 0;
                 }
                 else {
-                    this.selectedNoteIndex = piecesStore.currentPiece.parts[partIndex].phrases[phraseIndex][0].length - 1;
+                    this.selectedNoteIndex = currentPiece.parts[partIndex].phrases[phraseIndex][0].length - 1;
                 }
             }
         }
@@ -65,12 +65,12 @@ class DisplayStuff {
             const phraseIndex = this.selectedPhraseIndex;
             const handIndex = this.selectedHandIndex;
 
-            if (++this.selectedNoteIndex >= piecesStore.currentPiece.parts[partIndex].phrases[phraseIndex][0].length) {
+            if (++this.selectedNoteIndex >= currentPiece.parts[partIndex].phrases[phraseIndex][0].length) {
                 this.handleArrow('ArrowDown');
                 if (partIndex === this.selectedPartIndex
                     && phraseIndex === this.selectedPhraseIndex
                     && handIndex === this.selectedHandIndex) { // Arrow had no effect
-                    this.selectedNoteIndex = piecesStore.currentPiece.parts[partIndex].phrases[phraseIndex][0].length - 1;
+                    this.selectedNoteIndex = currentPiece.parts[partIndex].phrases[phraseIndex][0].length - 1;
                 }
                 else {
                     this.selectedNoteIndex = 0;
@@ -90,7 +90,7 @@ class DisplayStuff {
                                 break;
                             }
                         }
-                        this.selectedHandIndex = piecesStore.currentPiece.parts[this.selectedPartIndex].phrases[this.selectedPhraseIndex].length - 1;
+                        this.selectedHandIndex = currentPiece.parts[this.selectedPartIndex].phrases[this.selectedPhraseIndex].length - 1;
                     }
                     break;
                 case 'byPhrases':
@@ -104,7 +104,7 @@ class DisplayStuff {
                                 break;
                             }
                         }
-                        this.selectedHandIndex = piecesStore.currentPiece.parts[this.selectedPartIndex].phrases[this.selectedPhraseIndex].length - 1;
+                        this.selectedHandIndex = currentPiece.parts[this.selectedPartIndex].phrases[this.selectedPhraseIndex].length - 1;
                     }
                     break;
                 default: // compact
@@ -114,7 +114,7 @@ class DisplayStuff {
                     else {
                         if (this.selectedPartIndex) {
                             --this.selectedPartIndex;
-                            this.selectedHandIndex = piecesStore.currentPiece.parts[this.selectedPartIndex].phrases[this.selectedPhraseIndex].length - 1;
+                            this.selectedHandIndex = currentPiece.parts[this.selectedPartIndex].phrases[this.selectedPhraseIndex].length - 1;
                         }
                         else {
                             this.selectedPartIndex = 0;
@@ -125,37 +125,37 @@ class DisplayStuff {
         else if (arrow === 'ArrowDown') {
             switch (this.displayMode) {
                 case 'byParts':
-                    if (++this.selectedHandIndex >= piecesStore.currentPiece.parts[this.selectedPartIndex].phrases[this.selectedPhraseIndex].length) {
+                    if (++this.selectedHandIndex >= currentPiece.parts[this.selectedPartIndex].phrases[this.selectedPhraseIndex].length) {
                         this.selectedHandIndex = 0;
                         if (++this.selectedPhraseIndex >= this.numPhrases) {
                             this.selectedPhraseIndex = 0;
                             if (++this.selectedPartIndex >= this.numParts) {
                                 --this.selectedPartIndex;
                                 this.selectedPhraseIndex = this.numPhrases - 1;
-                                this.selectedHandIndex = piecesStore.currentPiece.parts[this.selectedPartIndex].phrases[this.selectedPhraseIndex].length - 1;
+                                this.selectedHandIndex = currentPiece.parts[this.selectedPartIndex].phrases[this.selectedPhraseIndex].length - 1;
                             }
                         }
                     }
                     break;
                 case 'byPhrases':
-                    if (++this.selectedHandIndex >= piecesStore.currentPiece.parts[this.selectedPartIndex].phrases[this.selectedPhraseIndex].length) {
+                    if (++this.selectedHandIndex >= currentPiece.parts[this.selectedPartIndex].phrases[this.selectedPhraseIndex].length) {
                         this.selectedHandIndex = 0;
                         if (++this.selectedPartIndex >= this.numParts) {
                             this.selectedPartIndex = 0;
                             if (++this.selectedPhraseIndex >= this.numPhrases) {
                                 --this.selectedPhraseIndex;
                                 this.selectedPartIndex = this.numParts - 1;
-                                this.selectedHandIndex = piecesStore.currentPiece.parts[this.selectedPartIndex].phrases[this.selectedPhraseIndex].length - 1;
+                                this.selectedHandIndex = currentPiece.parts[this.selectedPartIndex].phrases[this.selectedPhraseIndex].length - 1;
                             }
                         }
                     }
                     break;
                 default: // compact
-                    if (++this.selectedHandIndex >= piecesStore.currentPiece.parts[this.selectedPartIndex].phrases[this.selectedPhraseIndex].length) {
+                    if (++this.selectedHandIndex >= currentPiece.parts[this.selectedPartIndex].phrases[this.selectedPhraseIndex].length) {
                         this.selectedHandIndex = 0;
-                        if (++this.selectedPartIndex >= piecesStore.currentPiece.parts.length) {
-                            this.selectedPartIndex = piecesStore.currentPiece.parts.length - 1;
-                            this.selectedHandIndex = piecesStore.currentPiece.parts[this.selectedPartIndex].phrases[this.selectedPhraseIndex].length - 1;
+                        if (++this.selectedPartIndex >= currentPiece.parts.length) {
+                            this.selectedPartIndex = currentPiece.parts.length - 1;
+                            this.selectedHandIndex = currentPiece.parts[this.selectedPartIndex].phrases[this.selectedPhraseIndex].length - 1;
                         }
                     }
             }

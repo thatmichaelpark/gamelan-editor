@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import gamelansStore from './stores/gamelansStore';
-import piecesStore from './stores/piecesStore';
+import { currentPiece } from './stores/piecesStore';
 import displayStuff from './stores/displayStuff';
 
 @observer
@@ -71,7 +71,7 @@ class Note extends React.Component {
         }
         if (key) {
             displayStuff.setSelected(this.props.partIndex, this.props.phraseIndex, this.props.handIndex, this.props.noteIndex);
-            const success = piecesStore.currentPiece.setNote(key, this.props.partIndex, this.props.phraseIndex, this.props.handIndex, this.props.noteIndex);
+            const success = currentPiece.setNote(key, this.props.partIndex, this.props.phraseIndex, this.props.handIndex, this.props.noteIndex);
             if (success) {
                 displayStuff.handleArrow('ArrowRight');
             }
@@ -79,7 +79,7 @@ class Note extends React.Component {
         }
     }
     render() {
-        const gamut = [' ', '·'].concat(gamelansStore.gamut(piecesStore.currentPiece.scale, this.props.part.instrument));
+        const gamut = [' ', '·'].concat(gamelansStore.gamut(currentPiece.scale, this.props.part.instrument));
         const selected = this.props.partIndex === displayStuff.selectedPartIndex &&
                          this.props.phraseIndex === displayStuff.selectedPhraseIndex &&
                          this.props.handIndex === displayStuff.selectedHandIndex &&
@@ -87,7 +87,7 @@ class Note extends React.Component {
         const setNote = (e, x) => {
             e.preventDefault();
             displayStuff.setSelected(this.props.partIndex, this.props.phraseIndex, this.props.handIndex, this.props.noteIndex);
-            piecesStore.currentPiece.setNote(x, this.props.partIndex, this.props.phraseIndex, this.props.handIndex, this.props.noteIndex);
+            currentPiece.setNote(x, this.props.partIndex, this.props.phraseIndex, this.props.handIndex, this.props.noteIndex);
             this.setState({
                 menuIsVisible: false
             });
