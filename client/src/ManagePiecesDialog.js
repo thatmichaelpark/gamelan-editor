@@ -4,6 +4,41 @@ import account from './stores/accountStore';
 import { observer } from 'mobx-react';
 import Boo from './Boo';
 
+class DeleteButton extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            phase: 0
+        };
+    }
+    click = (e) => {
+        if (this.state.phase === 0) {
+            this.setState({ phase: 1 });
+            setTimeout(() => {
+                this.setState({ phase: 0 });
+            }, 3333);
+        }
+        else {
+            this.props.onClick(e);
+        }
+    }
+    render() {
+        return (
+            <button
+                onClick={this.click}
+                style={{
+                    overflow: 'hidden',
+                    transition: '0.2s',
+                    width: `${this.state.phase * 35 + 30}px`
+                }}
+            >
+                {/* {['❌', '❌ Sure?'][this.state.phase]} */}
+                ❌&nbsp;&nbsp;&nbsp;Sure?
+            </button>
+        )
+    }
+}
+
 @observer
 class ManagePiecesDialog extends React.Component {
     constructor(props) {
@@ -46,8 +81,19 @@ class ManagePiecesDialog extends React.Component {
                 tempTitle: piece.title
             });
         }
-        const deleet = () => {
-
+        const deleet = (id) => {
+            piecesStore.delete(id)
+            .then(() => {
+                return piecesStore.getPieces();
+            })
+            .then(pieces => {
+                this.setState({
+                    pieces: pieces.filter(p => p.userId === account.userId),
+                    selectedPieceId: -1,
+                    tempTitle: ''
+                });
+            })
+            .catch(Boo.boo);
         }
         const handleBlur = (piece) => {
             if (this.state.tempTitle.trim() === '') {
@@ -55,8 +101,11 @@ class ManagePiecesDialog extends React.Component {
                 // this.setState({ tempTitle: piece.title });
                 return;
             }
-            piece.title = this.state.tempTitle;
-            piecesStore.savePiece(piece)
+            piece.title = this.state.tempTitle.trim();
+            piecesStore.savePiece({
+                id: piece.id,
+                title: piece.title
+            })
             .then(() => {
                 return piecesStore.getPieces();
             })
@@ -83,7 +132,7 @@ class ManagePiecesDialog extends React.Component {
                                 // className={ piece.id === this.state.selectedPieceId ? 'selected' : '' }
                                 key={i}
                             >
-                                <button onClick={() => deleet()}>❌</button> {/* ×❌❎*/}
+                                <DeleteButton onClick={() => deleet()}/>
                                 {piece.id === this.state.selectedPieceId ? (
                                     <input
                                         name="tempTitle"

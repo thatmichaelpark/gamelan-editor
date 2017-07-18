@@ -192,6 +192,9 @@ class PiecesStore {
             this.savedPiece.phraseInfos = JSON.parse(JSON.stringify(this.currentPiece.phraseInfos));
         });
     }
+    delete(id) {
+        return axios.delete(`/api/pieces/${id}`);
+    }
     @computed get modified() {
         return this.currentPiece.title !== this.savedPiece.title
             || this.currentPiece.scale !== this.savedPiece.scale
