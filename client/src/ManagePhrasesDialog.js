@@ -94,6 +94,15 @@ class ManagePhrasesDialog extends React.Component {
             if (currentPiece.phraseInfos[phraseIndex].length === 0) {
                 return;
             }
+            let ok = true;
+            currentPiece.parts.forEach(part => {
+                part.phrases[phraseIndex].forEach(hand => {
+                    ok = ok && hand[0] === ' ';
+                });
+            });
+            if (!ok) {
+                return;
+            }
             currentPiece.phraseInfos[phraseIndex].length -= 1;
             currentPiece.parts.forEach(part => {
                 part.phrases[phraseIndex].forEach(hand => {
