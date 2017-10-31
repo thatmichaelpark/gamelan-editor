@@ -1,6 +1,8 @@
 import React from 'react';
 import { currentPiece } from './stores/piecesStore';
+import { observer } from 'mobx-react';
 
+@observer
 class ManagePhrasesDialog extends React.Component {
     constructor(props) {
         super(props);
@@ -80,6 +82,25 @@ class ManagePhrasesDialog extends React.Component {
         const handleBlur = (e) => {
             this.setState({ editPhraseIndex: -1 });
         }
+        const lengthen = (phraseIndex) => {
+            currentPiece.phraseInfos[phraseIndex].length += 1;
+            currentPiece.parts.forEach(part => {
+                part.phrases[phraseIndex].forEach(hand => {
+                    hand.unshift(' ');
+                });
+            });
+        }
+        const shorten = (phraseIndex) => {
+            if (currentPiece.phraseInfos[phraseIndex].length === 0) {
+                return;
+            }
+            currentPiece.phraseInfos[phraseIndex].length -= 1;
+            currentPiece.parts.forEach(part => {
+                part.phrases[phraseIndex].forEach(hand => {
+                    hand.shift();
+                });
+            });
+        }
 
         return this.props.isVisible && (
             <div className="dialogparent">
@@ -105,6 +126,11 @@ class ManagePhrasesDialog extends React.Component {
                                         {phrase.name}
                                     </span>
                                 )}
+                                (
+                                    <span>{phrase.length}</span>
+                                    <span onClick={() => lengthen(phraseIndex)}>+</span>
+                                    <span onClick={() => shorten(phraseIndex)}>-</span>
+                                )
                             </div>
                         )}
                     </div>
