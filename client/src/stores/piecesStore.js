@@ -132,7 +132,10 @@ class PiecesStore {
         this.savedPiece.phraseInfos = JSON.parse(JSON.stringify(this.currentPiece.phraseInfos.slice(0)));
     }
     new(title, scale) {
-        this.currentPiece = new Piece(title, scale, [], []);
+        this.currentPiece.title = title;
+        this.currentPiece.scale = scale;
+        this.currentPiece.parts = [];
+        this.currentPiece.phraseInfos = [];
         this.savedPiece = new Piece(title, scale, [], []);
     }
     getPieces() {

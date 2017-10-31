@@ -97,6 +97,7 @@ class Main extends React.Component {
         this.setState({
             newDialogIsVisible: false
         });
+        console.log(data);
         if (data) {
             piecesStore.new(data.title, data.scale);
         }
