@@ -32,6 +32,7 @@ router.post('/users', ev(validations.post), (req, res, next) => {
     const username = req.body.username;
     const name = req.body.name;
     const password = req.body.password;
+    const isAdmin = req.body.isAdmin;
 
     knex('users').where('username', username).then((users) => {
         if (users.length > 0) {
@@ -40,7 +41,7 @@ router.post('/users', ev(validations.post), (req, res, next) => {
 
         return bcrypt.hash(password, 12);
     }).then((hashedPassword) => {
-        return knex('users').insert(decamelizeKeys({username, name, hashedPassword}), '*');
+        return knex('users').insert(decamelizeKeys({username, name, hashedPassword, isAdmin}), '*');
     }).then((result) => {
         res.send({username: result[0].username, id: result[0].id});
     }).catch((err) => {
