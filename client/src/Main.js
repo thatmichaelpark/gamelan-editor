@@ -15,6 +15,7 @@ import displayStuff from './stores/displayStuff';
 import Boo from './Boo';
 import account from './stores/accountStore';
 import gamelansStore from './stores/gamelansStore';
+import InstrumentLoadingProgress from './InstrumentLoadingProgress';
 
 import { observer } from 'mobx-react';
 
@@ -263,6 +264,7 @@ class Main extends React.Component {
                 <ManagePhrasesDialog isVisible={this.state.managePhrasesDialogIsVisible} onManagePhrases={this.handleManagePhrases}/>
                 <ManagePiecesDialog isVisible={this.state.managePiecesDialogIsVisible} onManagePieces={this.handleManagePieces}/>
                 <LoginDialog isVisible={this.state.loginDialogIsVisible} onLogin={this.handleLogin}/>
+                <InstrumentLoadingProgress/>
             </div>
         );
     }
