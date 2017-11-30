@@ -4,12 +4,12 @@ import axios from 'axios';
 
 class Sample {
     constructor(ctx, buffer, destination) {
-        this.context = ctx;
+        this.audioContext = ctx;
         this.buffer = buffer;
         this.destination = destination;
     }
     trigger(time) {
-        this.source = this.context.createBufferSource();
+        this.source = this.audioContext.createBufferSource();
         this.source.buffer = this.buffer;
         this.source.connect(this.destination);
         this.source.start(time);
@@ -256,10 +256,10 @@ class GamelansStore {
     
     @observable nToLoad = 0;
     @observable nLoaded = 0;
-    loadInstrument(scale, instrumentName, context) {
+    loadInstrument(scale, instrumentName, audioContext) {
         const gamelan = this.gamelans.find(g => g.scale === scale);
         const instrument = gamelan.instruments.find(inst => inst.name === instrumentName);
-        console.log(gamelan.scale, instrument.name);
+
         instrument.tones.forEach(tone => {
             if (tone.sample) {
                 return; // skip if sample has already been loaded
@@ -267,25 +267,17 @@ class GamelansStore {
             this.nToLoad += 1;
             axios.get(`sounds/${tone.filename}`, { responseType: 'arraybuffer' })
             .then(response => {
-                context.decodeAudioData(response.data, buffer => {
-                    tone.sample = new Sample(context, buffer/*, gains[zounds[name].gain]*/);
+                audioContext.decodeAudioData(response.data, buffer => {
+                    tone.sample = new Sample(audioContext, buffer/*, gains[zounds[name].gain]*/);
                     this.nLoaded += 1;
                     if (this.nLoaded === this.nToLoad) {
                         this.nLoaded = this.nToLoad = 0;
                     }
-                    console.log(this.nLoaded, '/', this.nToLoad);
                 });
             });
         });
-        console.log(this.nToLoad, 'to load');
     }
 }
 
 const gamelansStore = new GamelansStore();
-
-window.AudioContext = window.AudioContext || window.webkitAudioContext;
-const context = new AudioContext();
-context.createOscillator(); // Chrome bug: needs this to start audio clock.
-
-gamelansStore.loadInstrument('pelog', 'Bonang barung', context);
 export default gamelansStore;
