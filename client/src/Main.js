@@ -14,16 +14,9 @@ import DropdownMenu from './DropdownMenu';
 import displayStuff from './stores/displayStuff';
 import Boo from './Boo';
 import account from './stores/accountStore';
-import gamelansStore from './stores/gamelansStore';
 import InstrumentLoadingProgress from './InstrumentLoadingProgress';
 
 import { observer } from 'mobx-react';
-
-
-window.AudioContext = window.AudioContext || window.webkitAudioContext;
-const audioContext = new AudioContext();
-audioContext.createOscillator(); // Chrome bug: needs this to start audio clock.
-
 
 @observer
 class Main extends React.Component {
@@ -114,9 +107,7 @@ class Main extends React.Component {
         this.setState({ managePartsDialogIsVisible: false });
         // list of parts might have changed, so go through the parts
         // and load instruments (already-loaded instruments aren't reloaded)
-        currentPiece.parts.forEach(part => {
-            gamelansStore.loadInstrument(currentPiece.scale, part.instrument, audioContext);
-        });
+        currentPiece.loadInstruments();
     }
     handleManagePhrases = () => {
         this.setState({ managePhrasesDialogIsVisible: false });

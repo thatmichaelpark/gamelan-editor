@@ -2,6 +2,7 @@ import { computed, observable } from 'mobx';
 import gamelansStore from './gamelansStore';
 import axios from 'axios';
 import Boo from '../Boo';
+import audioContext from '../audioContext';
 
 class Part {
     @observable instrument;
@@ -66,6 +67,11 @@ class Piece {
         }
         this.parts[partIndex].phrases[phraseIndex][handIndex][noteIndex] = note;
         return true;
+    }
+    loadInstruments() {
+        this.parts.forEach(part => {
+            gamelansStore.loadInstrument(this.scale, part.instrument, audioContext);
+        });
     }
 }
 
@@ -193,6 +199,8 @@ class PiecesStore {
             this.savedPiece.scale = this.currentPiece.scale;
             this.savedPiece.parts = JSON.parse(JSON.stringify(this.currentPiece.parts));
             this.savedPiece.phraseInfos = JSON.parse(JSON.stringify(this.currentPiece.phraseInfos));
+            
+            this.currentPiece.loadInstruments();
         });
     }
     delete(id) {
