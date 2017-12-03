@@ -1,6 +1,7 @@
 import React from 'react';
 import { currentPiece } from './stores/piecesStore';
 import { observer } from 'mobx-react';
+import Boo from './Boo';
 
 @observer
 class ManagePhrasesDialog extends React.Component {
@@ -28,10 +29,18 @@ class ManagePhrasesDialog extends React.Component {
         });
     }
     handleClick = (e) => {
+        function hasDuplicates() {
+            const sortedNames = currentPiece.phraseInfos.map(phraseInfo => phraseInfo.name).sort();
+            return sortedNames.map((name, i) => sortedNames.indexOf(name) !== i).reduce((acc, val) => acc || val)
+        }
         if (e.target.name === 'add') {
             currentPiece.addPhrase(this.state.name, Number(this.state.length));
         }
         else if (e.target.name === 'ok') {
+            if (hasDuplicates()) {
+                Boo.boo({message: "Can't have duplicate phrase names"});
+                return;
+            }
             this.props.onManagePhrases();
         }
         else { // cancel: restore saved parts
