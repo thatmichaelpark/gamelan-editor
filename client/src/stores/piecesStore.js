@@ -43,9 +43,16 @@ class Piece {
         }
     }
     addPhrase(name, length) {
-        if (!name.trim()) {
+        name = name.trim();
+        if (!name) {
             Boo.boo({message: "Phrase name cannot be blank"});
             return;
+        }
+        for (const phraseInfo of this.phraseInfos) {
+            if (phraseInfo.name === name) {
+                Boo.boo({message: "Cannot have duplicate phrase names"});
+                return;
+            }
         }
         this.phraseInfos.push({ name, length});
         this.parts.forEach(part => {
