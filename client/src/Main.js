@@ -5,6 +5,7 @@ import SaveAsDialog from './SaveAsDialog';
 import NewDialog from './NewDialog';
 import ManagePartsDialog from './ManagePartsDialog';
 import ManagePhrasesDialog from './ManagePhrasesDialog';
+import ManagePhrasePlaylistDialog from './ManagePhrasePlaylistDialog';
 import ManagePiecesDialog from './ManagePiecesDialog';
 import LoginDialog from './LoginDialog';
 import './App.css';
@@ -28,6 +29,7 @@ class Main extends React.Component {
             newDialogIsVisible: false,
             managePartsDialogIsVisible: false,
             managePhrasesDialogIsVisible: false,
+            managePhrasePlaylistDialogIsVisible: false,
             managePiecesDialogIsVisible: false,
             loginDialogIsVisible: false
         }
@@ -67,6 +69,13 @@ class Main extends React.Component {
             return;
         }
         this.setState({ managePhrasesDialogIsVisible: true });
+    }
+    showManagePhrasePlaylistDialog = () => {
+        if (currentPiece.phraseInfos.length === 0) {
+            Boo.boo({ message: "Add some phrases first"});
+            return;
+        }
+        this.setState({ managePhrasePlaylistDialogIsVisible: true });
     }
     showManagePiecesDialog = () => {
         if (!account.isLoggedIn) {
@@ -111,6 +120,9 @@ class Main extends React.Component {
     handleManagePhrases = () => {
         this.setState({ managePhrasesDialogIsVisible: false });
         currentPiece.updatePhrases();
+    }
+    handleManagePhrasePlaylist = () => {
+        this.setState({ managePhrasePlaylistDialogIsVisible: false });
     }
     handleManagePieces = () => {
         this.setState({ managePiecesDialogIsVisible: false });
@@ -200,6 +212,12 @@ class Main extends React.Component {
                     >
                         Phrases
                     </div>
+                    <div
+                        className="dropdowntitle"
+                        onClick={this.showManagePhrasePlaylistDialog}
+                    >
+                        PhrasePlaylist
+                    </div>
                     <DropdownMenu
                         title="View"
                         menuItems={[
@@ -258,6 +276,7 @@ class Main extends React.Component {
                 <NewDialog isVisible={this.state.newDialogIsVisible} onNew={this.handleNew}/>
                 <ManagePartsDialog isVisible={this.state.managePartsDialogIsVisible} scale={currentPiece.scale} onManageParts={this.handleManageParts}/>
                 <ManagePhrasesDialog isVisible={this.state.managePhrasesDialogIsVisible} onManagePhrases={this.handleManagePhrases}/>
+                <ManagePhrasePlaylistDialog isVisible={this.state.managePhrasePlaylistDialogIsVisible} onManagePhrasePlaylist={this.handleManagePhrasePlaylist}/>
                 <ManagePiecesDialog isVisible={this.state.managePiecesDialogIsVisible} onManagePieces={this.handleManagePieces}/>
                 <LoginDialog isVisible={this.state.loginDialogIsVisible} onLogin={this.handleLogin}/>
                 <InstrumentLoadingProgress/>
