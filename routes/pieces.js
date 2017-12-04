@@ -21,12 +21,13 @@ router.get('/pieces', (req, res, next) => {
 });
 
 router.get('/pieces/:id', (req, res, next) => {
-    knex('pieces').select('id', 'title', 'scale', 'parts', 'phrase_infos', 'user_id').where('id', req.params.id).first()
+    knex('pieces').select('id', 'title', 'scale', 'parts', 'phrase_infos', 'phrase_playlist', 'user_id').where('id', req.params.id).first()
     .then((result) => {
         result.title = result.title;
         result.scale = result.scale;
         result.parts = JSON.parse(result.parts);
         result.phrase_infos = JSON.parse(result.phrase_infos);
+        result.phrase_playlist = JSON.parse(result.phrase_playlist);
         res.send(camelizeKeys(result));
     }).catch((err) => {
         next(err);
@@ -38,6 +39,7 @@ router.post('/pieces', checkAuth, (req, res, next) => {
     const scale = req.body.piece.scale;
     const parts = JSON.stringify(req.body.piece.parts);
     const phraseInfos = JSON.stringify(req.body.piece.phraseInfos);
+    const phrasePlaylist = JSON.stringify(req.body.piece.phrasePlaylist);
     const userId = req.token.userId;
 
     knex('pieces')
@@ -47,7 +49,7 @@ router.post('/pieces', checkAuth, (req, res, next) => {
         if (result.length) {
             throw boom.create(400, 'Duplicate title');
         }
-        return knex('pieces').insert(decamelizeKeys({title, scale, parts, phraseInfos, userId}), '*')
+        return knex('pieces').insert(decamelizeKeys({title, scale, parts, phraseInfos, phrasePlaylist, userId}), '*')
     })
     .then((result) => {
         res.send({id: result[0].id, userId: result[0].user_id});
@@ -64,6 +66,7 @@ router.patch('/pieces/:id', checkAuth, (req, res, next) => {
     const scale = req.body.piece.scale;
     const parts = JSON.stringify(req.body.piece.parts);
     const phraseInfos = JSON.stringify(req.body.piece.phraseInfos);
+    const phrasePlaylist = JSON.stringify(req.body.piece.phrasePlaylist);
     const userId = req.token.userId;
 
     knex('pieces').select('user_id').where('id', req.params.id).first()
@@ -84,12 +87,9 @@ router.patch('/pieces/:id', checkAuth, (req, res, next) => {
             throw boom.create(400, 'Duplicate title');
         }
 
-        return knex('pieces').update(decamelizeKeys({
-            title: req.body.piece.title,
-            scale: req.body.piece.scale,
-            parts: JSON.stringify(req.body.piece.parts),
-            phraseInfos: JSON.stringify(req.body.piece.phraseInfos)
-        }), ['id', 'user_id']).where('id', req.params.id);
+        return knex('pieces')
+            .update(decamelizeKeys({title, scale, parts, phraseInfos, phrasePlaylist}), ['id', 'user_id'])
+            .where('id', req.params.id);
     })
     .then((ids) => {
         res.send(camelizeKeys(ids[0]));

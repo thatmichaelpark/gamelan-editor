@@ -31,7 +31,7 @@ class ManagePhrasesDialog extends React.Component {
     handleClick = (e) => {
         function hasDuplicates() {
             const sortedNames = currentPiece.phraseInfos.map(phraseInfo => phraseInfo.name).sort();
-            return sortedNames.map((name, i) => sortedNames.indexOf(name) !== i).reduce((acc, val) => acc || val)
+            return sortedNames.map((name, i) => sortedNames.indexOf(name) !== i).reduce((acc, val) => acc || val, false)
         }
         if (e.target.name === 'add') {
             currentPiece.addPhrase(this.state.name, Number(this.state.length));
@@ -64,7 +64,7 @@ class ManagePhrasesDialog extends React.Component {
             });
         }
         const moveDown = (i) => {
-            if (i === currentPiece.parts.length - 1) {
+            if (i === currentPiece.phraseInfos.length - 1) {
                 return;
             }
             const movingPhraseInfo = currentPiece.phraseInfos[i];

@@ -98,7 +98,6 @@ class Main extends React.Component {
         this.setState({
             newDialogIsVisible: false
         });
-        console.log(data);
         if (data) {
             piecesStore.new(data.title, data.scale);
         }
@@ -111,6 +110,7 @@ class Main extends React.Component {
     }
     handleManagePhrases = () => {
         this.setState({ managePhrasesDialogIsVisible: false });
+        currentPiece.updatePhrases();
     }
     handleManagePieces = () => {
         this.setState({ managePiecesDialogIsVisible: false });
@@ -248,6 +248,11 @@ class Main extends React.Component {
                 >
                     {blah(currentPiece)}
                 </div>
+                <ul>
+                    {currentPiece.phrasePlaylist.map((id, idx) =>
+                        <li key={idx}>{id} {(currentPiece.phraseInfos.find(pi => pi.id === id) || {name: '?'}).name}</li>
+                    )}
+                </ul>
                 <OpenDialog isVisible={this.state.openDialogIsVisible} onOpen={this.handleOpen}/>
                 <SaveAsDialog isVisible={this.state.saveAsDialogIsVisible} title={currentPiece.title} onSave={this.handleSaveAs}/>
                 <NewDialog isVisible={this.state.newDialogIsVisible} onNew={this.handleNew}/>

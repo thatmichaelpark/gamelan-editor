@@ -18,14 +18,16 @@ class Piece {
     @observable scale;
     @observable parts;
     @observable phraseInfos;
+    @observable phrasePlaylist;
     @observable id;
     @observable userId;
-
-    constructor(title, scale, parts, phraseInfos) {
-        this.title = title;
-        this.scale = scale;
-        this.parts = parts;
-        this.phraseInfos = phraseInfos;
+    
+    constructor(title, scale, parts, phraseInfos, phrasePlaylist) {
+        this.title = title; // string
+        this.scale = scale; // string
+        this.parts = parts; // array of Part objects
+        this.phraseInfos = phraseInfos; // array of {id, name, length}
+        this.phrasePlaylist = phrasePlaylist;   // array of id
     }
     addPart(instrument) {
         const part = new Part(instrument);
@@ -48,13 +50,21 @@ class Piece {
             Boo.boo({message: "Phrase name cannot be blank"});
             return;
         }
+        let id = -1;
         for (const phraseInfo of this.phraseInfos) {
             if (phraseInfo.name === name) {
                 Boo.boo({message: "Cannot have duplicate phrase names"});
                 return;
             }
+            id = Math.max(id, phraseInfo.id);
         }
-        this.phraseInfos.push({ name, length});
+        id += 1;
+        this.phraseInfos.push({ id, name, length});
+        
+        // Add new phrase id to phrasePlaylist:
+        this.phrasePlaylist.push(id);
+        
+        // Add new phrase to each part:
         this.parts.forEach(part => {
             const nHands = gamelansStore
                             .gamelans.find(g => g.scale === this.scale)
@@ -62,6 +72,9 @@ class Piece {
                             .nHands;
             part.phrases.push(Array(nHands).fill(0).map(h => Array(length).fill(' ')));
         });
+    }
+    updatePhrases() {
+        this.phrasePlaylist = this.phrasePlaylist.filter(id => this.phraseInfos.find(pi => pi.id === id));
     }
     setNote(note, partIndex, phraseIndex, handIndex, noteIndex) {
         if (partIndex < 0) {
@@ -90,6 +103,7 @@ class PiecesStore {
         this.currentPiece = new Piece(
             '',
             'slendro',
+            [],
             [],
             []
             // [
@@ -143,12 +157,14 @@ class PiecesStore {
         this.savedPiece.scale = this.currentPiece.scale;
         this.savedPiece.parts = JSON.parse(JSON.stringify(this.currentPiece.parts.slice(0)));
         this.savedPiece.phraseInfos = JSON.parse(JSON.stringify(this.currentPiece.phraseInfos.slice(0)));
+        this.savedPiece.phrasePlaylist = JSON.parse(JSON.stringify(this.currentPiece.phrasePlaylist));
     }
     new(title, scale) {
         this.currentPiece.title = title;
         this.currentPiece.scale = scale;
         this.currentPiece.parts = [];
         this.currentPiece.phraseInfos = [];
+        this.currentPiece.phrasePlaylist = [];
         this.savedPiece = new Piece(title, scale, [], []);
     }
     getPieces() {
@@ -173,6 +189,7 @@ class PiecesStore {
             this.savedPiece.scale = this.currentPiece.scale;
             this.savedPiece.parts = JSON.parse(JSON.stringify(this.currentPiece.parts));
             this.savedPiece.phraseInfos = JSON.parse(JSON.stringify(this.currentPiece.phraseInfos));
+            this.savedPiece.phrasePlaylist = JSON.parse(JSON.stringify(this.currentPiece.phrasePlaylist));
         });
     }
     savePiece(piece) {
@@ -189,6 +206,7 @@ class PiecesStore {
             this.savedPiece.scale = this.currentPiece.scale;
             this.savedPiece.parts = JSON.parse(JSON.stringify(this.currentPiece.parts));
             this.savedPiece.phraseInfos = JSON.parse(JSON.stringify(this.currentPiece.phraseInfos));
+            this.savedPiece.phrasePlaylist = JSON.parse(JSON.stringify(this.currentPiece.phrasePlaylist));
         });
     }
     open(id) {
@@ -200,13 +218,14 @@ class PiecesStore {
             this.currentPiece.phraseInfos = result.data.phraseInfos;
             this.currentPiece.id = result.data.id;
             this.currentPiece.userId = result.data.userId;
+            this.currentPiece.phrasePlaylist = result.data.phrasePlaylist || [];
             this.savedPiece.id = this.currentPiece.id;
             this.savedPiece.userId = this.currentPiece.userId;
             this.savedPiece.title = this.currentPiece.title;
             this.savedPiece.scale = this.currentPiece.scale;
             this.savedPiece.parts = JSON.parse(JSON.stringify(this.currentPiece.parts));
             this.savedPiece.phraseInfos = JSON.parse(JSON.stringify(this.currentPiece.phraseInfos));
-            
+            this.savedPiece.phrasePlaylist = JSON.parse(JSON.stringify(this.currentPiece.phrasePlaylist));
             this.currentPiece.loadInstruments();
         });
     }
@@ -219,7 +238,8 @@ class PiecesStore {
             || this.currentPiece.id !== this.savedPiece.id
             || this.currentPiece.userId !== this.savedPiece.userId
             || JSON.stringify(this.currentPiece.parts) !== JSON.stringify(this.savedPiece.parts)
-            || JSON.stringify(this.currentPiece.phraseInfos) !== JSON.stringify(this.savedPiece.phraseInfos);
+            || JSON.stringify(this.currentPiece.phraseInfos) !== JSON.stringify(this.savedPiece.phraseInfos)
+            || JSON.stringify(this.currentPiece.phrasePlaylist) !== JSON.stringify(this.savedPiece.phrasePlaylist);
     }
 }
 
