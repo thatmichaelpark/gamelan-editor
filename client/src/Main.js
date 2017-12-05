@@ -84,6 +84,10 @@ class Main extends React.Component {
         }
         this.setState({ managePiecesDialogIsVisible: true });
     }
+    switchToPlay = () => {
+        console.log('play!');
+        currentPiece.assignBeats();
+    }
     handleSaveAs = (title) => {
         if (title !== null) {
             if (!title.trim()) {
@@ -226,6 +230,12 @@ class Main extends React.Component {
                             { text: 'Compact', action: () => displayStuff.setDisplayMode('compact')},
                         ]}
                     />
+                    <div
+                        className="dropdowntitle"
+                        onClick={this.switchToPlay}
+                    >
+                        Play
+                    </div>
                     {account.isLoggedIn ? (
                         <div
                             className="dropdowntitle"

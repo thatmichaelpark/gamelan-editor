@@ -93,6 +93,59 @@ class Piece {
             gamelansStore.loadInstrument(this.scale, part.instrument, audioContext);
         });
     }
+    assignBeats() {
+        // A part might have phrases like zo:
+        //         phrases: [
+        //             [ //  phrase 0
+        //                 ['1', '2', '1', '2'],
+        //                 ['·', '2', '·', '2']
+        //             ],
+        //             [ // phrase 1
+        //                 ['·', '1', '·', '1', '·', '1', '·', '1'],
+        //                 ['·', '2', '·', '2', '·', '2', '·', '2']
+        //             ]
+        //         ]
+        // We're going to build a beatsArray like zo:
+        //         beatsArray: [
+        //             [a, b, c, d],            // beats for phrase 0 (all hands) 
+        //             [e, f, g, h, i, j, k, l] // beats for phrase 1 (all hands)
+        //          ]
+        // where a, b, etc are arrays of beats #s (e.g. [0, 8] indicating beats 0 and 8)
+        // for the corresponding notes in the phrase/hand.
+    
+        this.parts.forEach(part => {
+            part.beatsArray = [];
+            part.phrases.forEach((phrase, phraseIndex) => {
+                const beats = [];
+                phrase[0].forEach((note, noteIndex) => {
+                    beats.push([]);
+                });
+                part.beatsArray.push(beats);
+            });
+        });
+        
+        var startBeat = 0;
+        this.phrasePlaylist.forEach(phraseId => {
+            const phraseIndex = this.phraseInfos.findIndex(phraseInfo => phraseInfo.id === phraseId);
+            this.parts.forEach(part => {
+                part.beatsArray[phraseIndex].forEach((beats, beatIndex) => {
+                    beats.push(startBeat + beatIndex);
+                });
+            });
+            startBeat += this.phraseInfos[phraseIndex].length;
+        });
+        
+        this.parts.forEach(part => {
+            part.phrases.forEach((phrase, phraseIndex) => {
+                phrase.forEach((hand, handIndex) => {
+                    hand.forEach((note, noteIndex) => {
+                        console.log(part.instrument, phraseIndex, handIndex, noteIndex, part.beatsArray[phraseIndex][noteIndex]);
+                    });
+                });
+            });
+        });
+        return startBeat;
+    }
 }
 
 class PiecesStore {
