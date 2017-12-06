@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import gamelansStore from './stores/gamelansStore';
 import { currentPiece } from './stores/piecesStore';
 import displayStuff from './stores/displayStuff';
+import beatStore from './stores/beatStore';
 
 @observer
 class Note extends React.Component {
@@ -92,11 +93,18 @@ class Note extends React.Component {
                 menuIsVisible: false
             });
         };
+        let classes = 'note ';
+        if (this.state.menuIsVisible) {
+            classes += 'active ';
+        }
+        if (this.props.part.beatsArray.length > 0 && this.props.part.beatsArray[this.props.phraseIndex][this.props.noteIndex].indexOf(beatStore.beat) >= 0) {
+            classes += 'flash ';
+        }
 
         return (
             <div>
                 <div
-                    className={`note ${this.state.menuIsVisible ? 'active' : ''}`}
+                    className={classes}
                     onClick={this.handleClick}
                     onContextMenu={this.handleContextMenu}
                     tabIndex={1}

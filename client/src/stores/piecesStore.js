@@ -7,9 +7,11 @@ import audioContext from '../audioContext';
 class Part {
     @observable instrument;
     @observable phrases;
+    @observable beatsArray;
     constructor(instrument) {
         this.instrument = instrument;
         this.phrases = [];
+        this.beatsArray = observable([]);
     }
 }
 
@@ -114,7 +116,7 @@ class Piece {
         // for the corresponding notes in the phrase/hand.
     
         this.parts.forEach(part => {
-            part.beatsArray = [];
+            part.beatsArray.clear();
             part.phrases.forEach((phrase, phraseIndex) => {
                 const beats = [];
                 phrase[0].forEach((note, noteIndex) => {
@@ -139,7 +141,7 @@ class Piece {
             part.phrases.forEach((phrase, phraseIndex) => {
                 phrase.forEach((hand, handIndex) => {
                     hand.forEach((note, noteIndex) => {
-                        console.log(part.instrument, phraseIndex, handIndex, noteIndex, part.beatsArray[phraseIndex][noteIndex]);
+                        // console.log(part.instrument, phraseIndex, handIndex, noteIndex, part.beatsArray[phraseIndex][noteIndex]);
                     });
                 });
             });
@@ -267,6 +269,9 @@ class PiecesStore {
         .then(result => {
             this.currentPiece.title = result.data.title;
             this.currentPiece.scale = result.data.scale;
+            result.data.parts.forEach(part => {
+                part.beatsArray = [];
+            });
             this.currentPiece.parts = result.data.parts;
             this.currentPiece.phraseInfos = result.data.phraseInfos;
             this.currentPiece.id = result.data.id;

@@ -192,3 +192,18 @@ label {
 .note.active {
 	background: dodgerblue;
 }
+
+@keyframes flash {
+    from {
+        background: green;
+    }
+    to {
+        background: white;
+    }
+}
+
+.note.flash {
+    animation-name: flash;
+	animation-duration: 0.25s;
+    animation-timing-function: ease-out;
+}

@@ -1,6 +1,8 @@
 import React from 'react';
 import { currentPiece } from './stores/piecesStore';
+import { observer } from 'mobx-react';
 
+@observer
 class ManagePhraseListDialog extends React.Component {
     constructor(props) {
         super(props);
@@ -64,7 +66,6 @@ class ManagePhraseListDialog extends React.Component {
                                 <button onClick={() => moveUp(i)}>▲</button>
                                 <button onClick={() => moveDown(i)}>▼</button>
                                 <button onClick={() => deleet(i)}>❌</button> {/* ×❌❎*/}
-                                {phraseId}
                                 {currentPiece.phraseInfos.find(p => p.id === phraseId).name}
                             </div>
                         )}

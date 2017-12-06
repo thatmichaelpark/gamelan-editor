@@ -16,6 +16,7 @@ import displayStuff from './stores/displayStuff';
 import Boo from './Boo';
 import account from './stores/accountStore';
 import InstrumentLoadingProgress from './InstrumentLoadingProgress';
+import beatStore from './stores/beatStore';
 
 import { observer } from 'mobx-react';
 
@@ -86,7 +87,11 @@ class Main extends React.Component {
     }
     switchToPlay = () => {
         console.log('play!');
+        // currentPiece.parts.forEach(part => {
+        //     console.log(part.beatsArray.slice());
+        // });
         currentPiece.assignBeats();
+        beatStore.advance();
     }
     handleSaveAs = (title) => {
         if (title !== null) {
@@ -276,11 +281,6 @@ class Main extends React.Component {
                 >
                     {blah(currentPiece)}
                 </div>
-                <ul>
-                    {currentPiece.phrasePlaylist.map((id, idx) =>
-                        <li key={idx}>{id} {(currentPiece.phraseInfos.find(pi => pi.id === id) || {name: '?'}).name}</li>
-                    )}
-                </ul>
                 <OpenDialog isVisible={this.state.openDialogIsVisible} onOpen={this.handleOpen}/>
                 <SaveAsDialog isVisible={this.state.saveAsDialogIsVisible} title={currentPiece.title} onSave={this.handleSaveAs}/>
                 <NewDialog isVisible={this.state.newDialogIsVisible} onNew={this.handleNew}/>
