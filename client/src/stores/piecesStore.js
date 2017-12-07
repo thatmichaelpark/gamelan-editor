@@ -157,16 +157,6 @@ class Piece {
             startBeat += this.phraseInfos[phraseIndex].length;
         });
         // now startBeat is the length of the piece in beats.
-        
-        // this.parts.forEach(part => {
-        //     part.phrases.forEach((phrase, phraseIndex) => {
-        //         phrase.forEach((hand, handIndex) => {
-        //             hand.forEach((note, noteIndex) => {
-        //                 console.log(part.instrument, phraseIndex, handIndex, noteIndex, part.beatsArray[phraseIndex][noteIndex]);
-        //             });
-        //         });
-        //     });
-        // });
         return startBeat;
     }
     playBeat(beat) {
@@ -300,6 +290,29 @@ class PiecesStore {
                 part.beatsArray = [];
             });
             this.currentPiece.parts = result.data.parts;
+            this.currentPiece.parts.toJSON = function () {
+                // Need to hide beatsArray property inside parts array elements
+                // because we use JSON stringify/parse to determine if anything's
+                // changed (see modified() below) and beatsArray is not a salient change.
+                const result = [];
+                const that = this.slice();
+
+                for (let x of that) {
+                    x = JSON.parse(JSON.stringify(x));
+
+                    if (!x.instrument) {
+                        continue;
+                    }
+                    const o = {};
+                    for (let prop in x) {
+                        if (prop !== "beatsArray") {
+                            o[prop] = x[prop];
+                        }
+                    }
+                    result.push(o);
+                }
+                return result;
+            };
             this.currentPiece.phraseInfos = result.data.phraseInfos;
             this.currentPiece.id = result.data.id;
             this.currentPiece.userId = result.data.userId;
