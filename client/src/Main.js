@@ -86,12 +86,9 @@ class Main extends React.Component {
         this.setState({ managePiecesDialogIsVisible: true });
     }
     switchToPlay = () => {
-        console.log('play!');
-        // currentPiece.parts.forEach(part => {
-        //     console.log(part.beatsArray.slice());
-        // });
-        currentPiece.assignBeats();
-        beatStore.advance();
+        console.log('play!');;;
+        beatStore.nBeats = currentPiece.assignBeats();
+        beatStore.start();
     }
     handleSaveAs = (title) => {
         if (title !== null) {

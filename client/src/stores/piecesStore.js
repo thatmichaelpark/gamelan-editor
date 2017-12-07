@@ -114,7 +114,10 @@ class Piece {
         //          ]
         // where a, b, etc are arrays of beats #s (e.g. [0, 8] indicating beats 0 and 8)
         // for the corresponding notes in the phrase/hand.
-    
+        //
+        // At the same time, we'll build a noteList which will have a noteNode for each
+        // beat, each noteNode indicating which instrument(s)/note(s) to play on that beat
+        
         this.parts.forEach(part => {
             part.beatsArray.clear();
             part.phrases.forEach((phrase, phraseIndex) => {
@@ -126,16 +129,35 @@ class Piece {
             });
         });
         
-        var startBeat = 0;
+        let startBeat = 0;
+        this.noteList = [];
+
         this.phrasePlaylist.forEach(phraseId => {
             const phraseIndex = this.phraseInfos.findIndex(phraseInfo => phraseInfo.id === phraseId);
+
             this.parts.forEach(part => {
                 part.beatsArray[phraseIndex].forEach((beats, beatIndex) => {
                     beats.push(startBeat + beatIndex);
                 });
             });
+
+            const noteNode = [];
+            
+            for (let beat = startBeat; beat < startBeat + this.phraseInfos[phraseIndex].length; ++beat) {
+                this.parts.forEach(part => { // eslint-disable-line no-loop-func
+                    part.phrases[phraseIndex].forEach(hand => {
+                        hand.forEach((note, noteIndex) => {
+                            if (noteIndex + startBeat === beat && note !== ' ') {
+                                noteNode.push({ instrument: part.instrument, note });
+                            }
+                        });
+                    });
+                });
+            }
+            this.noteList.push(noteNode);
             startBeat += this.phraseInfos[phraseIndex].length;
         });
+        // now startBeat is the length of the piece in beats.
         
         this.parts.forEach(part => {
             part.phrases.forEach((phrase, phraseIndex) => {
