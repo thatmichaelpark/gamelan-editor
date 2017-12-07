@@ -1,4 +1,5 @@
 import { observable } from 'mobx';
+import { currentPiece } from './piecesStore';
 
 class BeatStore {
     realBeat; // floating-point beat [0..nBeats) or -1 if not playing
@@ -12,8 +13,13 @@ class BeatStore {
 
     advance(dt) {
         this.realBeat += dt;
-        this.beat = Math.floor(this.realBeat);
-        if (this.realBeat >= this.nBeats) {
+        const newBeat = Math.floor(this.realBeat);
+        if (this.beat !== newBeat) {
+            this.beat = newBeat;
+            console.log(this.beat, this.nBeats);;;
+            currentPiece.playBeat(this.beat);
+        }
+        if (this.realBeat >= this.nBeats - 1) {
             this.stop();
         }
     }
@@ -22,7 +28,7 @@ class BeatStore {
         this.advance(1);
         this.timer = setInterval(() => {
             this.advance(1);
-        }, 100);
+        }, 500);
     }
     
     pause() {

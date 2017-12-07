@@ -1,6 +1,7 @@
 // 0̇ 1̇ 2̇ 3̇ 4̇ 5̇ 6̇ 7̇ 8̇ 9̇ 0̣ 1̣ 2̣ 3̣ 4̣ 5̣ 6̣ 7̣ 8̣ 9̣
 import { observable } from 'mobx';
 import axios from 'axios';
+import audioContext from '../audioContext';
 
 class Sample {
     constructor(ctx, buffer, destination) {
@@ -268,7 +269,7 @@ class GamelansStore {
             axios.get(`sounds/${tone.filename}`, { responseType: 'arraybuffer' })
             .then(response => {
                 audioContext.decodeAudioData(response.data, buffer => {
-                    tone.sample = new Sample(audioContext, buffer/*, gains[zounds[name].gain]*/);
+                    tone.sample = new Sample(audioContext, buffer/*, gains[zounds[name].gain]*/, audioContext.destination);
                     this.nLoaded += 1;
                     if (this.nLoaded === this.nToLoad) {
                         this.nLoaded = this.nToLoad = 0;
@@ -276,6 +277,13 @@ class GamelansStore {
                 });
             });
         });
+    }
+    
+    triggerInstrument(scale, instrumentName, note) {
+        const gamelan = this.gamelans.find(g => g.scale === scale);
+        const instrument = gamelan.instruments.find(inst => inst.name === instrumentName);
+        const tone = instrument.tones.find(tone => tone.pitch === note);
+        tone.sample.trigger(audioContext.currentTime);
     }
 }
 

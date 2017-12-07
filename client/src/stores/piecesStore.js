@@ -141,34 +141,40 @@ class Piece {
                 });
             });
 
-            const noteNode = [];
-            
             for (let beat = startBeat; beat < startBeat + this.phraseInfos[phraseIndex].length; ++beat) {
+                const noteNode = [];
+                
                 this.parts.forEach(part => { // eslint-disable-line no-loop-func
                     part.phrases[phraseIndex].forEach(hand => {
                         hand.forEach((note, noteIndex) => {
-                            if (noteIndex + startBeat === beat && note !== ' ') {
+                            if (noteIndex + startBeat === beat && note !== ' ' && note !== '.') {
                                 noteNode.push({ instrument: part.instrument, note });
                             }
                         });
                     });
                 });
+                this.noteList.push(noteNode);
             }
-            this.noteList.push(noteNode);
             startBeat += this.phraseInfos[phraseIndex].length;
         });
         // now startBeat is the length of the piece in beats.
         
-        this.parts.forEach(part => {
-            part.phrases.forEach((phrase, phraseIndex) => {
-                phrase.forEach((hand, handIndex) => {
-                    hand.forEach((note, noteIndex) => {
-                        // console.log(part.instrument, phraseIndex, handIndex, noteIndex, part.beatsArray[phraseIndex][noteIndex]);
-                    });
-                });
-            });
-        });
+        // this.parts.forEach(part => {
+        //     part.phrases.forEach((phrase, phraseIndex) => {
+        //         phrase.forEach((hand, handIndex) => {
+        //             hand.forEach((note, noteIndex) => {
+        //                 console.log(part.instrument, phraseIndex, handIndex, noteIndex, part.beatsArray[phraseIndex][noteIndex]);
+        //             });
+        //         });
+        //     });
+        // });
         return startBeat;
+    }
+    playBeat(beat) {
+        const notes = this.noteList[beat];
+        notes.forEach(note => {
+            gamelansStore.triggerInstrument(this.scale, note.instrument, note.note, audioContext);
+        });
     }
 }
 
