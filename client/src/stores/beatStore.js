@@ -16,7 +16,6 @@ class BeatStore {
         const newBeat = Math.floor(this.realBeat);
         if (this.beat !== newBeat) {
             this.beat = newBeat;
-            console.log(this.beat, this.nBeats);;;
             currentPiece.playBeat(this.beat);
         }
         if (this.realBeat >= this.nBeats - 1) {

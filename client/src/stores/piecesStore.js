@@ -2,7 +2,6 @@ import { computed, observable } from 'mobx';
 import gamelansStore from './gamelansStore';
 import axios from 'axios';
 import Boo from '../Boo';
-import audioContext from '../audioContext';
 
 class Part {
     @observable instrument;
@@ -92,7 +91,7 @@ class Piece {
     }
     loadInstruments() {
         this.parts.forEach(part => {
-            gamelansStore.loadInstrument(this.scale, part.instrument, audioContext);
+            gamelansStore.loadInstrument(this.scale, part.instrument);
         });
     }
     assignBeats() {
@@ -173,7 +172,7 @@ class Piece {
     playBeat(beat) {
         const notes = this.noteList[beat];
         notes.forEach(note => {
-            gamelansStore.triggerInstrument(this.scale, note.instrument, note.note, audioContext);
+            gamelansStore.triggerInstrument(this.scale, note.instrument, note.note);
         });
     }
 }

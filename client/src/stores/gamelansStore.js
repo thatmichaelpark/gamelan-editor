@@ -4,13 +4,12 @@ import axios from 'axios';
 import audioContext from '../audioContext';
 
 class Sample {
-    constructor(ctx, buffer, destination) {
-        this.audioContext = ctx;
+    constructor(buffer, destination) {
         this.buffer = buffer;
         this.destination = destination;
     }
     trigger(time) {
-        this.source = this.audioContext.createBufferSource();
+        this.source = audioContext.createBufferSource();
         this.source.buffer = this.buffer;
         this.source.connect(this.destination);
         this.source.start(time);
@@ -257,7 +256,7 @@ class GamelansStore {
     
     @observable nToLoad = 0;
     @observable nLoaded = 0;
-    loadInstrument(scale, instrumentName, audioContext) {
+    loadInstrument(scale, instrumentName) {
         const gamelan = this.gamelans.find(g => g.scale === scale);
         const instrument = gamelan.instruments.find(inst => inst.name === instrumentName);
 
@@ -269,7 +268,7 @@ class GamelansStore {
             axios.get(`sounds/${tone.filename}`, { responseType: 'arraybuffer' })
             .then(response => {
                 audioContext.decodeAudioData(response.data, buffer => {
-                    tone.sample = new Sample(audioContext, buffer/*, gains[zounds[name].gain]*/, audioContext.destination);
+                    tone.sample = new Sample(buffer/*, gains[zounds[name].gain]*/, audioContext.destination);
                     this.nLoaded += 1;
                     if (this.nLoaded === this.nToLoad) {
                         this.nLoaded = this.nToLoad = 0;
