@@ -85,8 +85,7 @@ class Main extends React.Component {
         }
         this.setState({ managePiecesDialogIsVisible: true });
     }
-    switchToPlay = () => {
-        console.log('play!');;;
+    handlePlay = () => {
         beatStore.nBeats = currentPiece.assignBeats();
         beatStore.start();
     }
@@ -232,12 +231,14 @@ class Main extends React.Component {
                             { text: 'Compact', action: () => displayStuff.setDisplayMode('compact')},
                         ]}
                     />
-                    <div
-                        className="dropdowntitle"
-                        onClick={this.switchToPlay}
-                    >
-                        Play
-                    </div>
+                    <DropdownMenu
+                        title="Play"
+                        menuItems={[
+                            { text: 'Play', action: this.handlePlay},
+                            { text: 'Pause', action: beatStore.pause},
+                            { text: 'Stop', action: beatStore.stop},
+                        ]}
+                    />
                     {account.isLoggedIn ? (
                         <div
                             className="dropdowntitle"

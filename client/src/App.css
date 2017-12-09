@@ -207,3 +207,18 @@ label {
 	animation-duration: 0.25s;
     animation-timing-function: ease-out;
 }
+
+@keyframes light-flash {
+    from {
+        background: palegreen;
+    }
+    to {
+        background: white;
+    }
+}
+
+.note.light-flash {
+    animation-name: light-flash;
+	animation-duration: 0.25s;
+    animation-timing-function: ease-out;
+}
