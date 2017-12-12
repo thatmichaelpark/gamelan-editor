@@ -285,10 +285,14 @@ class GamelansStore {
             }
         ])
     ];
-    gamut(scale, instrument) {
-        return this.gamelans.find(g => g.scale === scale)
-            .instruments.find(inst => inst.name === instrument)
-            .tones.map(tone => tone.pitch);
+    gamut(scale, instrumentName) {
+        const instrument = this.gamelans.find(g => g.scale === scale)
+            .instruments.find(instrument => instrument.name === instrumentName);
+        const gamut = instrument.tones.map(tone => tone.pitch);
+        if (instrument.damping) {
+            gamut.push(',');
+        }
+        return gamut;
     }
     
     @observable nToLoad = 0;
@@ -325,15 +329,24 @@ class GamelansStore {
     triggerInstrument(scale, instrumentName, note) {
         const gamelan = this.gamelans.find(g => g.scale === scale);
         const instrument = gamelan.instruments.find(inst => inst.name === instrumentName);
-        const tone = instrument.tones.find(tone => tone.pitch === note);
-        if (instrument.damping) {
+        if (note === ',') {
             this.previousSample = this.previousSampleMap.get(scale + instrumentName);
             if (this.previousSample) {
                 this.previousSample.damp(audioContext.currentTime);
+                this.previousSampleMap.set(scale + instrumentName);
             }
         }
-        tone.sample.trigger(audioContext.currentTime);
-        this.previousSampleMap.set(scale + instrumentName, tone.sample);
+        else {
+            const tone = instrument.tones.find(tone => tone.pitch === note);
+            if (instrument.damping) {
+                this.previousSample = this.previousSampleMap.get(scale + instrumentName);
+                if (this.previousSample) {
+                    this.previousSample.damp(audioContext.currentTime);
+                }
+            }
+            tone.sample.trigger(audioContext.currentTime);
+            this.previousSampleMap.set(scale + instrumentName, tone.sample);
+        }
     }
 }
 

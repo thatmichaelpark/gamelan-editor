@@ -67,6 +67,9 @@ class Note extends React.Component {
         else if (code === 'Period') {
             key = '·';
         }
+        else if (code === 'Comma') {
+            key = ',';
+        }
         else if (code === 'Equal' && e.shiftKey) {
             key = '+';
         }
