@@ -16,6 +16,25 @@ class Sample {
     }
 }
 
+class DampedSample {
+    constructor(buffer, destination) {
+        this.buffer = buffer;
+        this.destination = destination;
+    }
+    trigger(time) {
+        this.source = audioContext.createBufferSource();
+        this.source.buffer = this.buffer;
+        this.dampGain = audioContext.createGain();
+        this.source.connect(this.dampGain);
+        this.dampGain.connect(this.destination);
+        this.source.start(time);
+    }
+    damp(time) {
+        this.dampGain.gain.setValueAtTime(1, time);
+        this.dampGain.gain.linearRampToValueAtTime(0, time + 0.05)
+    }
+}
+
 class Gamelan {
     @observable scale;          // string
     @observable instruments;    // string
@@ -31,6 +50,7 @@ class GamelansStore {
             {
                 name: 'Bonang barung',
                 nHands: 2,
+                damping: false,
                 tones: [
                     { pitch: '1̣', sample: null, filename: 'pelog/bonang barung/bonang barung p lo1.mp3' },
                     { pitch: '2̣', sample: null, filename: 'pelog/bonang barung/bonang barung p lo2.mp3' },
@@ -51,6 +71,7 @@ class GamelansStore {
             {
                 name: 'Bonang panerus',
                 nHands: 2,
+                damping: false,
                 tones: [
                     { pitch: '1̣', sample: null, filename: 'pelog/bonang panerus/bonang panerus p lo1.mp3' },
                     { pitch: '2̣', sample: null, filename: 'pelog/bonang panerus/bonang panerus p lo2.mp3' },
@@ -71,6 +92,7 @@ class GamelansStore {
             {
                 name: 'Gong ageng',
                 nHands: 1,
+                damping: false,
                 tones: [
                     { pitch: 'G', sample: null, filename: 'pelog/gong/gong pelog.mp3' }
                 ]
@@ -78,6 +100,7 @@ class GamelansStore {
             {
                 name: 'Gong suwuk',
                 nHands: 1,
+                damping: false,
                 tones: [
                     { pitch: 'S', sample: null, filename: 'pelog/gong/gong suwuk p2.mp3' }
                 ]
@@ -85,6 +108,7 @@ class GamelansStore {
             {
                 name: 'Nong',
                 nHands: 1,
+                damping: false,
                 tones: [
                     { pitch: '1', sample: null, filename: 'pelog/nong/nong p1.mp3' },
                     { pitch: '2', sample: null, filename: 'pelog/nong/nong p2.mp3' },
@@ -97,6 +121,7 @@ class GamelansStore {
             {
                 name: 'Peking',
                 nHands: 1,
+                damping: true,
                 tones: [
                     { pitch: '1', sample: null, filename: 'pelog/peking/peking p1.mp3' },
                     { pitch: '2', sample: null, filename: 'pelog/peking/peking p2.mp3' },
@@ -110,6 +135,7 @@ class GamelansStore {
             {
                 name: 'Pul',
                 nHands: 1,
+                damping: false,
                 tones: [
                     { pitch: '1', sample: null, filename: 'pelog/pul/pul p1.mp3' },
                     { pitch: '3', sample: null, filename: 'pelog/pul/pul p3.mp3' },
@@ -121,6 +147,7 @@ class GamelansStore {
             {
                 name: 'Saron',
                 nHands: 1,
+                damping: true,
                 tones: [
                     { pitch: '1', sample: null, filename: 'pelog/saron/saron p1.mp3' },
                     { pitch: '2', sample: null, filename: 'pelog/saron/saron p2.mp3' },
@@ -134,6 +161,7 @@ class GamelansStore {
             {
                 name: 'Tuk',
                 nHands: 1,
+                damping: false,
                 tones: [
                     { pitch: '+', sample: null, filename: 'pelog/tuk pelog.mp3' }
                 ]
@@ -143,6 +171,7 @@ class GamelansStore {
             {
                 name: 'Bonang barung',
                 nHands: 2,
+                damping: false,
                 tones: [
                     { pitch: '1̣', sample: null, filename: 'slendro/bonang barung/bonang barung s lo1.mp3' },
                     { pitch: '2̣', sample: null, filename: 'slendro/bonang barung/bonang barung s lo2.mp3' },
@@ -161,6 +190,7 @@ class GamelansStore {
             {
                 name: 'Bonang panerus',
                 nHands: 2,
+                damping: false,
                 tones: [
                     { pitch: '1̣', sample: null, filename: 'slendro/bonang panerus/bonang panerus s lo1.mp3' },
                     { pitch: '2̣', sample: null, filename: 'slendro/bonang panerus/bonang panerus s lo2.mp3' },
@@ -179,6 +209,7 @@ class GamelansStore {
             {
                 name: 'Gong ageng',
                 nHands: 1,
+                damping: false,
                 tones: [
                     { pitch: 'G', sample: null, filename: 'slendro/gong/gong ageng slendro.mp3' }
                 ]
@@ -186,6 +217,7 @@ class GamelansStore {
             {
                 name: 'Gong suwuk',
                 nHands: 1,
+                damping: false,
                 tones: [
                     { pitch: 'S', sample: null, filename: 'slendro/gong/gong suwuk s1.mp3' }
                 ]
@@ -193,6 +225,7 @@ class GamelansStore {
             {
                 name: 'Nong',
                 nHands: 1,
+                damping: false,
                 tones: [
                     { pitch: '2', sample: null, filename: 'slendro/nong/nong s2.mp3' },
                     { pitch: '3', sample: null, filename: 'slendro/nong/nong s3.mp3' },
@@ -204,6 +237,7 @@ class GamelansStore {
             {
                 name: 'Peking',
                 nHands: 1,
+                damping: true,
                 tones: [
                     { pitch: '6̣', sample: null, filename: 'slendro/peking/peking s lo6.mp3' },
                     { pitch: '1', sample: null, filename: 'slendro/peking/peking s1.mp3' },
@@ -217,6 +251,7 @@ class GamelansStore {
             {
                 name: 'Pul',
                 nHands: 1,
+                damping: false,
                 tones: [
                     { pitch: '3', sample: null, filename: 'slendro/pul/pul s3.mp3' },
                     { pitch: '5', sample: null, filename: 'slendro/pul/pul s5.mp3' },
@@ -227,6 +262,7 @@ class GamelansStore {
             {
                 name: 'Saron',
                 nHands: 1,
+                damping: true,
                 tones: [
                     { pitch: '6̣', sample: null, filename: 'slendro/saron/saron s lo6.mp3' },
                     { pitch: '1', sample: null, filename: 'slendro/saron/saron s1.mp3' },
@@ -242,6 +278,7 @@ class GamelansStore {
             {
                 name: 'Tuk',
                 nHands: 1,
+                damping: false,
                 tones: [
                     { pitch: '+', sample: null, filename: 'slendro/tuk slendro.mp3' }
                 ]
@@ -268,7 +305,12 @@ class GamelansStore {
             axios.get(`sounds/${tone.filename}`, { responseType: 'arraybuffer' })
             .then(response => {
                 audioContext.decodeAudioData(response.data, buffer => {
-                    tone.sample = new Sample(buffer/*, gains[zounds[name].gain]*/, audioContext.destination);
+                    if (instrument.damping) {
+                        tone.sample = new DampedSample(buffer/*, gains[zounds[name].gain]*/, audioContext.destination);
+                    }
+                    else {
+                        tone.sample = new Sample(buffer/*, gains[zounds[name].gain]*/, audioContext.destination);
+                    }
                     this.nLoaded += 1;
                     if (this.nLoaded === this.nToLoad) {
                         this.nLoaded = this.nToLoad = 0;
@@ -278,11 +320,20 @@ class GamelansStore {
         });
     }
     
+    previousSampleMap = new Map(); // (scale, instrumentName) => sample
+    
     triggerInstrument(scale, instrumentName, note) {
         const gamelan = this.gamelans.find(g => g.scale === scale);
         const instrument = gamelan.instruments.find(inst => inst.name === instrumentName);
         const tone = instrument.tones.find(tone => tone.pitch === note);
+        if (instrument.damping) {
+            this.previousSample = this.previousSampleMap.get(scale + instrumentName);
+            if (this.previousSample) {
+                this.previousSample.damp(audioContext.currentTime);
+            }
+        }
         tone.sample.trigger(audioContext.currentTime);
+        this.previousSampleMap.set(scale + instrumentName, tone.sample);
     }
 }
 
