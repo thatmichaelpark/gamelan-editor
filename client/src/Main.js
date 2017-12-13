@@ -268,7 +268,7 @@ class Main extends React.Component {
                     /> */}
                     {account.isLoggedIn ? (
                         <div
-                            className="dropdowntitle"
+                            className="dropdowntitle pinright"
                             onClick={() => account.logOut()
                                 .then(() => Boo.yeah(`Logged out`))
                                 .catch(Boo.boo)
@@ -278,7 +278,7 @@ class Main extends React.Component {
                         </div>
                     ) : (
                         <div
-                            className="dropdowntitle"
+                            className="dropdowntitle pinright"
                             onClick={() => this.setState({ loginDialogIsVisible: true })}
                         >
                             Log In
