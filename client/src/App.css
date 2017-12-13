@@ -26,6 +26,10 @@ h1 {
 	background: dodgerblue;
 }
 
+.dropdowntitle.disabled {
+	color: lightgray;
+}
+
 .dropdownmenu {
 	background: whitesmoke;
 	border: 1px solid gray;
@@ -40,7 +44,7 @@ h1 {
 	height: 28px;
 }
 .dropdownitem.disabled {
-	color: gray;
+	color: lightgray;
 }
 .dropdownitem:hover {
 	background: dodgerblue;

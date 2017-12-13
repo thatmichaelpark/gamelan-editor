@@ -18,7 +18,25 @@ import account from './stores/accountStore';
 import InstrumentLoadingProgress from './InstrumentLoadingProgress';
 import beatStore from './stores/beatStore';
 
+import { observable, computed } from 'mobx';
 import { observer } from 'mobx-react';
+
+class EditMode {
+    @observable editMode = account.isLoggedIn; 
+    
+    toggle() {
+        this.editMode = !this.editMode;
+        console.log(this.editMode);
+    }
+    @computed get isEdit() {
+        return account.isLoggedIn ? this.editMode : false;
+    }
+    @computed get isPlay() {
+        return !this.isEdit;
+    }
+}
+
+const editMode = new EditMode();
 
 @observer
 class Main extends React.Component {
@@ -32,7 +50,7 @@ class Main extends React.Component {
             managePhrasesDialogIsVisible: false,
             managePhrasePlaylistDialogIsVisible: false,
             managePiecesDialogIsVisible: false,
-            loginDialogIsVisible: false
+            loginDialogIsVisible: false,
         }
     }
     handleClick = (e) => {
@@ -88,6 +106,9 @@ class Main extends React.Component {
     handlePlay = () => {
         beatStore.nBeats = currentPiece.assignBeats();
         beatStore.start();
+    }
+    toggleEditMode = () => {
+        editMode.toggle();
     }
     handleSaveAs = (title) => {
         if (title !== null) {
@@ -198,28 +219,28 @@ class Main extends React.Component {
                     <DropdownMenu
                         title="Piece"
                         menuItems={[
-                            { text: 'New', action: () => this.setState({ newDialogIsVisible: true })},
+                            { text: 'New', action: () => this.setState({ newDialogIsVisible: true }), disabled: editMode.isPlay},
                             { text: 'Open', action: () => this.setState({ openDialogIsVisible: true })},
                             { text: 'Save', action: this.handleSave, disabled: !(piecesStore.modified && currentPiece.id && currentPiece.userId === account.userId) },
-                            { text: 'Save As', action: this.showSaveAsDialog},
-                            { text: 'Manage', action: this.showManagePiecesDialog},
+                            { text: 'Save As', action: this.showSaveAsDialog, disabled: editMode.isPlay},
+                            { text: 'Manage', action: this.showManagePiecesDialog, disabled: editMode.isPlay},
                         ]}
                     />
                     <div
-                        className="dropdowntitle"
-                        onClick={() => this.setState({ managePartsDialogIsVisible: true })}
+                        className={'dropdowntitle' + (editMode.isPlay ? ' disabled' : '')}
+                        onClick={editMode.isEdit && (() => this.setState({ managePartsDialogIsVisible: true }))}
                     >
                         Parts
                     </div>
                     <div
-                        className="dropdowntitle"
-                        onClick={this.showManagePhrasesDialog}
+                        className={'dropdowntitle' + (editMode.isPlay ? ' disabled' : '')}
+                        onClick={editMode.isEdit && this.showManagePhrasesDialog}
                     >
                         Phrases
                     </div>
                     <div
-                        className="dropdowntitle"
-                        onClick={this.showManagePhrasePlaylistDialog}
+                        className={'dropdowntitle' + (editMode.isPlay ? ' disabled' : '')}
+                        onClick={editMode.isEdit && this.showManagePhrasePlaylistDialog}
                     >
                         PhrasePlaylist
                     </div>
@@ -231,14 +252,20 @@ class Main extends React.Component {
                             { text: 'Compact', action: () => displayStuff.setDisplayMode('compact')},
                         ]}
                     />
-                    <DropdownMenu
+                    <div
+                        className={'dropdowntitle' + (editMode.isPlay && !account.isLoggedIn ? ' disabled' : '')}
+                        onClick={this.toggleEditMode}
+                    >
+                        {editMode.isEdit ? 'Play' : 'Edit'}
+                    </div>
+                    {/* <DropdownMenu
                         title="Play"
                         menuItems={[
                             { text: 'Play', action: this.handlePlay},
                             { text: 'Pause', action: beatStore.pause},
                             { text: 'Stop', action: beatStore.stop},
                         ]}
-                    />
+                    /> */}
                     {account.isLoggedIn ? (
                         <div
                             className="dropdowntitle"
@@ -263,6 +290,7 @@ class Main extends React.Component {
                         </div>
                     )}
                 </div>
+                {editMode.isEdit ? 'Edit mode' : 'Play mode'}
                 <h1>
                     {currentPiece.title || 'Untitled'}
                     ({currentPiece.scale})
