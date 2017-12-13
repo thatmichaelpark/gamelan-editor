@@ -3,17 +3,6 @@ import gamelansStore from './gamelansStore';
 import axios from 'axios';
 import Boo from '../Boo';
 
-class Part {
-    @observable instrument;
-    @observable phrases;
-    @observable beatsArray;
-    constructor(instrument) {
-        this.instrument = instrument;
-        this.phrases = [];
-        this.beatsArray = observable([]);
-    }
-}
-
 class Piece {
     @observable title;
     @observable scale;
@@ -31,7 +20,7 @@ class Piece {
         this.phrasePlaylist = phrasePlaylist;   // array of id
     }
     addPart(instrument) {
-        const part = new Part(instrument);
+        const part = { instrument, phrases: [], beatsArray: [] };
         const nParts = this.parts.push(part);
 
         const nHands = gamelansStore
