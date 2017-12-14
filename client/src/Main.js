@@ -16,6 +16,7 @@ import displayStuff from './stores/displayStuff';
 import Boo from './Boo';
 import account from './stores/accountStore';
 import InstrumentLoadingProgress from './InstrumentLoadingProgress';
+import Transport from './Transport';
 import beatStore from './stores/beatStore';
 
 import { observable, computed } from 'mobx';
@@ -290,7 +291,6 @@ class Main extends React.Component {
                         </div>
                     )}
                 </div>
-                {editMode.isEdit ? 'Edit mode' : 'Play mode'}
                 <h1>
                     {currentPiece.title || 'Untitled'}
                     ({currentPiece.scale})
@@ -307,6 +307,7 @@ class Main extends React.Component {
                 >
                     {blah(currentPiece)}
                 </div>
+                {editMode.isPlay && <Transport/>}
                 <OpenDialog isVisible={this.state.openDialogIsVisible} onOpen={this.handleOpen}/>
                 <SaveAsDialog isVisible={this.state.saveAsDialogIsVisible} title={currentPiece.title} onSave={this.handleSaveAs}/>
                 <NewDialog isVisible={this.state.newDialogIsVisible} onNew={this.handleNew}/>
