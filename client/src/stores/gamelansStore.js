@@ -8,32 +8,29 @@ class Sample {
         this.buffer = buffer;
         this.destination = destination;
     }
-    trigger(time) {
-        this.source = audioContext.createBufferSource();
-        this.source.buffer = this.buffer;
-        this.source.connect(this.destination);
-        this.source.start(time);
-    }
 }
 
-class DampedSample {
-    constructor(buffer, destination) {
-        this.buffer = buffer;
-        this.destination = destination;
-    }
-    trigger(time) {
-        this.source = audioContext.createBufferSource();
-        this.source.buffer = this.buffer;
-        this.dampGain = audioContext.createGain();
-        this.source.connect(this.dampGain);
-        this.dampGain.connect(this.destination);
-        this.source.start(time);
-        return this.dampGain;
-    }
-    damp(time, dampGain) {
-        dampGain.gain.setValueAtTime(1, time);
-        dampGain.gain.linearRampToValueAtTime(0, time + 0.05)
-    }
+function triggerSample(sample) {
+    const source = audioContext.createBufferSource();
+    source.buffer = sample.buffer;
+    source.connect(sample.destination);
+    source.start(audioContext.currentTime);
+}
+
+function triggerDampedSample(sample) {
+    const source = audioContext.createBufferSource();
+    source.buffer = sample.buffer;
+    const dampGain = audioContext.createGain();
+    source.connect(dampGain);
+    dampGain.connect(sample.destination);
+    source.start(audioContext.currentTime);
+    return dampGain;
+}
+
+function damp(dampGain) {
+    const time = audioContext.currentTime;
+    dampGain.gain.setValueAtTime(1, time);
+    dampGain.gain.linearRampToValueAtTime(0, time + 0.05)
 }
 
 class Gamelan {
@@ -310,12 +307,7 @@ class GamelansStore {
             axios.get(`sounds/${tone.filename}`, { responseType: 'arraybuffer' })
             .then(response => {
                 audioContext.decodeAudioData(response.data, buffer => {
-                    if (instrument.damping) {
-                        tone.sample = new DampedSample(buffer/*, gains[zounds[name].gain]*/, audioContext.destination);
-                    }
-                    else {
-                        tone.sample = new Sample(buffer/*, gains[zounds[name].gain]*/, audioContext.destination);
-                    }
+                    tone.sample = new Sample(buffer/*, gains[zounds[name].gain]*/, audioContext.destination);
                     this.nLoaded += 1;
                     if (this.nLoaded === this.nToLoad) {
                         this.nLoaded = this.nToLoad = 0;
@@ -325,28 +317,32 @@ class GamelansStore {
         });
     }
     
-    previousSampleMap = new Map(); // (scale, instrumentName) => sample
+    dampGainMap = new Map(); // partId => dampGain
     
-    triggerInstrument(scale, instrumentName, note) {
+    triggerInstrument(part, scale, note) {
+        const instrumentName = part.instrument;
         const gamelan = this.gamelans.find(g => g.scale === scale);
         const instrument = gamelan.instruments.find(inst => inst.name === instrumentName);
         if (note === ',') {
-            this.previousSample = this.previousSampleMap.get(scale + instrumentName);
-            if (this.previousSample) {
-                this.previousSample.damp(audioContext.currentTime);
-                this.previousSampleMap.set(scale + instrumentName);
+            const dampGain = this.dampGainMap.get(part.id);
+            if (dampGain) {
+                damp(dampGain);
+                this.dampGainMap.set(scale + instrumentName); // remove dampGain
             }
         }
         else {
             const tone = instrument.tones.find(tone => tone.pitch === note);
             if (instrument.damping) {
-                this.previousSample = this.previousSampleMap.get(scale + instrumentName);
-                if (this.previousSample) {
-                    this.previousSample.damp(audioContext.currentTime);
+                const dampGain = this.dampGainMap.get(scale + instrumentName);
+                if (dampGain) {
+                    damp(dampGain);
                 }
+                const newDampGain = triggerDampedSample(tone.sample);
+                this.dampGainMap.set(part.id, newDampGain);
             }
-            tone.sample.trigger(audioContext.currentTime);
-            this.previousSampleMap.set(scale + instrumentName, tone.sample);
+            else {
+                triggerSample(tone.sample);
+            }
         }
     }
 }

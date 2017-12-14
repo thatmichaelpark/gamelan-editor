@@ -15,9 +15,9 @@ class Transport extends React.Component {
         // };
         return (
             <div className="transport" style={{ bottom: this.props.isVisible ? 0 : '-100px' }}>
-                <button onClick={this.handleButtonClick} value='play'>play</button>
-                <button onClick={this.handleButtonClick} value='pause'>pause</button>
-                <button onClick={this.handleButtonClick} value='stop'>stop</button>
+                <button onClick={this.props.onPlay} value='play'>play</button>
+                <button onClick={this.props.onPause} value='pause'>pause</button>
+                <button onClick={this.props.onStop} value='stop'>stop</button>
                 <div className="tempo">
                     <span>{123}</span>
                     <input type="range" min="40" max="150" value={123}/>

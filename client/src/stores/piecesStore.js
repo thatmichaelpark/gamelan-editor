@@ -105,7 +105,7 @@ class Piece {
         // for the corresponding notes in the phrase/hand.
         //
         // At the same time, we'll build a noteList which will have a noteNode for each
-        // beat, each noteNode indicating which instrument(s)/note(s) to play on that beat
+        // beat, each noteNode indicating which part(s)/note(s) to play on that beat
         
         this.parts.forEach(part => {
             part.beatsArray.clear();
@@ -137,7 +137,7 @@ class Piece {
                     part.phrases[phraseIndex].forEach(hand => {
                         hand.forEach((note, noteIndex) => {
                             if (noteIndex + startBeat === beat && note !== ' ' && note !== '.') {
-                                noteNode.push({ instrument: part.instrument, note });
+                                noteNode.push({ part, note });
                             }
                         });
                     });
@@ -152,7 +152,7 @@ class Piece {
     playBeat(beat) {
         const notes = this.noteList[beat];
         notes.forEach(note => {
-            gamelansStore.triggerInstrument(this.scale, note.instrument, note.note);
+            gamelansStore.triggerInstrument(note.part, this.scale, note.note);
         });
     }
 }
