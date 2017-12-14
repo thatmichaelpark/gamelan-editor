@@ -13,7 +13,8 @@ class AddPartDialog extends React.Component {
     }
     componentWillReceiveProps(nextProps) {
         if (!this.props.isVisible && nextProps.isVisible) {
-            const instruments = gamelansStore.gamelans.find(gamelan => gamelan.scale === nextProps.scale).instruments.map(instrument => instrument.name);
+            const instruments = gamelansStore.gamelans.find(gamelan => gamelan.scale === nextProps.scale).instruments.map(instrument => instrument.name)
+                .filter(instrument => !currentPiece.parts.find(part => part.instrument === instrument));
             this.setState({
                 instruments,
                 instrument: instruments[0]
@@ -29,6 +30,8 @@ class AddPartDialog extends React.Component {
     handleClick = (e) => {
         if (e.target.name === 'add') {
             currentPiece.addPart(this.state.instrument);
+            const instruments = this.state.instruments.filter(instrument => !currentPiece.parts.find(part => part.instrument === instrument));
+            this.setState({ instruments, instrument: instruments[0] });
         }
         else if (e.target.name === 'ok') {
             this.props.onManageParts();
@@ -78,7 +81,7 @@ class AddPartDialog extends React.Component {
                             <option key={i} value={instrument}>{instrument}</option>
                         )}
                     </select>
-                    <button onClick={this.handleClick} name="add">Add</button>
+                    <button onClick={this.handleClick} disabled={this.state.instruments.length === 0} name="add">Add</button>
                     <div className="dialog-buttonrow">
                         <button className="dialog-button ok" onClick={this.handleClick} name="ok">OK</button>
                         <button className="dialog-button cancel" onClick={this.handleClick} name="cancel">Cancel</button>

@@ -301,7 +301,8 @@ class Main extends React.Component {
                     style={{
                         alignItems: 'center',
                         display: 'flex',
-                        flexDirection: 'column'
+                        flexDirection: 'column',
+                        paddingBottom: '100px'
                     }}
                 >
                     {blah(currentPiece)}
