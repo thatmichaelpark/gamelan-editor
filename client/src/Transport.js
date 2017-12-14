@@ -4,6 +4,9 @@ import { currentPiece } from './stores/piecesStore';
 
 @observer
 class Transport extends React.Component {
+    handleLevelChange = (part, value) => {
+        part.level = value / 100;
+    };
     render() {
         // const buttonStyle = {
         //     height: '50px',
@@ -19,14 +22,19 @@ class Transport extends React.Component {
                     <span>{123}</span>
                     <input type="range" min="40" max="150" value={123}/>
                 </div>
-                <div className="level">
-                    <span>Gong</span>
-                    <input type="range" name="gong" min="0" max="100" value={50}/>
-                </div>
-                <div className="level">
-                    <span>Bonang Barung</span>
-                    <input type="range" name="nong" min="0" max="100" value={75}/>
-                </div>
+                {currentPiece.parts.map((part, i) =>
+                    <div className="level" key={i}>
+                        <span>{part.instrument}</span>
+                        <input 
+                            type="range" 
+                            name={part.instrument} 
+                            min="0" 
+                            max="100" 
+                            value={part.level * 100}
+                            onChange={(e) => this.handleLevelChange(part, e.target.value)}
+                        />
+                    </div>
+                )}
             </div>
             // <div style={{
             // 	position: 'fixed',
