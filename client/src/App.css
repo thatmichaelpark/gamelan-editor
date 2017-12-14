@@ -1,7 +1,7 @@
 body {
 	font-family: sans-serif;
 	font-size: 20px;
-	margin-top: 24px;
+	margin: 24px 0 0 0;
 }
 
 h1 {
@@ -232,10 +232,47 @@ label {
 }
 
 .transport {
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	height: 100px;
-	background: red;
+    align-items: center;
+    display: flex;
+    justify-content: flex-start;
+    position: fixed;
+    bottom: 0px;
+    height: 100px;
+    width: 100%;
+    background: rgba(240, 240, 240, 0.9);
+    transition: bottom 0.3s ease-in-out;
+}
+
+.transport button {
+    height: 80px;
+    width: 80px;
+    margin: 0 5px;
+    border-radius: 50%;
+}
+
+.tempo {
+    display: flex;
+    height: 80px;
+    width: 100px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 150%;
+}
+
+.tempo input {
+    width: 80px;
+}
+
+.level {
+    display: flex;
+    height: 80px;
+    width: 100px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.level input {
+    width: 80px;
 }

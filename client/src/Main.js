@@ -307,7 +307,7 @@ class Main extends React.Component {
                 >
                     {blah(currentPiece)}
                 </div>
-                {editMode.isPlay && <Transport/>}
+                {<Transport isVisible={editMode.isPlay}/>}
                 <OpenDialog isVisible={this.state.openDialogIsVisible} onOpen={this.handleOpen}/>
                 <SaveAsDialog isVisible={this.state.saveAsDialogIsVisible} title={currentPiece.title} onSave={this.handleSaveAs}/>
                 <NewDialog isVisible={this.state.newDialogIsVisible} onNew={this.handleNew}/>
