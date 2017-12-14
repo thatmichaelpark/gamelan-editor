@@ -3,6 +3,8 @@
 exports.up = function(knex) {
     return knex.schema.createTable('pieces', (table) => {
         table.increments();
+        table.bool('is_active').notNullable().defaultTo(true);
+        table.bool('is_public').notNullable().defaultTo(true);
         table.string('title').notNullable();
         table.string('scale').notNullable();
         table.string('parts', 10000).notNullable();

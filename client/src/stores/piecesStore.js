@@ -20,7 +20,7 @@ class Piece {
         this.phrasePlaylist = phrasePlaylist;   // array of id
     }
     addPart(instrument) {
-        const part = { instrument, phrases: [], beatsArray: [] };
+        const part = { instrument, phrases: observable([]), beatsArray: [] };
         const nParts = this.parts.push(part);
 
         const nHands = gamelansStore
