@@ -27,7 +27,6 @@ class EditMode {
     
     toggle() {
         this.editMode = !this.editMode;
-        console.log(this.editMode);
     }
     @computed get isEdit() {
         return account.isLoggedIn ? this.editMode : false;
