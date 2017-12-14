@@ -28,10 +28,11 @@ class DampedSample {
         this.source.connect(this.dampGain);
         this.dampGain.connect(this.destination);
         this.source.start(time);
+        return this.dampGain;
     }
-    damp(time) {
-        this.dampGain.gain.setValueAtTime(1, time);
-        this.dampGain.gain.linearRampToValueAtTime(0, time + 0.05)
+    damp(time, dampGain) {
+        dampGain.gain.setValueAtTime(1, time);
+        dampGain.gain.linearRampToValueAtTime(0, time + 0.05)
     }
 }
 

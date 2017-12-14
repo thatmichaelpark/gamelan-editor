@@ -20,7 +20,8 @@ class Piece {
         this.phrasePlaylist = phrasePlaylist;   // array of id
     }
     addPart(instrument) {
-        const part = { instrument, phrases: observable([]), beatsArray: [], level: 0.5 };
+        const id = this.parts.reduce((maxId, part) => Math.max(maxId, part.id), -1) + 1;
+        const part = { id, instrument, phrases: observable([]), beatsArray: [], level: 0.5 };
         const nParts = this.parts.push(part);
 
         const nHands = gamelansStore
