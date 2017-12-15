@@ -4,25 +4,24 @@ import axios from 'axios';
 import audioContext from '../audioContext';
 
 class Sample {
-    constructor(buffer, destination) {
+    constructor(buffer) {
         this.buffer = buffer;
-        this.destination = destination;
     }
 }
 
-function triggerSample(sample) {
+function triggerSample(sample, destination) {
     const source = audioContext.createBufferSource();
     source.buffer = sample.buffer;
-    source.connect(sample.destination);
+    source.connect(destination);
     source.start(audioContext.currentTime);
 }
 
-function triggerDampedSample(sample) {
+function triggerDampedSample(sample, destination) {
     const source = audioContext.createBufferSource();
     source.buffer = sample.buffer;
     const dampGain = audioContext.createGain();
     source.connect(dampGain);
-    dampGain.connect(sample.destination);
+    dampGain.connect(destination);
     source.start(audioContext.currentTime);
     return dampGain;
 }
@@ -337,11 +336,11 @@ class GamelansStore {
                 if (dampGain) {
                     damp(dampGain);
                 }
-                const newDampGain = triggerDampedSample(tone.sample);
+                const newDampGain = triggerDampedSample(tone.sample, part.gainNode);
                 this.dampGainMap.set(part.id, newDampGain);
             }
             else {
-                triggerSample(tone.sample);
+                triggerSample(tone.sample, part.gainNode);
             }
         }
     }

@@ -2,6 +2,7 @@ import { computed, observable } from 'mobx';
 import gamelansStore from './gamelansStore';
 import axios from 'axios';
 import Boo from '../Boo';
+import audioContext from '../audioContext';
 
 class Piece {
     @observable title;
@@ -21,7 +22,18 @@ class Piece {
     }
     addPart(instrument) {
         const id = this.parts.reduce((maxId, part) => Math.max(maxId, part.id), -1) + 1;
-        const part = { id, instrument, phrases: observable([]), beatsArray: [], level: 0.5 };
+        const level = 0.5;
+        const gainNode = audioContext.createGain();
+        gainNode.connect(audioContext.destination);
+        gainNode.gain.value = level;
+        const part = { 
+            id, 
+            instrument, 
+            phrases: observable([]), 
+            beatsArray: [], 
+            gainNode,
+            level
+        };
         const nParts = this.parts.push(part);
 
         const nHands = gamelansStore
@@ -278,6 +290,9 @@ class PiecesStore {
             this.currentPiece.scale = result.data.scale;
             result.data.parts.forEach(part => {
                 part.beatsArray = [];
+                part.gainNode = audioContext.createGain();
+                part.gainNode.connect(audioContext.destination);
+                part.gainNode.gain.value = part.level;
             });
             this.currentPiece.parts = result.data.parts;
             this.currentPiece.parts.toJSON = function () {

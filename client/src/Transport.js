@@ -6,6 +6,7 @@ import { currentPiece } from './stores/piecesStore';
 class Transport extends React.Component {
     handleLevelChange = (part, value) => {
         part.level = value / 100;
+        part.gainNode.gain.value = part.level;
     };
     render() {
         // const buttonStyle = {
