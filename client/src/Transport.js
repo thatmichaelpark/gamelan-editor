@@ -4,6 +4,9 @@ import { currentPiece } from './stores/piecesStore';
 
 @observer
 class Transport extends React.Component {
+    handleBpmChange = (e) => {
+        currentPiece.bpm = e.target.value;
+    }
     handleLevelChange = (part, value) => {
         part.level = value / 100;
         part.gainNode.gain.value = part.level;
@@ -20,8 +23,8 @@ class Transport extends React.Component {
                 <button onClick={this.props.onPause} value='pause'>pause</button>
                 <button onClick={this.props.onStop} value='stop'>stop</button>
                 <div className="tempo">
-                    <span>{123}</span>
-                    <input type="range" min="40" max="150" value={123}/>
+                    <span>{currentPiece.bpm}</span>
+                    <input type="range" min="40" max="150" value={currentPiece.bpm} onChange={this.handleBpmChange}/>
                 </div>
                 {currentPiece.parts.map((part, i) =>
                     <div className="level" key={i}>

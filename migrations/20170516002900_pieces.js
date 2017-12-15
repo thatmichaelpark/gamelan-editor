@@ -7,6 +7,7 @@ exports.up = function(knex) {
         table.bool('is_public').notNullable().defaultTo(true);
         table.string('title').notNullable();
         table.string('scale').notNullable();
+        table.integer('bpm').notNullable();
         table.string('parts', 10000).notNullable();
         table.string('phrase_infos', 10000).notNullable();
         table.string('phrase_playlist', 10000).notNullable();

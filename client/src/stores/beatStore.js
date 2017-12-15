@@ -20,7 +20,6 @@ class BeatStore {
         {x: 0.8, y: 1},
         {x: 1, y: 0.5},
     ];
-    bpm = 120;
     
     tick = (timestamp) => {
         const dt = 0.001 * (this.prevTimestamp ? timestamp - this.prevTimestamp : 0);
@@ -28,7 +27,7 @@ class BeatStore {
 
         const timeScaler = interpolator(this.pointsList, this.realBeat / this.nBeats);
 
-        this.realBeat += dt * timeScaler * this.bpm / 60;
+        this.realBeat += dt * timeScaler * currentPiece.bpm / 60;
         if (this.realBeat >= this.nBeats) {
             this.stop();
             return;

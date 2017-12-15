@@ -12,13 +12,15 @@ class Piece {
     @observable phrasePlaylist;
     @observable id;
     @observable userId;
+    @observable bpm;
     
-    constructor(title, scale, parts, phraseInfos, phrasePlaylist) {
+    constructor(title, scale, parts, phraseInfos, phrasePlaylist, bpm) {
         this.title = title; // string
         this.scale = scale; // string
         this.parts = parts; // array of Part objects
         this.phraseInfos = phraseInfos; // array of {id, name, length}
         this.phrasePlaylist = phrasePlaylist;   // array of id
+        this.bpm = bpm;
     }
     addPart(instrument) {
         const id = this.parts.reduce((maxId, part) => Math.max(maxId, part.id), -1) + 1;
@@ -179,7 +181,8 @@ class PiecesStore {
             'slendro',
             [],
             [],
-            []
+            [],
+            120
             // [
             //     {
             //         instrument: 'Saron',
@@ -226,7 +229,7 @@ class PiecesStore {
             // ]
         );
 
-        this.savedPiece = new Piece('', '', [], []);
+        this.savedPiece = new Piece('', '', [], [], 120);
         this.savedPiece.title = this.currentPiece.title;
         this.savedPiece.scale = this.currentPiece.scale;
         this.savedPiece.parts = JSON.parse(JSON.stringify(this.currentPiece.parts.slice(0)));
@@ -239,7 +242,8 @@ class PiecesStore {
         this.currentPiece.parts = [];
         this.currentPiece.phraseInfos = [];
         this.currentPiece.phrasePlaylist = [];
-        this.savedPiece = new Piece(title, scale, [], []);
+        this.currentPiece.bpm = 120;
+        this.savedPiece = new Piece(title, scale, [], [], 120);
     }
     getPieces() {
         return axios.get('/api/pieces')
@@ -261,6 +265,7 @@ class PiecesStore {
             this.savedPiece.userId = this.currentPiece.userId;
             this.savedPiece.title = this.currentPiece.title;
             this.savedPiece.scale = this.currentPiece.scale;
+            this.savedPiece.bpm = this.currentPiece.bpm;
             this.savedPiece.parts = JSON.parse(JSON.stringify(this.currentPiece.parts));
             this.savedPiece.phraseInfos = JSON.parse(JSON.stringify(this.currentPiece.phraseInfos));
             this.savedPiece.phrasePlaylist = JSON.parse(JSON.stringify(this.currentPiece.phrasePlaylist));
@@ -278,6 +283,7 @@ class PiecesStore {
             this.savedPiece.userId = this.currentPiece.userId;
             this.savedPiece.title = this.currentPiece.title;
             this.savedPiece.scale = this.currentPiece.scale;
+            this.savedPiece.bpm = this.currentPiece.bpm;
             this.savedPiece.parts = JSON.parse(JSON.stringify(this.currentPiece.parts));
             this.savedPiece.phraseInfos = JSON.parse(JSON.stringify(this.currentPiece.phraseInfos));
             this.savedPiece.phrasePlaylist = JSON.parse(JSON.stringify(this.currentPiece.phrasePlaylist));
@@ -321,11 +327,13 @@ class PiecesStore {
             this.currentPiece.phraseInfos = result.data.phraseInfos;
             this.currentPiece.id = result.data.id;
             this.currentPiece.userId = result.data.userId;
+            this.currentPiece.bpm = result.data.bpm;
             this.currentPiece.phrasePlaylist = result.data.phrasePlaylist || [];
             this.savedPiece.id = this.currentPiece.id;
             this.savedPiece.userId = this.currentPiece.userId;
             this.savedPiece.title = this.currentPiece.title;
             this.savedPiece.scale = this.currentPiece.scale;
+            this.savedPiece.bpm = this.currentPiece.bpm;
             this.savedPiece.parts = JSON.parse(JSON.stringify(this.currentPiece.parts));
             this.savedPiece.phraseInfos = JSON.parse(JSON.stringify(this.currentPiece.phraseInfos));
             this.savedPiece.phrasePlaylist = JSON.parse(JSON.stringify(this.currentPiece.phrasePlaylist));
@@ -340,6 +348,7 @@ class PiecesStore {
             || this.currentPiece.scale !== this.savedPiece.scale
             || this.currentPiece.id !== this.savedPiece.id
             || this.currentPiece.userId !== this.savedPiece.userId
+            || this.currentPiece.bpm !== this.savedPiece.bpm
             || JSON.stringify(this.currentPiece.parts) !== JSON.stringify(this.savedPiece.parts)
             || JSON.stringify(this.currentPiece.phraseInfos) !== JSON.stringify(this.savedPiece.phraseInfos)
             || JSON.stringify(this.currentPiece.phrasePlaylist) !== JSON.stringify(this.savedPiece.phrasePlaylist);
