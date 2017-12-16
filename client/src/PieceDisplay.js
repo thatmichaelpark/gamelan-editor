@@ -12,12 +12,28 @@ class PieceDisplay extends React.Component {
             svgWidth: 0
         };
     }
-    scaleX = (x) => x * (this.state.svgWidth - 80) + 40; // x in [0..1]
     componentDidMount() {
         const svgWidth = this.svgElement.clientWidth;
         const svgHeight = this.svgElement.clientHeight;
         this.setState({ svgWidth, svgHeight })
-        console.log(svgWidth, svgHeight);
+        this.bcr = this.parentElement.getBoundingClientRect();
+        this.svgLeft = 40;
+    }
+    t2x = (t) => t * (this.state.svgWidth - 80) + 40; // t in [0..1]
+    f2y = (f) => 80 - f * 40; // t in [0..1]
+    x2t = (x) => (x - 40) / (this.state.svgWidth - 80);
+    y2f = (y) => (this.svgTop - y + 80) / 40;
+
+    handleClick = (e) => {
+    }
+    handleLineClick = (e) => {
+        this.svgTop = this.svgElement.getBoundingClientRect().top;
+        const tempoPoints = currentPiece.tempoPoints.slice();
+        tempoPoints.push({ t: this.x2t(e.clientX), f: this.y2f(e.clientY) });
+        tempoPoints.sort((a, b) => a.t - b.t);
+        currentPiece.tempoPoints.replace(tempoPoints);
+    }
+    handleCircleClick = (e) => {
     }
     render() {
         const totalBeats = currentPiece.phrasePlaylist.reduce((acc, id) => acc + currentPiece.phraseInfos.find(p => p.id === id).length, 0);
@@ -29,8 +45,9 @@ class PieceDisplay extends React.Component {
                     width: '100%',
                     height: '100px',
                     bottom: this.props.isVisible ? '100px' : '-100px',
-                    transition: 'bottom 0.3s ease-in-out'
+                    transition: 'bottom 0.3s ease-in-out',
                 }}
+                ref={(parentElement => this.parentElement = parentElement)}
             >
                 <div
                     style={{
@@ -39,7 +56,8 @@ class PieceDisplay extends React.Component {
                         right: '40px',
                         height: '100%',
                         display: 'flex',
-                        flexDirection: 'row'
+                        flexDirection: 'row',
+                        zIndex: -1
                     }}
                 >
                     {currentPiece.phrasePlaylist.map((id, i) => 
@@ -60,10 +78,45 @@ class PieceDisplay extends React.Component {
                 <svg
                     width='100%'
                     height='100%'
-                    ref={(svgElement => this.svgElement = svgElement)}
+                    onClick={this.handleClick}
+                    ref={svgElement => this.svgElement = svgElement}
+                    style={{
+                    }}
                 >
+                    {currentPiece.tempoPoints.map((pt, i) => 
+                        i !== currentPiece.tempoPoints.length - 1 &&
+                        <line 
+                            className='tempoLine'
+                            key={i} 
+                            onClick={this.handleLineClick}
+                            // onMouseDown={this.handleMouseDown}
+                            // onMouseMove={this.handleMouseMove}
+                            // onMouseUp={this.handleMouseUp}
+                            x1={this.t2x(pt.t)} 
+                            y1={this.f2y(pt.f)} 
+                            x2={this.t2x(currentPiece.tempoPoints[i + 1].t)} 
+                            y2={this.f2y(currentPiece.tempoPoints[i + 1].f)}
+                        />
+                    )}
+                    {currentPiece.tempoPoints.map((pt, i) =>
+                        <circle
+                            key={i} 
+                            // i={i}
+                            cx={this.t2x(pt.t)} 
+                            cy={this.f2y(pt.f)}
+                            r={5}
+                            fill='green'
+                            // moveDot={this.moveDot}
+                        />
+                    )}
                     {totalBeats &&
-                        <circle cx={this.scaleX(beatStore.realBeat / totalBeats)} cy={90} r={5} fill='green'/>
+                        <circle 
+                            cx={this.t2x(beatStore.realBeat / totalBeats)} 
+                            cy={90} 
+                            r={10} 
+                            fill='green'
+                            onClick={this.handleCircleClick}
+                        />
                     }
                 </svg>
             </div>

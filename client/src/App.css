@@ -276,3 +276,13 @@ label {
 .level input {
     width: 80px;
 }
+
+.tempoLine {
+	stroke: pink;
+	strokeWidth: 2;
+}
+
+.tempoLine:hover {
+	stroke: red;
+	strokeWidth: 5;
+}

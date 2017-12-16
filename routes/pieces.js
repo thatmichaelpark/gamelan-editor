@@ -21,11 +21,12 @@ router.get('/pieces', (req, res, next) => {
 });
 
 router.get('/pieces/:id', (req, res, next) => {
-    knex('pieces').select('id', 'title', 'scale', 'bpm', 'parts', 'phrase_infos', 'phrase_playlist', 'user_id').where('id', req.params.id).first()
+    knex('pieces').select('id', 'title', 'scale', 'bpm', 'parts', 'phrase_infos', 'phrase_playlist', 'tempo_points', 'user_id').where('id', req.params.id).first()
     .then((result) => {
         result.parts = JSON.parse(result.parts);
         result.phrase_infos = JSON.parse(result.phrase_infos);
         result.phrase_playlist = JSON.parse(result.phrase_playlist);
+        result.tempo_points = JSON.parse(result.tempo_points);
         res.send(camelizeKeys(result));
     }).catch((err) => {
         next(err);
@@ -38,6 +39,7 @@ router.post('/pieces', checkAuth, (req, res, next) => {
     const parts = JSON.stringify(req.body.piece.parts);
     const phraseInfos = JSON.stringify(req.body.piece.phraseInfos);
     const phrasePlaylist = JSON.stringify(req.body.piece.phrasePlaylist);
+    const tempoPoints = JSON.stringify(req.body.piece.tempoPoints);
     const userId = req.token.userId;
 
     knex('pieces')
@@ -47,7 +49,7 @@ router.post('/pieces', checkAuth, (req, res, next) => {
         if (result.length) {
             throw boom.create(400, 'Duplicate title');
         }
-        return knex('pieces').insert(decamelizeKeys({title, scale, parts, bpm, phraseInfos, phrasePlaylist, userId}), '*')
+        return knex('pieces').insert(decamelizeKeys({title, scale, parts, bpm, phraseInfos, phrasePlaylist, tempoPoints, userId}), '*')
     })
     .then((result) => {
         res.send({id: result[0].id, userId: result[0].user_id});
@@ -64,6 +66,7 @@ router.patch('/pieces/:id', checkAuth, (req, res, next) => {
     const parts = JSON.stringify(req.body.piece.parts);
     const phraseInfos = JSON.stringify(req.body.piece.phraseInfos);
     const phrasePlaylist = JSON.stringify(req.body.piece.phrasePlaylist);
+    const tempoPoints = JSON.stringify(req.body.piece.tempoPoints);
     const userId = req.token.userId;
 
     knex('pieces').select('user_id').where('id', req.params.id).first()
@@ -85,7 +88,7 @@ router.patch('/pieces/:id', checkAuth, (req, res, next) => {
         }
 
         return knex('pieces')
-            .update(decamelizeKeys({title, scale, bpm, parts, phraseInfos, phrasePlaylist}), ['id', 'user_id'])
+            .update(decamelizeKeys({title, scale, bpm, parts, phraseInfos, phrasePlaylist, tempoPoints}), ['id', 'user_id'])
             .where('id', req.params.id);
     })
     .then((ids) => {

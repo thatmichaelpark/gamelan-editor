@@ -11,6 +11,7 @@ exports.up = function(knex) {
         table.string('parts', 10000).notNullable();
         table.string('phrase_infos', 10000).notNullable();
         table.string('phrase_playlist', 10000).notNullable();
+        table.string('tempo_points', 10000).notNullable();
         table.integer('user_id')
           .notNullable()
           .references('id')

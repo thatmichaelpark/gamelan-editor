@@ -13,14 +13,16 @@ class Piece {
     @observable id;
     @observable userId;
     @observable bpm;
+    @observable tempoPoints;
     
-    constructor(title, scale, parts, phraseInfos, phrasePlaylist, bpm) {
+    constructor(title, scale, parts, phraseInfos, phrasePlaylist, bpm, tempoPoints) {
         this.title = title; // string
         this.scale = scale; // string
         this.parts = parts; // array of Part objects
         this.phraseInfos = phraseInfos; // array of {id, name, length}
         this.phrasePlaylist = phrasePlaylist;   // array of id
         this.bpm = bpm;
+        this.tempoPoints = tempoPoints;
     }
     addPart(instrument) {
         const id = this.parts.reduce((maxId, part) => Math.max(maxId, part.id), -1) + 1;
@@ -182,7 +184,8 @@ class PiecesStore {
             [],
             [],
             [],
-            120
+            120,
+            [{t: 0, f: 1}, {t: 1, f: 1}]
             // [
             //     {
             //         instrument: 'Saron',
@@ -229,12 +232,13 @@ class PiecesStore {
             // ]
         );
 
-        this.savedPiece = new Piece('', '', [], [], 120);
+        this.savedPiece = new Piece('', '', [], [], 120, [{t: 0, f: 1}, {t: 1, f: 1}]);
         this.savedPiece.title = this.currentPiece.title;
         this.savedPiece.scale = this.currentPiece.scale;
         this.savedPiece.parts = JSON.parse(JSON.stringify(this.currentPiece.parts.slice(0)));
         this.savedPiece.phraseInfos = JSON.parse(JSON.stringify(this.currentPiece.phraseInfos.slice(0)));
         this.savedPiece.phrasePlaylist = JSON.parse(JSON.stringify(this.currentPiece.phrasePlaylist));
+        this.savedPiece.tempoPoints = JSON.parse(JSON.stringify(this.currentPiece.tempoPoints));
     }
     new(title, scale) {
         this.currentPiece.title = title;
@@ -243,7 +247,7 @@ class PiecesStore {
         this.currentPiece.phraseInfos = [];
         this.currentPiece.phrasePlaylist = [];
         this.currentPiece.bpm = 120;
-        this.savedPiece = new Piece(title, scale, [], [], 120);
+        this.savedPiece = new Piece(title, scale, [], [], 120, [{t: 0, f: 1}, {t: 1, f: 1}]);
     }
     getPieces() {
         return axios.get('/api/pieces')
@@ -269,6 +273,7 @@ class PiecesStore {
             this.savedPiece.parts = JSON.parse(JSON.stringify(this.currentPiece.parts));
             this.savedPiece.phraseInfos = JSON.parse(JSON.stringify(this.currentPiece.phraseInfos));
             this.savedPiece.phrasePlaylist = JSON.parse(JSON.stringify(this.currentPiece.phrasePlaylist));
+            this.savedPiece.tempoPoints = JSON.parse(JSON.stringify(this.currentPiece.tempoPoints));
         });
     }
     savePiece(piece) {
@@ -287,6 +292,7 @@ class PiecesStore {
             this.savedPiece.parts = JSON.parse(JSON.stringify(this.currentPiece.parts));
             this.savedPiece.phraseInfos = JSON.parse(JSON.stringify(this.currentPiece.phraseInfos));
             this.savedPiece.phrasePlaylist = JSON.parse(JSON.stringify(this.currentPiece.phrasePlaylist));
+            this.savedPiece.tempoPoints = JSON.parse(JSON.stringify(this.currentPiece.tempoPoints));
         });
     }
     open(id) {
@@ -328,7 +334,8 @@ class PiecesStore {
             this.currentPiece.id = result.data.id;
             this.currentPiece.userId = result.data.userId;
             this.currentPiece.bpm = result.data.bpm;
-            this.currentPiece.phrasePlaylist = result.data.phrasePlaylist || [];
+            this.currentPiece.phrasePlaylist = result.data.phrasePlaylist;
+            this.currentPiece.tempoPoints = result.data.tempoPoints;
             this.savedPiece.id = this.currentPiece.id;
             this.savedPiece.userId = this.currentPiece.userId;
             this.savedPiece.title = this.currentPiece.title;
@@ -337,6 +344,7 @@ class PiecesStore {
             this.savedPiece.parts = JSON.parse(JSON.stringify(this.currentPiece.parts));
             this.savedPiece.phraseInfos = JSON.parse(JSON.stringify(this.currentPiece.phraseInfos));
             this.savedPiece.phrasePlaylist = JSON.parse(JSON.stringify(this.currentPiece.phrasePlaylist));
+            this.savedPiece.tempoPoints = JSON.parse(JSON.stringify(this.currentPiece.tempoPoints));
             this.currentPiece.loadInstruments();
         });
     }
@@ -351,7 +359,8 @@ class PiecesStore {
             || this.currentPiece.bpm !== this.savedPiece.bpm
             || JSON.stringify(this.currentPiece.parts) !== JSON.stringify(this.savedPiece.parts)
             || JSON.stringify(this.currentPiece.phraseInfos) !== JSON.stringify(this.savedPiece.phraseInfos)
-            || JSON.stringify(this.currentPiece.phrasePlaylist) !== JSON.stringify(this.savedPiece.phrasePlaylist);
+            || JSON.stringify(this.currentPiece.phrasePlaylist) !== JSON.stringify(this.savedPiece.phrasePlaylist)
+            || JSON.stringify(this.currentPiece.tempoPoints) !== JSON.stringify(this.savedPiece.tempoPoints);
     }
 }
 
