@@ -23,12 +23,13 @@ class Transport extends React.Component {
                 <button onClick={this.props.onPause} value='pause'>pause</button>
                 <button onClick={this.props.onStop} value='stop'>stop</button>
                 <div className="tempo">
-                    <span>{currentPiece.bpm}</span>
+                    <div style={{ fontSize: '50%' }}>Tempo</div>
+                    <div>{currentPiece.bpm}</div>
                     <input type="range" min="40" max="150" value={currentPiece.bpm} onChange={this.handleBpmChange}/>
                 </div>
                 {currentPiece.parts.map((part, i) =>
                     <div className="level" key={i}>
-                        <span>{part.instrument}</span>
+                        <div style={{ textAlign: 'center '}}>{part.instrument}</div>
                         <input 
                             type="range" 
                             name={part.instrument} 

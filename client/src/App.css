@@ -255,7 +255,7 @@ label {
     height: 80px;
     width: 100px;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
     font-size: 150%;
 }
@@ -269,7 +269,7 @@ label {
     height: 80px;
     width: 100px;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
 }
 
