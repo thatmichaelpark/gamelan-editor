@@ -294,8 +294,6 @@ class Main extends React.Component {
                     {currentPiece.title || 'Untitled'}
                     ({currentPiece.scale})
                     {piecesStore.modified ? '*' : ''}
-                    [{currentPiece.id}]
-                    [{currentPiece.userId}]
                 </h1>
                 <div
                     style={{
