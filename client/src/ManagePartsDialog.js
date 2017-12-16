@@ -1,6 +1,7 @@
 import React from 'react';
 import gamelansStore from './stores/gamelansStore';
 import { currentPiece } from './stores/piecesStore';
+import audioContext from './audioContext';
 
 class AddPartDialog extends React.Component {
     constructor(props) {
@@ -35,7 +36,14 @@ class AddPartDialog extends React.Component {
             this.props.onManageParts();
         }
         else { // cancel: restore saved parts
-            currentPiece.parts = JSON.parse(this.savedParts);
+            const temp = JSON.parse(this.savedParts);
+            temp.forEach(part => {
+                part.beatsArray = [];
+                part.gainNode = audioContext.createGain();
+                part.gainNode.connect(audioContext.destination);
+                part.gainNode.gain.value = part.level;
+            });
+            currentPiece.parts = temp;
             this.props.onManageParts();
         }
     }
