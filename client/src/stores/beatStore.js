@@ -3,7 +3,7 @@ import { currentPiece } from './piecesStore';
 import interpolator from '../interpolator';
 
 class BeatStore {
-    realBeat; // floating-point beat [0..nBeats)
+    @observable realBeat; // floating-point beat [0..nBeats)
     @observable beat; // integer part of realBeat or -1 if not playing
     @observable nBeats; // length of piece in beats
     prevTimestamp = 0;

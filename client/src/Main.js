@@ -17,6 +17,7 @@ import Boo from './Boo';
 import account from './stores/accountStore';
 import InstrumentLoadingProgress from './InstrumentLoadingProgress';
 import Transport from './Transport';
+import PieceDisplay from './PieceDisplay';
 import beatStore from './stores/beatStore';
 
 import { observable, computed } from 'mobx';
@@ -300,11 +301,12 @@ class Main extends React.Component {
                         alignItems: 'center',
                         display: 'flex',
                         flexDirection: 'column',
-                        paddingBottom: '100px'
+                        paddingBottom: editMode.isPlay ? '200px' : 0
                     }}
                 >
                     {blah(currentPiece)}
                 </div>
+                {<PieceDisplay isVisible={editMode.isPlay}/>}
                 {<Transport isVisible={editMode.isPlay} onPlay={this.handlePlay} onPause={beatStore.pause} onStop={beatStore.stop}/>}
                 <OpenDialog isVisible={this.state.openDialogIsVisible} onOpen={this.handleOpen}/>
                 <SaveAsDialog isVisible={this.state.saveAsDialogIsVisible} title={currentPiece.title} onSave={this.handleSaveAs}/>

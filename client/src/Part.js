@@ -39,7 +39,7 @@ class Part extends React.Component {
             <div>
                 <div className="part">
                     <div className="left">
-                        {part.instrument}({part.id})
+                        {part.instrument}
                         {/* <input type="checkbox" onChange={this.handleCheck} checked={part.muteSolo === 'solo'}/>
                         <input type="checkbox" onChange={this.handleCheck} checked={part.muteSolo === 'mute'}/> */}
                     </div>
