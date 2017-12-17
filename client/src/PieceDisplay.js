@@ -24,6 +24,11 @@ class PieceDisplay extends React.Component {
     y2f = (y) => (this.svgTop - y + 80) / 40;
 
     handleClick = (e) => {
+        this.svgTop = this.svgElement.getBoundingClientRect().top;
+        const t = this.x2t(e.clientX);
+        if (0 <= t && t <= 1) {
+            beatStore.realBeat = t * this.totalBeats;
+        }
     }
     handleLineClick = (e) => {
         this.svgTop = this.svgElement.getBoundingClientRect().top;
@@ -31,6 +36,10 @@ class PieceDisplay extends React.Component {
         tempoPoints.push({ t: this.x2t(e.clientX), f: this.y2f(e.clientY) });
         tempoPoints.sort((a, b) => a.t - b.t);
         currentPiece.tempoPoints.replace(tempoPoints);
+        e.stopPropagation();
+    }
+    handleCircleClick = (e) => {
+        e.stopPropagation();
     }
     handleCircleMouseDown = (e) => {
         this.svgTop = this.svgElement.getBoundingClientRect().top;
@@ -63,7 +72,7 @@ class PieceDisplay extends React.Component {
         this.dragging = false;
     }
     render() {
-        const totalBeats = currentPiece.phrasePlaylist.reduce((acc, id) => acc + currentPiece.phraseInfos.find(p => p.id === id).length, 0);
+        this.totalBeats = currentPiece.phrasePlaylist.reduce((acc, id) => acc + currentPiece.phraseInfos.find(p => p.id === id).length, 0);
 
         return (
             <div
@@ -93,7 +102,7 @@ class PieceDisplay extends React.Component {
                                 boxSizing: 'border-box',
                                 border: '1px solid gray',
                                 background: 'rgba(230, 240, 250, 0.9)',
-                                width: `${currentPiece.phraseInfos.find(p => p.id === id).length / totalBeats * 100}%`,
+                                width: `${currentPiece.phraseInfos.find(p => p.id === id).length / this.totalBeats * 100}%`,
                                 height: '80px'
                             }}
                         >
@@ -115,9 +124,6 @@ class PieceDisplay extends React.Component {
                             className='tempoLine'
                             key={i} 
                             onClick={this.handleLineClick}
-                            // onMouseDown={this.handleMouseDown}
-                            // onMouseMove={this.handleMouseMove}
-                            // onMouseUp={this.handleMouseUp}
                             x1={this.t2x(pt.t)} 
                             y1={this.f2y(pt.f)} 
                             x2={this.t2x(currentPiece.tempoPoints[i + 1].t)} 
@@ -131,15 +137,16 @@ class PieceDisplay extends React.Component {
                             cy={this.f2y(pt.f)}
                             r={5}
                             fill='green'
+                            onClick={this.handleCircleClick}
                             onMouseDown={this.handleCircleMouseDown}
                             onMouseMove={(e) => this.handleCircleMouseMove(e, i)}
                             onMouseUp={this.handleCircleMouseUp}
                             onMouseOut={this.handleCircleMouseUp}
                         />
                     )}
-                    {totalBeats &&
+                    {this.totalBeats &&
                         <circle 
-                            cx={this.t2x(beatStore.realBeat / totalBeats)} 
+                            cx={this.t2x(beatStore.realBeat / this.totalBeats)} 
                             cy={90} 
                             r={10} 
                             fill='green'
