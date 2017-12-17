@@ -16,7 +16,6 @@ class PieceDisplay extends React.Component {
         const svgWidth = this.svgElement.clientWidth;
         const svgHeight = this.svgElement.clientHeight;
         this.setState({ svgWidth, svgHeight })
-        this.bcr = this.parentElement.getBoundingClientRect();
         this.svgLeft = 40;
     }
     t2x = (t) => t * (this.state.svgWidth - 80) + 40; // t in [0..1]
@@ -33,7 +32,35 @@ class PieceDisplay extends React.Component {
         tempoPoints.sort((a, b) => a.t - b.t);
         currentPiece.tempoPoints.replace(tempoPoints);
     }
-    handleCircleClick = (e) => {
+    handleCircleMouseDown = (e) => {
+        this.svgTop = this.svgElement.getBoundingClientRect().top;
+        this.dragging = true;
+    }
+    handleCircleMouseMove = (e, i) => {
+        if (this.dragging) {
+            let t = this.x2t(e.clientX);
+            let f = this.y2f(e.clientY);
+            const points = currentPiece.tempoPoints.slice();
+
+            if (i === 0) {
+                t = points[i].t;
+            }
+            else if (i === points.length - 1) {
+                t = points[i].t;
+            }
+            else if (points[i].t <= points[i - 1].t) {
+                points.splice(i - 1, 1);
+                i -= 1;
+            }
+            else if (points[i].t >= points[i + 1].t) {
+                points.splice(i + 1, 1);
+            }
+            points[i] = {t, f};
+            currentPiece.tempoPoints.replace(points);
+        }
+    }
+    handleCircleMouseUp = (e) => {
+        this.dragging = false;
     }
     render() {
         const totalBeats = currentPiece.phrasePlaylist.reduce((acc, id) => acc + currentPiece.phraseInfos.find(p => p.id === id).length, 0);
@@ -47,7 +74,6 @@ class PieceDisplay extends React.Component {
                     bottom: this.props.isVisible ? '100px' : '-100px',
                     transition: 'bottom 0.3s ease-in-out',
                 }}
-                ref={(parentElement => this.parentElement = parentElement)}
             >
                 <div
                     style={{
@@ -101,12 +127,14 @@ class PieceDisplay extends React.Component {
                     {currentPiece.tempoPoints.map((pt, i) =>
                         <circle
                             key={i} 
-                            // i={i}
                             cx={this.t2x(pt.t)} 
                             cy={this.f2y(pt.f)}
                             r={5}
                             fill='green'
-                            // moveDot={this.moveDot}
+                            onMouseDown={this.handleCircleMouseDown}
+                            onMouseMove={(e) => this.handleCircleMouseMove(e, i)}
+                            onMouseUp={this.handleCircleMouseUp}
+                            onMouseOut={this.handleCircleMouseUp}
                         />
                     )}
                     {totalBeats &&
