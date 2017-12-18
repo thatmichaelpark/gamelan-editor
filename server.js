@@ -37,7 +37,7 @@ app.use('/api', (req, res, next) => {
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb'}));
 app.use(cookieParser());
 
 const users = require('./routes/users');
