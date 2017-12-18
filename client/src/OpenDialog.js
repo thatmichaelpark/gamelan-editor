@@ -31,11 +31,13 @@ class OpenDialog extends React.Component {
     }
     handleClick = (e) => {
         if (e.target.name === 'open') {
-            this.props.onOpen(Number(this.state.selectedPieceId));
+            const id = Number(this.state.selectedPieceId);
+            if (id >= 0) {
+                this.props.onOpen(id);
+                return;
+            }
         }
-        else {
-            this.props.onOpen(null);
-        }
+        this.props.onOpen(null);
     }
     handleDoubleClick = (id) => {
         this.setState({
