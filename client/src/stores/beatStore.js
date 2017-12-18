@@ -16,21 +16,26 @@ class BeatStore {
     }
 
     tick = (timestamp) => {
-        const dt = 0.001 * (this.prevTimestamp ? timestamp - this.prevTimestamp : 0);
-        this.prevTimestamp = timestamp;
-
-        const timeScaler = interpolator(currentPiece.tempoPoints, this.realBeat / this.nBeats);
-
-        this.realBeat += dt * timeScaler * currentPiece.bpm / 60;
-        if (this.realBeat >= this.nBeats) {
-            this.stop();
-            return;
+        if (this.prevTimestamp) {
+            const dt = 0.001 * (timestamp - this.prevTimestamp);
+            this.prevTimestamp = timestamp;
+            
+            const timeScaler = interpolator(currentPiece.tempoPoints, this.realBeat / this.nBeats);
+            
+            this.realBeat += dt * timeScaler * currentPiece.bpm / 60;
+            if (this.realBeat >= this.nBeats) {
+                this.stop();
+                return;
+            }
+            
+            const newBeat = Math.floor(this.realBeat);
+            if (this.beat !== newBeat) {
+                this.beat = newBeat;
+                currentPiece.playBeat(this.beat);
+            }
         }
-
-        const newBeat = Math.floor(this.realBeat);
-        if (this.beat !== newBeat) {
-            this.beat = newBeat;
-            currentPiece.playBeat(this.beat);
+        else {
+            this.prevTimestamp = performance.now();
         }
         this.rafRequest = requestAnimationFrame(this.tick);
     }
