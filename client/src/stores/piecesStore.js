@@ -5,6 +5,7 @@ import Boo from '../Boo';
 import audioContext from '../audioContext';
 
 class Piece {
+    @observable isUnusable;
     @observable title;
     @observable scale;
     @observable parts;
@@ -16,6 +17,7 @@ class Piece {
     @observable tempoPoints;
     
     constructor(title, scale, parts, phraseInfos, phrasePlaylist, bpm, tempoPoints) {
+        this.isUnusable = true;
         this.title = title; // string
         this.scale = scale; // string
         this.parts = parts; // array of Part objects
@@ -23,6 +25,7 @@ class Piece {
         this.phrasePlaylist = phrasePlaylist;   // array of id
         this.bpm = bpm;
         this.tempoPoints = tempoPoints;
+        this.isUnusable = false;
     }
     addPart(instrument) {
         const id = this.parts.reduce((maxId, part) => Math.max(maxId, part.id), -1) + 1;
@@ -242,6 +245,7 @@ class PiecesStore {
         this.savedPiece.tempoPoints = JSON.parse(JSON.stringify(this.currentPiece.tempoPoints));
     }
     new(title, scale) {
+        this.currentPiece.isUnusable = true;
         this.currentPiece.title = title;
         this.currentPiece.scale = scale;
         this.currentPiece.parts = [];
@@ -271,6 +275,7 @@ class PiecesStore {
         this.currentPiece.phraseInfos = [];
         this.currentPiece.phrasePlaylist = [];
         this.currentPiece.bpm = 120;
+        this.currentPiece.isUnusable = false;
         this.savedPiece = new Piece(title, scale, [], [], 120, [{t: 0, f: 1}, {t: 1, f: 1}]);
     }
     getPieces() {
@@ -322,6 +327,7 @@ class PiecesStore {
     open(id) {
         return axios.get(`/api/pieces/${id}`)
         .then(result => {
+            this.currentPiece.isUnusable = true;
             this.currentPiece.title = result.data.title;
             this.currentPiece.scale = result.data.scale;
             result.data.parts.forEach(part => {
@@ -332,7 +338,6 @@ class PiecesStore {
             this.currentPiece.parts = result.data.parts;
             this.currentPiece.parts.forEach(part => {
                 part.beatsArray = []; // add non-observable array
-                console.log('after', part.beatsArray);
             })
             this.currentPiece.parts.toJSON = function () {
                 // Need to hide beatsArray property inside parts array elements
@@ -363,6 +368,7 @@ class PiecesStore {
             this.currentPiece.bpm = result.data.bpm;
             this.currentPiece.phrasePlaylist = result.data.phrasePlaylist;
             this.currentPiece.tempoPoints = result.data.tempoPoints;
+            this.currentPiece.isUnusable = false;
             this.savedPiece.id = this.currentPiece.id;
             this.savedPiece.userId = this.currentPiece.userId;
             this.savedPiece.title = this.currentPiece.title;

@@ -72,6 +72,9 @@ class PieceDisplay extends React.Component {
         this.dragging = false;
     }
     render() {
+        if (currentPiece.isUnusable) {
+            return <div></div>;
+        }
         this.totalBeats = currentPiece.phrasePlaylist.reduce((acc, id) => acc + currentPiece.phraseInfos.find(p => p.id === id).length, 0);
 
         return (

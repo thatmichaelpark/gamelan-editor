@@ -159,6 +159,9 @@ class Main extends React.Component {
     }
     render() {
         const blah = () => {
+            if (currentPiece.isUnusable) {
+                return;
+            }
             const phraseNames = currentPiece.phraseInfos.map(info => info.name);
 
             if (displayStuff.displayMode === 'compact') {
