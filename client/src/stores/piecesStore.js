@@ -34,12 +34,13 @@ class Piece {
             id, 
             instrument, 
             phrases: observable([]), 
-            beatsArray: [], 
             gainNode,
             level
         };
         const nParts = this.parts.push(part);
-
+        this.parts[nParts - 1].beatsArray = []; // add non-observable array
+        console.log(this.parts);;;
+        console.log(this.parts.toJS());;;
         const nHands = gamelansStore
                         .gamelans.find(g => g.scale === this.scale)
                         .instruments.find(i => i.name === instrument)
@@ -124,7 +125,7 @@ class Piece {
         // beat, each noteNode indicating which part(s)/note(s) to play on that beat
         
         this.parts.forEach(part => {
-            part.beatsArray.clear();
+            part.beatsArray = [];
             part.phrases.forEach((phrase, phraseIndex) => {
                 const beats = [];
                 phrase[0].forEach((note, noteIndex) => {
@@ -244,6 +245,29 @@ class PiecesStore {
         this.currentPiece.title = title;
         this.currentPiece.scale = scale;
         this.currentPiece.parts = [];
+        this.currentPiece.parts.toJSON = function () {
+            // Need to hide beatsArray property inside parts array elements
+            // because we use JSON stringify/parse to determine if anything's
+            // changed (see modified() below) and beatsArray is not a salient change.
+            const result = [];
+            const that = this.slice();
+
+            for (let x of that) {
+                x = JSON.parse(JSON.stringify(x));
+
+                if (!x.instrument) {
+                    continue;
+                }
+                const o = {};
+                for (let prop in x) {
+                    if (prop !== "beatsArray") {
+                        o[prop] = x[prop];
+                    }
+                }
+                result.push(o);
+            }
+            return result;
+        };
         this.currentPiece.phraseInfos = [];
         this.currentPiece.phrasePlaylist = [];
         this.currentPiece.bpm = 120;
@@ -301,12 +325,15 @@ class PiecesStore {
             this.currentPiece.title = result.data.title;
             this.currentPiece.scale = result.data.scale;
             result.data.parts.forEach(part => {
-                part.beatsArray = [];
                 part.gainNode = audioContext.createGain();
                 part.gainNode.connect(audioContext.destination);
                 part.gainNode.gain.value = part.level;
             });
             this.currentPiece.parts = result.data.parts;
+            this.currentPiece.parts.forEach(part => {
+                part.beatsArray = []; // add non-observable array
+                console.log('after', part.beatsArray);
+            })
             this.currentPiece.parts.toJSON = function () {
                 // Need to hide beatsArray property inside parts array elements
                 // because we use JSON stringify/parse to determine if anything's
