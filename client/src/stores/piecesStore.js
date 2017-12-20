@@ -37,13 +37,11 @@ class Piece {
             id, 
             instrument, 
             phrases: observable([]), 
+            beatsArray: [],
             gainNode,
             level
         };
         const nParts = this.parts.push(part);
-        this.parts[nParts - 1].beatsArray = []; // add non-observable array
-        console.log(this.parts);;;
-        console.log(this.parts.toJS());;;
         const nHands = gamelansStore
                         .gamelans.find(g => g.scale === this.scale)
                         .instruments.find(i => i.name === instrument)
@@ -126,6 +124,7 @@ class Piece {
         //
         // At the same time, we'll build a noteList which will have a noteNode for each
         // beat, each noteNode indicating which part(s)/note(s) to play on that beat
+        this.isUnusable = true;
         
         this.parts.forEach(part => {
             part.beatsArray = [];
@@ -156,7 +155,7 @@ class Piece {
                 this.parts.forEach(part => { // eslint-disable-line no-loop-func
                     part.phrases[phraseIndex].forEach(hand => {
                         hand.forEach((note, noteIndex) => {
-                            if (noteIndex + startBeat === beat && note !== ' ' && note !== '.') {
+                            if (noteIndex + startBeat === beat && note !== ' ' && note !== '·') {
                                 noteNode.push({ part, note });
                             }
                         });
@@ -165,7 +164,9 @@ class Piece {
                 this.noteList.push(noteNode);
             }
             startBeat += this.phraseInfos[phraseIndex].length;
-        });
+        });        
+        this.isUnusable = false;
+
         // now startBeat is the length of the piece in beats.
         return startBeat;
     }
@@ -331,14 +332,12 @@ class PiecesStore {
             this.currentPiece.title = result.data.title;
             this.currentPiece.scale = result.data.scale;
             result.data.parts.forEach(part => {
+                part.beatsArray = [];
                 part.gainNode = audioContext.createGain();
                 part.gainNode.connect(audioContext.destination);
                 part.gainNode.gain.value = part.level;
             });
             this.currentPiece.parts = result.data.parts;
-            this.currentPiece.parts.forEach(part => {
-                part.beatsArray = []; // add non-observable array
-            })
             this.currentPiece.parts.toJSON = function () {
                 // Need to hide beatsArray property inside parts array elements
                 // because we use JSON stringify/parse to determine if anything's

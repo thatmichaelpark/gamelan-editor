@@ -101,9 +101,8 @@ class Note extends React.Component {
             classes += 'active ';
         }
         if (this.props.part.beatsArray && this.props.part.beatsArray.length > 0 && this.props.part.beatsArray[this.props.phraseIndex][this.props.noteIndex].indexOf(beatStore.beat) >= 0) {
-            classes += this.props.note === ' ' || this.props.note === '.' || this.props.note === ',' ? '' : 'flash ';
+            classes += this.props.note === ' ' || this.props.note === '·' || this.props.note === ',' ? '' : 'flash ';
         }
-
         return (
             <div>
                 <div
