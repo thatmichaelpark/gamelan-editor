@@ -65,7 +65,7 @@ class Note extends React.Component {
             key = ' ';
         }
         else if (code === 'Period') {
-            key = '·';
+            key = '·'; // n.b. not actually a period
         }
         else if (code === 'Comma') {
             key = ',';
@@ -74,8 +74,9 @@ class Note extends React.Component {
             key = '+';
         }
         if (key) {
-            displayStuff.setSelected(this.props.partIndex, this.props.phraseIndex, this.props.handIndex, this.props.noteIndex);
-            const success = currentPiece.setNote(key, this.props.partIndex, this.props.phraseIndex, this.props.handIndex, this.props.noteIndex);
+            const { partIndex, phraseIndex, handIndex, noteIndex } = this.props;
+            displayStuff.setSelected(partIndex, phraseIndex, handIndex, noteIndex);
+            const success = currentPiece.setNote(key, partIndex, phraseIndex, handIndex, noteIndex);
             if (success) {
                 displayStuff.handleArrow('ArrowRight');
             }
@@ -84,24 +85,25 @@ class Note extends React.Component {
     }
     render() {
         const gamut = [' ', '·'].concat(gamelansStore.gamut(currentPiece.scale, this.props.part.instrument));
-        const selected = this.props.partIndex === displayStuff.selectedPartIndex &&
-                         this.props.phraseIndex === displayStuff.selectedPhraseIndex &&
-                         this.props.handIndex === displayStuff.selectedHandIndex &&
-                         this.props.noteIndex === displayStuff.selectedNoteIndex;
+        const { part, partIndex, phraseIndex, handIndex, noteIndex, note } = this.props;
+        const selected = partIndex === displayStuff.selectedPartIndex &&
+                         phraseIndex === displayStuff.selectedPhraseIndex &&
+                         handIndex === displayStuff.selectedHandIndex &&
+                         noteIndex === displayStuff.selectedNoteIndex;
         const setNote = (e, x) => {
             e.preventDefault();
-            displayStuff.setSelected(this.props.partIndex, this.props.phraseIndex, this.props.handIndex, this.props.noteIndex);
-            currentPiece.setNote(x, this.props.partIndex, this.props.phraseIndex, this.props.handIndex, this.props.noteIndex);
+            displayStuff.setSelected(partIndex, phraseIndex, handIndex, noteIndex);
+            currentPiece.setNote(x, partIndex, phraseIndex, handIndex, noteIndex);
             this.setState({
                 menuIsVisible: false
             });
         };
-        let classes = 'note ';
+        let classes = 'note';
         if (this.state.menuIsVisible) {
-            classes += 'active ';
+            classes += ' active ';
         }
-        if (this.props.part.beatsArray && this.props.part.beatsArray.length > 0 && this.props.part.beatsArray[this.props.phraseIndex][this.props.noteIndex].indexOf(beatStore.beat) >= 0) {
-            classes += this.props.note === ' ' || this.props.note === '·' || this.props.note === ',' ? '' : 'flash ';
+        if (part.beatsArray && part.beatsArray.length > 0 && part.beatsArray[phraseIndex][noteIndex].indexOf(beatStore.beat) >= 0) {
+            classes += note === ' ' || note === '·' || note === ',' ? '' : ' flash ';
         }
         return (
             <div>
@@ -118,7 +120,7 @@ class Note extends React.Component {
                     onKeyDown={this.handleKeyDown}
                     onKeyPress={this.handleKeyPress}
                 >
-                    {this.props.note}
+                    {note}
                 </div>
                 <div>
                     {this.state.menuIsVisible &&
