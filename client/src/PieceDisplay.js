@@ -8,30 +8,40 @@ class PieceDisplay extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            svgHeight: 0,
-            svgWidth: 0
+            svgTop: 0,
+            svgRight: 0,
+            svgBottom: 0,
+            svgLeft: 0
         };
     }
     componentDidMount() {
-        const svgWidth = this.svgElement.clientWidth;
-        const svgHeight = this.svgElement.clientHeight;
-        this.setState({ svgWidth, svgHeight })
-        this.svgLeft = 40;
+        this.updateSvgRect();
+        window.addEventListener('resize', this.updateSvgRect);
     }
-    t2x = (t) => t * (this.state.svgWidth - 80) + 40; // t in [0..1]
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateSvgRect);
+    }
+    updateSvgRect = () => {
+        const { top, right, bottom, left } = this.svgElement.getBoundingClientRect();
+        this.setState({ 
+            svgTop: top,
+            svgRight: right,
+            svgBottom: bottom,
+            svgLeft: left
+        });
+    }
+    t2x = (t) => t * (this.state.svgRight - this.state.svgLeft - 80) + 40; // t in [0..1]
     f2y = (f) => 80 - f * 40; // t in [0..1]
-    x2t = (x) => (x - 40) / (this.state.svgWidth - 80);
+    x2t = (x) => (x - 40) / (this.state.svgRight - this.state.svgLeft - 80);
     y2f = (y) => (this.svgTop - y + 80) / 40;
 
     handleClick = (e) => {
-        this.svgTop = this.svgElement.getBoundingClientRect().top;
         const t = this.x2t(e.clientX);
         if (0 <= t && t <= 1) {
             beatStore.realBeat = t * this.totalBeats;
         }
     }
     handleLineClick = (e) => {
-        this.svgTop = this.svgElement.getBoundingClientRect().top;
         const tempoPoints = currentPiece.tempoPoints.slice();
         tempoPoints.push({ t: this.x2t(e.clientX), f: this.y2f(e.clientY) });
         tempoPoints.sort((a, b) => a.t - b.t);
