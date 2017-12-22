@@ -77,6 +77,8 @@ class ManagePhrasesDialog extends React.Component {
             });
         }
         const deleet = (i) => {
+            currentPiece.phrasePlaylist = 
+                currentPiece.phrasePlaylist.filter(id => id !== currentPiece.phraseInfos[i].id);
             currentPiece.phraseInfos.splice(i, 1);                // remove ith phraseInfo
             currentPiece.parts.forEach(part => {
                 part.phrases.splice(i, 1);                      // remove ith phrase
