@@ -2,6 +2,7 @@ import React from 'react';
 import { currentPiece } from './stores/piecesStore';
 import { observer } from 'mobx-react';
 import Boo from './Boo';
+import FlipMove from 'react-flip-move';
 
 @observer
 class ManagePhrasesDialog extends React.Component {
@@ -130,29 +131,31 @@ class ManagePhrasesDialog extends React.Component {
                     <input type="number" onChange={this.handleChange} name="length" value={this.state.length} style={{ width: '20%' }}/>
                     <button onClick={this.handleClick} name="add">Add</button>
                     <div className="dialog-contents">
-                        {currentPiece.phraseInfos.map((phrase, phraseIndex) =>
-                            <div key={phraseIndex}>
-                                <button onClick={() => moveUp(phraseIndex)}>▲</button>
-                                <button onClick={() => moveDown(phraseIndex)}>▼</button>
-                                <button onClick={() => deleet(phraseIndex)}>❌</button> {/* ×❌❎*/}
-                                {phraseIndex === this.state.editPhraseIndex ? (
-                                    <input
-                                        onBlur={handleBlur}
-                                        onChange={handleEdit} value={phrase.name}
-                                        ref={x => x && x.focus()}
-                                    />
-                                ) : (
-                                    <span onClick={() => edit(phraseIndex)}>
-                                        {phrase.name}
-                                    </span>
-                                )}
-                                (
-                                    <span>{phrase.length}</span>
-                                    <span onClick={() => lengthen(phraseIndex)}>+</span>
-                                    <span onClick={() => shorten(phraseIndex)}>-</span>
-                                )
-                            </div>
-                        )}
+                        <FlipMove>                            
+                            {currentPiece.phraseInfos.map((phrase, phraseIndex) =>
+                                <div key={phrase.id}>
+                                    <button onClick={() => moveUp(phraseIndex)}>▲</button>
+                                    <button onClick={() => moveDown(phraseIndex)}>▼</button>
+                                    <button onClick={() => deleet(phraseIndex)}>❌</button> {/* ×❌❎*/}
+                                    {phraseIndex === this.state.editPhraseIndex ? (
+                                        <input
+                                            onBlur={handleBlur}
+                                            onChange={handleEdit} value={phrase.name}
+                                            ref={x => x && x.focus()}
+                                        />
+                                    ) : (
+                                        <span onClick={() => edit(phraseIndex)}>
+                                            {phrase.name}
+                                        </span>
+                                    )}
+                                    (
+                                        <span>{phrase.length}</span>
+                                        <span onClick={() => lengthen(phraseIndex)}>+</span>
+                                        <span onClick={() => shorten(phraseIndex)}>-</span>
+                                    )
+                                </div>
+                            )}
+                        </FlipMove>
                     </div>
                     <div className="dialog-buttonrow">
                         <button className="dialog-button ok" onClick={this.handleClick} name="ok">OK</button>
