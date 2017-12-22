@@ -53,7 +53,6 @@ class PieceDisplay extends React.Component {
         e.stopPropagation();
     }
     handleCircleMouseDown = (e) => {
-        this.svgTop = this.svgElement.getBoundingClientRect().top;
         this.dragging = true;
     }
     handleCircleMouseMove = (e, i) => {
