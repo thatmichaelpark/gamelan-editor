@@ -13,6 +13,8 @@ class PieceDisplay extends React.Component {
             svgBottom: 0,
             svgLeft: 0
         };
+        this.height = 100; // px
+        this.margin = 40; // px on left and right
     }
     componentDidMount() {
         this.updateSvgRect();
@@ -27,13 +29,14 @@ class PieceDisplay extends React.Component {
             svgTop: top,
             svgRight: right,
             svgBottom: bottom,
-            svgLeft: left
+            svgLeft: left,
+            svgWidth: right - left
         });
     }
-    t2x = (t) => t * (this.state.svgRight - this.state.svgLeft - 80) + 40; // t in [0..1]
-    f2y = (f) => 80 - f * 40; // t in [0..1]
-    x2t = (x) => (x - 40) / (this.state.svgRight - this.state.svgLeft - 80);
-    y2f = (y) => (this.state.svgTop - y + 80) / 40;
+    t2x = (t) => t * (this.state.svgWidth - 2 * this.margin) + this.margin; // t in [0..1]
+    f2y = (f) => this.height - f * 0.5 * this.height;
+    x2t = (x) => (x - this.margin) / (this.state.svgWidth - 2 * this.margin);
+    y2f = (y) => (this.state.svgTop - y + this.height) / (this.height * 0.5);
 
     handleClick = (e) => {
         const t = this.x2t(e.clientX);
@@ -95,7 +98,7 @@ class PieceDisplay extends React.Component {
                 style={{
                     position: 'fixed',
                     width: '100%',
-                    height: '100px',
+                    height: `${this.height}px`,
                     bottom: this.props.isVisible ? '100px' : '-100px',
                     transition: 'bottom 0.3s ease-in-out',
                 }}
@@ -103,8 +106,8 @@ class PieceDisplay extends React.Component {
                 <div
                     style={{
                         position: 'absolute',
-                        left: '40px',
-                        right: '40px',
+                        left: `${this.margin}px`,
+                        right: `${this.margin}px`,
                         height: '100%',
                         display: 'flex',
                         flexDirection: 'row',
@@ -119,7 +122,7 @@ class PieceDisplay extends React.Component {
                                 border: '1px solid gray',
                                 background: 'rgb(230, 240, 250)',
                                 width: `${currentPiece.phraseInfos.find(p => p.id === id).length / this.totalBeats * 100}%`,
-                                height: '80px'
+                                height: '100%'
                             }}
                         >
                             {currentPiece.phraseInfos.find(p => p.id === id).name}
@@ -160,12 +163,13 @@ class PieceDisplay extends React.Component {
                         />
                     )}
                     {currentPiece.phrasePlaylist.length !== 0 && this.totalBeats &&
-                        <circle 
-                            cx={this.t2x(beatStore.realBeat / this.totalBeats)} 
-                            cy={90} 
-                            r={10} 
-                            fill='green'
-                            onClick={this.handleCircleClick}
+                        <line 
+                            x1={this.t2x(beatStore.realBeat / this.totalBeats)} 
+                            y1={0}
+                            x2={this.t2x(beatStore.realBeat / this.totalBeats)} 
+                            y2={this.height} 
+                            stroke={'blue'}
+                            strokeWidth={5}
                         />
                     }
                 </svg>
