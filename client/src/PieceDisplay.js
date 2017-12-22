@@ -99,7 +99,7 @@ class PieceDisplay extends React.Component {
                     position: 'fixed',
                     width: '100%',
                     height: `${this.height}px`,
-                    bottom: this.props.isVisible ? '100px' : '-100px',
+                    bottom: this.props.isVisible ? '80px' : '-100px',
                     transition: 'bottom 0.3s ease-in-out',
                 }}
             >
