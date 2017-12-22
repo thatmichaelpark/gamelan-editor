@@ -237,7 +237,7 @@ class PiecesStore {
             // ]
         );
 
-        this.savedPiece = new Piece('', '', [], [], 120, [{t: 0, f: 1}, {t: 1, f: 1}]);
+        this.savedPiece = new Piece('', '', [], [], [], 120, [{t: 0, f: 1}, {t: 1, f: 1}]);
         this.savedPiece.title = this.currentPiece.title;
         this.savedPiece.scale = this.currentPiece.scale;
         this.savedPiece.parts = JSON.parse(JSON.stringify(this.currentPiece.parts.slice(0)));
