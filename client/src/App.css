@@ -239,7 +239,7 @@ label {
     bottom: 0px;
     height: 100px;
     width: 100%;
-    background: rgba(240, 240, 240, 0.9);
+    background: rgb(240, 240, 240);
     transition: bottom 0.3s ease-in-out;
 }
 
@@ -279,10 +279,20 @@ label {
 
 .tempoLine {
 	stroke: pink;
-	strokeWidth: 2;
+	stroke-width: 2;
 }
 
 .tempoLine:hover {
 	stroke: red;
-	strokeWidth: 5;
+	stroke-width: 4;
+}
+
+.tempoCircle {
+	r: 5;
+	fill: lightgreen;
+}
+
+.tempoCircle:hover {
+	r: 10;
+	fill: green;
 }

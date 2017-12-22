@@ -114,7 +114,7 @@ class PieceDisplay extends React.Component {
                             style={{
                                 boxSizing: 'border-box',
                                 border: '1px solid gray',
-                                background: 'rgba(230, 240, 250, 0.9)',
+                                background: 'rgb(230, 240, 250)',
                                 width: `${currentPiece.phraseInfos.find(p => p.id === id).length / this.totalBeats * 100}%`,
                                 height: '80px'
                             }}
@@ -145,11 +145,10 @@ class PieceDisplay extends React.Component {
                     )}
                     {currentPiece.phrasePlaylist.length !== 0 && currentPiece.tempoPoints.map((pt, i) =>
                         <circle
+                            className='tempoCircle'
                             key={i} 
                             cx={this.t2x(pt.t)} 
                             cy={this.f2y(pt.f)}
-                            r={5}
-                            fill='green'
                             onClick={this.handleCircleClick}
                             onMouseDown={this.handleCircleMouseDown}
                             onMouseMove={(e) => this.handleCircleMouseMove(e, i)}
