@@ -33,7 +33,7 @@ class PieceDisplay extends React.Component {
     t2x = (t) => t * (this.state.svgRight - this.state.svgLeft - 80) + 40; // t in [0..1]
     f2y = (f) => 80 - f * 40; // t in [0..1]
     x2t = (x) => (x - 40) / (this.state.svgRight - this.state.svgLeft - 80);
-    y2f = (y) => (this.svgTop - y + 80) / 40;
+    y2f = (y) => (this.state.svgTop - y + 80) / 40;
 
     handleClick = (e) => {
         const t = this.x2t(e.clientX);
@@ -43,6 +43,7 @@ class PieceDisplay extends React.Component {
     }
     handleLineClick = (e) => {
         const tempoPoints = currentPiece.tempoPoints.slice();
+
         tempoPoints.push({ t: this.x2t(e.clientX), f: this.y2f(e.clientY) });
         tempoPoints.sort((a, b) => a.t - b.t);
         currentPiece.tempoPoints.replace(tempoPoints);
