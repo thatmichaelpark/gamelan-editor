@@ -2,6 +2,7 @@ import React from 'react';
 import gamelansStore from './stores/gamelansStore';
 import { currentPiece } from './stores/piecesStore';
 import audioContext from './audioContext';
+import FlipMove from 'react-flip-move';
 
 class AddPartDialog extends React.Component {
     constructor(props) {
@@ -73,14 +74,16 @@ class AddPartDialog extends React.Component {
                 <div className="dialog dialog-large">
                     <h1>Manage Parts</h1>
                     <div className="dialog-contents">
-                        {currentPiece.parts.map((part, partIndex) =>
-                            <div key={partIndex}>
-                                <button onClick={() => moveUp(partIndex)}>▲</button>
-                                <button onClick={() => moveDown(partIndex)}>▼</button>
-                                <button onClick={() => deleet(partIndex)}>❌</button> {/* ×❌❎*/}
-                                {part.instrument}
-                            </div>
-                        )}
+                        <FlipMove>
+                            {currentPiece.parts.map((part, partIndex) =>
+                                <div key={part.id}>
+                                    <button onClick={() => moveUp(partIndex)}>▲</button>
+                                    <button onClick={() => moveDown(partIndex)}>▼</button>
+                                    <button onClick={() => deleet(partIndex)}>❌</button> {/* ×❌❎*/}
+                                    {part.instrument}
+                                </div>
+                            )}
+                        </FlipMove>
                     </div>
                     <select onChange={this.handleSelect} value={this.state.instrument}>
                         {this.state.instruments.map((instrument, i) =>
