@@ -253,7 +253,7 @@ label {
 .tempo {
     display: flex;
     height: 80px;
-    width: 100px;
+    width: 200px;
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
