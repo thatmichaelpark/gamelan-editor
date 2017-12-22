@@ -131,7 +131,7 @@ class PieceDisplay extends React.Component {
                     style={{
                     }}
                 >
-                    {currentPiece.tempoPoints.map((pt, i) => 
+                    {currentPiece.phrasePlaylist.length !== 0 && currentPiece.tempoPoints.map((pt, i) => 
                         i !== currentPiece.tempoPoints.length - 1 &&
                         <line 
                             className='tempoLine'
@@ -143,7 +143,7 @@ class PieceDisplay extends React.Component {
                             y2={this.f2y(currentPiece.tempoPoints[i + 1].f)}
                         />
                     )}
-                    {currentPiece.tempoPoints.map((pt, i) =>
+                    {currentPiece.phrasePlaylist.length !== 0 && currentPiece.tempoPoints.map((pt, i) =>
                         <circle
                             key={i} 
                             cx={this.t2x(pt.t)} 
@@ -157,7 +157,7 @@ class PieceDisplay extends React.Component {
                             onMouseOut={this.handleCircleMouseUp}
                         />
                     )}
-                    {this.totalBeats &&
+                    {currentPiece.phrasePlaylist.length !== 0 && this.totalBeats &&
                         <circle 
                             cx={this.t2x(beatStore.realBeat / this.totalBeats)} 
                             cy={90} 
