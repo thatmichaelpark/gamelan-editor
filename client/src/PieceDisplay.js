@@ -54,6 +54,7 @@ class PieceDisplay extends React.Component {
     }
     handleCircleMouseDown = (e) => {
         this.dragging = true;
+        e.stopPropagation();
     }
     handleCircleMouseMove = (e, i) => {
         if (this.dragging) {
@@ -77,9 +78,11 @@ class PieceDisplay extends React.Component {
             points[i] = {t, f};
             currentPiece.tempoPoints.replace(points);
         }
+        e.stopPropagation();
     }
     handleCircleMouseUp = (e) => {
         this.dragging = false;
+        e.stopPropagation();
     }
     render() {
         if (currentPiece.isUnusable) {

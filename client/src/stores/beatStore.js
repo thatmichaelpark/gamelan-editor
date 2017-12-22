@@ -77,10 +77,10 @@ class BeatStore {
         if (this.isPlaying) {
             this.isPlaying = false;
             cancelAnimationFrame(this.rafRequest);
-            this.beat = -1;
-            this.realBeat = 0;
-            this.prevTimestamp = 0;
         }
+        this.beat = -1;
+        this.realBeat = 0;
+        this.prevTimestamp = 0;
     }
 }
 
