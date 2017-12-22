@@ -172,6 +172,7 @@ class Piece {
     }
     playBeat(beat) {
         const notes = this.noteList[beat];
+
         notes.forEach(note => {
             gamelansStore.triggerInstrument(note.part, this.scale, note.note);
         });

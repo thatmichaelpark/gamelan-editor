@@ -4,7 +4,6 @@ import { currentPiece } from './piecesStore';
 function interpolator(pointsList, t) {
     // pointsList: [{t0, f0}, {t1, f1}...] describing a piecewise-linear curve
     // returns f on curve at given t
-
     for (let i = 0; i < pointsList.length - 1; ++i) {
         const t0 = pointsList[i].t;
         const f0 = pointsList[i].f;
@@ -31,26 +30,25 @@ class BeatStore {
     }
 
     tick = (timestamp) => {
-        if (this.prevTimestamp) {
-            const dt = 0.001 * (timestamp - this.prevTimestamp);
+        if (!this.prevTimestamp) {
             this.prevTimestamp = timestamp;
-            
-            const timeScaler = interpolator(currentPiece.tempoPoints, this.realBeat / this.nBeats);
-            
-            this.realBeat += dt * timeScaler * currentPiece.bpm / 60;
-            if (this.realBeat >= this.nBeats) {
-                this.stop();
-                return;
-            }
-            
-            const newBeat = Math.floor(this.realBeat);
-            if (this.beat !== newBeat) {
-                this.beat = newBeat;
-                currentPiece.playBeat(this.beat);
-            }
         }
-        else {
-            this.prevTimestamp = performance.now();
+        const dt = 0.001 * (timestamp - this.prevTimestamp);
+
+        this.prevTimestamp = timestamp;
+        
+        const timeScaler = interpolator(currentPiece.tempoPoints, this.realBeat / this.nBeats);
+
+        this.realBeat += dt * timeScaler * currentPiece.bpm / 60;
+        if (this.realBeat >= this.nBeats) {
+            this.stop();
+            return;
+        }
+        
+        const newBeat = Math.floor(this.realBeat);
+        if (this.beat !== newBeat) {
+            this.beat = newBeat;
+            currentPiece.playBeat(this.beat);
         }
         this.rafRequest = requestAnimationFrame(this.tick);
     }
