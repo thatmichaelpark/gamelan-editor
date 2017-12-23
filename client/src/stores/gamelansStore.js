@@ -9,25 +9,24 @@ class Sample {
     }
 }
 
-function triggerSample(sample, destination) {
+function triggerSample(sample, destination, time) {
     const source = audioContext.createBufferSource();
     source.buffer = sample.buffer;
     source.connect(destination);
-    source.start(audioContext.currentTime);
+    source.start(time);
 }
 
-function triggerDampedSample(sample, destination) {
+function triggerDampedSample(sample, destination, time) {
     const source = audioContext.createBufferSource();
     source.buffer = sample.buffer;
     const dampGain = audioContext.createGain();
     source.connect(dampGain);
     dampGain.connect(destination);
-    source.start(audioContext.currentTime);
+    source.start(time);
     return dampGain;
 }
 
-function damp(dampGain) {
-    const time = audioContext.currentTime;
+function damp(dampGain, time) {
     dampGain.gain.setValueAtTime(1, time);
     dampGain.gain.linearRampToValueAtTime(0, time + 0.05)
 }
@@ -318,14 +317,15 @@ class GamelansStore {
     
     dampGainMap = new Map(); // partId => dampGain
     
-    triggerInstrument(part, scale, note) {
+    triggerInstrument(part, scale, note, time) {
+        time = time || audioContext.currentTime;
         const instrumentName = part.instrument;
         const gamelan = this.gamelans.find(g => g.scale === scale);
         const instrument = gamelan.instruments.find(inst => inst.name === instrumentName);
         if (note === ',') {
             const dampGain = this.dampGainMap.get(part.id);
             if (dampGain) {
-                damp(dampGain);
+                damp(dampGain, time);
                 this.dampGainMap.set(scale + instrumentName); // remove dampGain
             }
         }
@@ -334,13 +334,13 @@ class GamelansStore {
             if (instrument.damping) {
                 const dampGain = this.dampGainMap.get(scale + instrumentName);
                 if (dampGain) {
-                    damp(dampGain);
+                    damp(dampGain, time);
                 }
-                const newDampGain = triggerDampedSample(tone.sample, part.gainNode);
+                const newDampGain = triggerDampedSample(tone.sample, part.gainNode, time);
                 this.dampGainMap.set(part.id, newDampGain);
             }
             else {
-                triggerSample(tone.sample, part.gainNode);
+                triggerSample(tone.sample, part.gainNode, time);
             }
         }
     }
