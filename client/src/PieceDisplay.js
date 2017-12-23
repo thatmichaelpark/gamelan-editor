@@ -42,6 +42,7 @@ class PieceDisplay extends React.Component {
         const t = this.x2t(e.clientX);
         if (0 <= t && t <= 1) {
             beatStore.realBeat = t * this.totalBeats;
+            beatStore.realBeat0 = beatStore.realBeat1 = beatStore.realBeat;
         }
     }
     handleLineClick = (e) => {

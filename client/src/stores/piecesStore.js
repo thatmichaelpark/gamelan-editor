@@ -170,11 +170,11 @@ class Piece {
         // now startBeat is the length of the piece in beats.
         return startBeat;
     }
-    playBeat(beat) {
+    playBeat(beat, time) {
         const notes = this.noteList[beat];
 
         notes.forEach(note => {
-            gamelansStore.triggerInstrument(note.part, this.scale, note.note);
+            gamelansStore.triggerInstrument(note.part, this.scale, note.note, time);
         });
     }
 }
