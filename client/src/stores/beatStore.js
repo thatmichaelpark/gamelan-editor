@@ -16,11 +16,13 @@ function interpolator(pointsList, t) {
     }
 }
 
+const initialTimestamp = -2; // gives requestAnimationFrame a few frames to warm up
+
 class BeatStore {
     @observable realBeat; // floating-point beat [0..nBeats)
     @observable beat; // integer part of realBeat or -1 if not playing
     @observable nBeats; // length of piece in beats
-    prevTimestamp = 0;
+    prevTimestamp = initialTimestamp;
     rafRequest = 0; // current requestAnimationFrame request
     @observable isPlaying = false;
     
@@ -30,11 +32,15 @@ class BeatStore {
     }
 
     tick = (timestamp) => {
+        if (this.prevTimestamp < 0) {
+            ++this.prevTimestamp;
+            this.rafRequest = requestAnimationFrame(this.tick);
+            return;
+        }
         if (!this.prevTimestamp) {
             this.prevTimestamp = timestamp;
         }
         const dt = 0.001 * (timestamp - this.prevTimestamp);
-
         this.prevTimestamp = timestamp;
         
         const timeScaler = interpolator(currentPiece.tempoPoints, this.realBeat / this.nBeats);
@@ -64,7 +70,7 @@ class BeatStore {
         if (this.isPlaying) {
             this.isPlaying = false;
             cancelAnimationFrame(this.rafRequest);
-            this.prevTimestamp = 0;
+            this.prevTimestamp = initialTimestamp;
         }
         else {
             this.start();
@@ -78,7 +84,7 @@ class BeatStore {
         }
         this.beat = -1;
         this.realBeat = 0;
-        this.prevTimestamp = 0;
+        this.prevTimestamp = initialTimestamp;
     }
 }
 
