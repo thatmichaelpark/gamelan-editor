@@ -100,10 +100,10 @@ class Note extends React.Component {
         };
         let classes = 'note';
         if (this.state.menuIsVisible) {
-            classes += ' active ';
+            classes += ' active';
         }
         if (part.beatsArray && part.beatsArray.length > 0 && part.beatsArray[phraseIndex][noteIndex].indexOf(beatStore.beat) >= 0) {
-            classes += note === ' ' || note === '·' || note === ',' ? '' : ' flash ';
+            classes += note === ' ' || note === '·' || note === ',' ? '' : ' flash';
         }
         return (
             <div>
