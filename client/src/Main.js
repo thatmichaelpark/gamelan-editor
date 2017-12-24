@@ -224,7 +224,7 @@ class Main extends React.Component {
                         title="Piece"
                         menuItems={[
                             { text: 'New', action: () => this.setState({ newDialogIsVisible: true }), disabled: editMode.isPlay},
-                            { text: 'Open', action: () => this.setState({ openDialogIsVisible: true })},
+                            { text: 'Open', action: () => this.setState({ openDialogIsVisible: true }), disabled: beatStore.isPlaying},
                             { text: 'Save', action: this.handleSave, disabled: !(piecesStore.modified && currentPiece.id && currentPiece.userId === account.userId) },
                             { text: 'Save As', action: this.showSaveAsDialog, disabled: editMode.isPlay},
                             { text: 'Manage', action: this.showManagePiecesDialog, disabled: editMode.isPlay},
@@ -257,8 +257,8 @@ class Main extends React.Component {
                         ]}
                     />
                     <div
-                        className={'dropdowntitle' + (editMode.isPlay && !account.isLoggedIn ? ' disabled' : '')}
-                        onClick={this.toggleEditMode}
+                        className={'dropdowntitle' + ((editMode.isPlay && !account.isLoggedIn) || beatStore.isPlaying ? ' disabled' : '')}
+                        onClick={((editMode.isEdit || account.isLoggedIn) && !beatStore.isPlaying) && this.toggleEditMode}
                     >
                         {editMode.isEdit ? 'Play' : 'Edit'}
                     </div>
