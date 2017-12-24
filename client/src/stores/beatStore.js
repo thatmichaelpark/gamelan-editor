@@ -65,18 +65,14 @@ class BeatStore {
         this.realBeat1 = Math.max(this.realBeat0, this.realBeat1); // just in case time went backwards
 
         // for integer beats b in [realBeat0..realBeat1) playBeat(b)
-        for (let b = Math.ceil(this.realBeat0); b < this.realBeat1; ++b) {
+        for (let b = Math.ceil(this.realBeat0); b < this.realBeat1 && b < this.nBeats; ++b) {
             const t = (b - this.realBeat) / timeScaler;
             currentPiece.playBeat(b, audioTime + t);
         }
         
         this.realBeat0 = this.realBeat1;
         this.beat = Math.floor(this.realBeat);
-        // const newBeat = Math.floor(this.realBeat);
-        // if (this.beat !== newBeat) {
-        //     this.beat = newBeat;
-        //     currentPiece.playBeat(this.beat);
-        // }
+
         this.rafRequest = requestAnimationFrame(this.tick);
     }
     
