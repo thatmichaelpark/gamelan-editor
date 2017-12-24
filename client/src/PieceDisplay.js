@@ -151,17 +151,28 @@ class PieceDisplay extends React.Component {
                         />
                     )}
                     {currentPiece.phrasePlaylist.length !== 0 && currentPiece.tempoPoints.map((pt, i) =>
-                        <circle
-                            className='tempoCircle'
-                            key={i} 
-                            cx={this.t2x(pt.t)} 
-                            cy={this.f2y(pt.f)}
-                            onClick={this.handleCircleClick}
-                            onMouseDown={this.handleCircleMouseDown}
-                            onMouseMove={(e) => this.handleCircleMouseMove(e, i)}
-                            onMouseUp={this.handleCircleMouseUp}
-                            onMouseOut={this.handleCircleMouseUp}
-                        />
+                        <g key={i}>
+                            <circle
+                                className='tempoCircle'
+                                cx={this.t2x(pt.t)} 
+                                cy={this.f2y(pt.f)}
+                                onClick={this.handleCircleClick}
+                                onMouseDown={this.handleCircleMouseDown}
+                                onMouseMove={(e) => this.handleCircleMouseMove(e, i)}
+                                onMouseUp={this.handleCircleMouseUp}
+                                onMouseOut={this.handleCircleMouseUp}
+                            />
+                            <text
+                                x={this.t2x(pt.t)} 
+                                y={this.f2y(pt.f)}
+                                fontSize='12px'
+                                dx={-9}
+                                dy={4}
+                                textAnchor='end'
+                            >
+                                {Math.round(pt.f * 100) / 100}
+                            </text>
+                        </g>
                     )}
                     {currentPiece.phrasePlaylist.length !== 0 && this.totalBeats &&
                         <line 
