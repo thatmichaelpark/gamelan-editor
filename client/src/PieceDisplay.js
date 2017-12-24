@@ -67,10 +67,11 @@ class PieceDisplay extends React.Component {
             const points = currentPiece.tempoPoints.slice();
 
             if (i === 0) {
-                t = points[i].t;
+                t = 0;
+                f = 1;
             }
             else if (i === points.length - 1) {
-                t = points[i].t;
+                t = 1;
             }
             else if (points[i].t <= points[i - 1].t) {
                 points.splice(i - 1, 1);
