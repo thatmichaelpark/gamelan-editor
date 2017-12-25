@@ -26,6 +26,12 @@ h1 {
 	margin-left: auto;
 }
 
+.dropdowntitle.center {
+	margin-left: auto;
+	margin-right: auto;
+	/*font-style: italic;*/
+}
+
 .dropdowntitle.active {
 	background: dodgerblue;
 }

@@ -262,14 +262,11 @@ class Main extends React.Component {
                     >
                         {editMode.isEdit ? 'Play' : 'Edit'}
                     </div>
-                    {/* <DropdownMenu
-                        title="Play"
-                        menuItems={[
-                            { text: 'Play', action: this.handlePlay},
-                            { text: 'Pause', action: beatStore.pause},
-                            { text: 'Stop', action: beatStore.stop},
-                        ]}
-                    /> */}
+                    <div className="dropdowntitle center">
+                        <i>{currentPiece.title || 'Untitled'}</i>
+                        &nbsp;({currentPiece.scale})
+                        {piecesStore.modified ? '*' : ''}
+                    </div>
                     {account.isLoggedIn ? (
                         <div
                             className="dropdowntitle pinright"
@@ -294,11 +291,6 @@ class Main extends React.Component {
                         </div>
                     )}
                 </div>
-                <h1>
-                    {currentPiece.title || 'Untitled'}
-                    ({currentPiece.scale})
-                    {piecesStore.modified ? '*' : ''}
-                </h1>
                 <div
                     style={{
                         alignItems: 'center',
