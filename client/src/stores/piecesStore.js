@@ -3,6 +3,7 @@ import gamelansStore from './gamelansStore';
 import axios from 'axios';
 import Boo from '../Boo';
 import audioContext from '../audioContext';
+import beatStore from './beatStore';
 
 class Piece {
     @observable isUnusable;
@@ -327,6 +328,7 @@ class PiecesStore {
         });
     }
     open(id) {
+        beatStore.stop();
         return axios.get(`/api/pieces/${id}`)
         .then(result => {
             this.currentPiece.isUnusable = true;
