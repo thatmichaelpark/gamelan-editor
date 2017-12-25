@@ -178,6 +178,31 @@ class Piece {
             gamelansStore.triggerInstrument(note.part, this.scale, note.note, time);
         });
     }
+    hideBeatsArray() {
+        this.parts.toJSON = function () {
+            // Need to hide beatsArray property inside parts array elements
+            // because we use JSON stringify/parse to determine if anything's
+            // changed (see modified() below) and beatsArray is not a salient change.
+            const result = [];
+            const that = this.slice();
+
+            for (let x of that) {
+                x = JSON.parse(JSON.stringify(x));
+
+                if (!x.instrument) {
+                    continue;
+                }
+                const o = {};
+                for (let prop in x) {
+                    if (prop !== "beatsArray") {
+                        o[prop] = x[prop];
+                    }
+                }
+                result.push(o);
+            }
+            return result;
+        };
+    }
 }
 
 class PiecesStore {
@@ -252,29 +277,7 @@ class PiecesStore {
         this.currentPiece.title = title;
         this.currentPiece.scale = scale;
         this.currentPiece.parts = [];
-        this.currentPiece.parts.toJSON = function () {
-            // Need to hide beatsArray property inside parts array elements
-            // because we use JSON stringify/parse to determine if anything's
-            // changed (see modified() below) and beatsArray is not a salient change.
-            const result = [];
-            const that = this.slice();
-
-            for (let x of that) {
-                x = JSON.parse(JSON.stringify(x));
-
-                if (!x.instrument) {
-                    continue;
-                }
-                const o = {};
-                for (let prop in x) {
-                    if (prop !== "beatsArray") {
-                        o[prop] = x[prop];
-                    }
-                }
-                result.push(o);
-            }
-            return result;
-        };
+        this.currentPiece.hideBeatsArray();
         this.currentPiece.phraseInfos = [];
         this.currentPiece.phrasePlaylist = [];
         this.currentPiece.bpm = 120;
@@ -341,29 +344,7 @@ class PiecesStore {
                 part.gainNode.gain.value = part.level;
             });
             this.currentPiece.parts = result.data.parts;
-            this.currentPiece.parts.toJSON = function () {
-                // Need to hide beatsArray property inside parts array elements
-                // because we use JSON stringify/parse to determine if anything's
-                // changed (see modified() below) and beatsArray is not a salient change.
-                const result = [];
-                const that = this.slice();
-
-                for (let x of that) {
-                    x = JSON.parse(JSON.stringify(x));
-
-                    if (!x.instrument) {
-                        continue;
-                    }
-                    const o = {};
-                    for (let prop in x) {
-                        if (prop !== "beatsArray") {
-                            o[prop] = x[prop];
-                        }
-                    }
-                    result.push(o);
-                }
-                return result;
-            };
+            this.currentPiece.hideBeatsArray();
             this.currentPiece.phraseInfos = result.data.phraseInfos;
             this.currentPiece.id = result.data.id;
             this.currentPiece.userId = result.data.userId;

@@ -35,7 +35,7 @@ class Part extends React.Component {
                 :
             [part.phrases.length ? part.phrases[this.props.phraseIndex] : []];
 
-        return (
+        return part.isVisible && (
             <div>
                 <div className="part">
                     <div className="left">

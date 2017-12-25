@@ -3,7 +3,9 @@ import gamelansStore from './stores/gamelansStore';
 import { currentPiece } from './stores/piecesStore';
 import audioContext from './audioContext';
 import FlipMove from 'react-flip-move';
+import { observer } from 'mobx-react';
 
+@observer
 class AddPartDialog extends React.Component {
     constructor(props) {
         super(props);
@@ -45,6 +47,7 @@ class AddPartDialog extends React.Component {
                 part.gainNode.gain.value = part.level;
             });
             currentPiece.parts = temp;
+            currentPiece.hideBeatsArray();
             this.props.onManageParts();
         }
     }
@@ -81,6 +84,7 @@ class AddPartDialog extends React.Component {
                                     <button onClick={() => moveDown(partIndex)}>▼</button>
                                     <button onClick={() => deleet(partIndex)}>❌</button> {/* ×❌❎*/}
                                     {part.instrument}
+                                    <input type="checkbox" checked={part.isVisible} onChange={() => part.isVisible = !part.isVisible}/>
                                 </div>
                             )}
                         </FlipMove>
