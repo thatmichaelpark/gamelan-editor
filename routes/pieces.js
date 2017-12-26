@@ -99,13 +99,15 @@ router.patch('/pieces/:id', checkAuth, (req, res, next) => {
 });
 
 router.delete('/pieces/:id', checkAuth, (req, res, next) => {
-    if (!req.token.isAdmin) {
-        return next(boom.create(401, 'Not logged in as admin'));
-    }
+    // if (!req.token.isAdmin) {
+    //     return next(boom.create(401, 'Not logged in as admin'));
+    // }
 
     knex('pieces').select('user_id').where('id', req.params.id).first()
-    then((userId) => {
-        if (userId !== req.token.userId) {
+    .then(result => {
+        const ownerId = camelizeKeys(result).userId;
+
+        if (ownerId !== req.token.userId) {
             return next(boom.create(401, 'Not allowed to delete this piece'));
         }
 
@@ -118,8 +120,8 @@ router.delete('/pieces/:id', checkAuth, (req, res, next) => {
 
         return knex('pieces').del().where('id', req.params.id);
     })
-    .then(() => {
-        res.send(piece.id);
+    .then(result => {
+        res.send(`${result} deleted`);
     }).catch((err) => {
         next(err);
     });
