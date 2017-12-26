@@ -50,7 +50,8 @@ class Transport extends React.Component {
                                     fontSize: '10px',
                                     borderRadius: '3px',
                                     padding: '0',
-                                    background: part.isVisible ? 'dodgerblue' : 'lightgray'
+                                    background: part.isVisible ? 'dodgerblue' : 'lightgray',
+                                    color: part.isVisible ? 'white' : ''
                                 }}
                                 onClick={() => part.isVisible = !part.isVisible}
                             >
@@ -64,7 +65,7 @@ class Transport extends React.Component {
                                     fontSize: '10px',
                                     borderRadius: '3px',
                                     padding: '0',
-                                    background: part.isMute ? 'red' : 'lightgray'
+                                    background: part.isMute ? 'pink' : 'lightgray',
                                 }}
                                 onClick={() => this.handleMute(part)}
                             >
@@ -78,7 +79,7 @@ class Transport extends React.Component {
                                     fontSize: '10px',
                                     borderRadius: '3px',
                                     padding: '0',
-                                    background: part.isSolo ? 'green' : 'lightgray'
+                                    background: part.isSolo ? 'lightgreen' : 'lightgray',
                                 }}
                                 onClick={() => this.handleSolo(part)}
                             >

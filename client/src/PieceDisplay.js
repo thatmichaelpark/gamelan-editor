@@ -181,8 +181,8 @@ class PieceDisplay extends React.Component {
                             y1={0}
                             x2={this.t2x(beatStore.realBeat / this.totalBeats)} 
                             y2={this.height} 
-                            stroke={'blue'}
-                            strokeWidth={5}
+                            stroke={'green'}
+                            strokeWidth={4}
                         />
                     }
                 </svg>

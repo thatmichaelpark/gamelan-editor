@@ -286,21 +286,21 @@ label {
 }
 
 .tempoLine {
-	stroke: pink;
+	stroke: lightskyblue;
 	stroke-width: 2;
 }
 
 .tempoLine:hover {
-	stroke: red;
+	stroke: deepskyblue;
 	stroke-width: 4;
 }
 
 .tempoCircle {
 	r: 5;
-	fill: lightgreen;
+	fill: lightskyblue;
 }
 
 .tempoCircle:hover {
 	r: 10;
-	fill: green;
+	fill: deepskyblue;
 }

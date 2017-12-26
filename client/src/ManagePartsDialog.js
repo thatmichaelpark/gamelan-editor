@@ -48,6 +48,7 @@ class AddPartDialog extends React.Component {
             });
             currentPiece.parts = temp;
             currentPiece.hideBeatsArray();
+            currentPiece.checkMuteSolo();
             this.props.onManageParts();
         }
     }
