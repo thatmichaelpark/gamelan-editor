@@ -11,6 +11,20 @@ class Transport extends React.Component {
         part.level = value / 100;
         part.gainNode.gain.value = part.level;
     };
+    handleMute = (part) => {
+        part.isMute = !part.isMute;
+        if (part.isMute) {
+            part.isSolo = false;
+        }
+        currentPiece.checkMuteSolo();
+    }
+    handleSolo = (part) => {
+        part.isSolo = !part.isSolo;
+        if (part.isSolo) {
+            part.isMute = false;
+        }
+        currentPiece.checkMuteSolo();
+    }
     render() {
         return (
             <div className="transport" style={{ bottom: this.props.isVisible ? 0 : '-100px' }}>
@@ -50,9 +64,9 @@ class Transport extends React.Component {
                                     fontSize: '10px',
                                     borderRadius: '3px',
                                     padding: '0',
-                                    background: part.isVisible ? 'dodgerblue' : 'lightgray'
+                                    background: part.isMute ? 'red' : 'lightgray'
                                 }}
-                                onClick={() => part.isVisible = !part.isVisible}
+                                onClick={() => this.handleMute(part)}
                             >
                                 M
                             </button>
@@ -64,9 +78,9 @@ class Transport extends React.Component {
                                     fontSize: '10px',
                                     borderRadius: '3px',
                                     padding: '0',
-                                    background: part.isVisible ? 'dodgerblue' : 'lightgray'
+                                    background: part.isSolo ? 'green' : 'lightgray'
                                 }}
-                                onClick={() => part.isVisible = !part.isVisible}
+                                onClick={() => this.handleSolo(part)}
                             >
                                 S
                             </button>

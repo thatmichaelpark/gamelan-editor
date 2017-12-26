@@ -40,7 +40,9 @@ class Piece {
             phrases: observable([]), 
             beatsArray: [],
             gainNode,
-            level
+            level,
+            isMute: false,
+            isSolo: false
         };
         const nParts = this.parts.push(part);
         const nHands = gamelansStore
@@ -203,6 +205,19 @@ class Piece {
             return result;
         };
     }
+    checkMuteSolo() {
+        const anySolo = this.parts.reduce((acc, part) => acc || part.isSolo, false);
+        if (anySolo) {
+            this.parts.forEach(part => {
+                part.gainNode.gain.value = part.isSolo ? part.level : 0;
+            });
+        }
+        else {
+            this.parts.forEach(part => {
+                part.gainNode.gain.value = part.isMute ? 0 : part.level;
+            });
+        }
+    }
 }
 
 class PiecesStore {
@@ -344,6 +359,7 @@ class PiecesStore {
                 part.gainNode.gain.value = part.level;
             });
             this.currentPiece.parts = result.data.parts;
+            this.currentPiece.checkMuteSolo();
             this.currentPiece.hideBeatsArray();
             this.currentPiece.phraseInfos = result.data.phraseInfos;
             this.currentPiece.id = result.data.id;
