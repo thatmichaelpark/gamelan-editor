@@ -11,10 +11,13 @@ class DeleteButton extends React.Component {
             phase: 0
         };
     }
+    componentWillUnmount() {
+        clearTimeout(this.timer);
+    }
     click = (e) => {
         if (this.state.phase === 0) {
             this.setState({ phase: 1 });
-            setTimeout(() => {
+            this.timer = setTimeout(() => {
                 this.setState({ phase: 0 });
             }, 3333);
         }
