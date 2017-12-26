@@ -84,7 +84,6 @@ class AddPartDialog extends React.Component {
                                     <button onClick={() => moveDown(partIndex)}>▼</button>
                                     <button onClick={() => deleet(partIndex)}>❌</button> {/* ×❌❎*/}
                                     {part.instrument}
-                                    <input type="checkbox" checked={part.isVisible} onChange={() => part.isVisible = !part.isVisible}/>
                                 </div>
                             )}
                         </FlipMove>

@@ -12,11 +12,6 @@ class Transport extends React.Component {
         part.gainNode.gain.value = part.level;
     };
     render() {
-        // const buttonStyle = {
-        //     height: '50px',
-        //     width: '50px',
-        //     borderRadius: '50%'
-        // };
         return (
             <div className="transport" style={{ bottom: this.props.isVisible ? 0 : '-100px' }}>
                 <button onClick={this.props.onPlay} value='play'>play</button>
@@ -29,15 +24,61 @@ class Transport extends React.Component {
                 </div>
                 {currentPiece.parts.map((part, i) =>
                     <div className="level" key={i}>
-                        <div style={{ textAlign: 'center '}}>{part.instrument}</div>
-                        <input 
-                            type="range" 
-                            name={part.instrument} 
-                            min="0" 
-                            max="100" 
-                            value={part.level * 100}
-                            onChange={(e) => this.handleLevelChange(part, e.target.value)}
-                        />
+                        <div className="instrument">
+                            {part.instrument}
+                        </div>
+                        <div className="controls">
+                            <button
+                                style={{
+                                    height: '16px',
+                                    width: '35px',
+                                    margin: '4px 4px',
+                                    fontSize: '10px',
+                                    borderRadius: '3px',
+                                    padding: '0',
+                                    background: part.isVisible ? 'dodgerblue' : 'lightgray'
+                                }}
+                                onClick={() => part.isVisible = !part.isVisible}
+                            >
+                                Show
+                            </button>
+                            <button
+                                style={{
+                                    height: '16px',
+                                    width: '16px',
+                                    margin: '4px 4px',
+                                    fontSize: '10px',
+                                    borderRadius: '3px',
+                                    padding: '0',
+                                    background: part.isVisible ? 'dodgerblue' : 'lightgray'
+                                }}
+                                onClick={() => part.isVisible = !part.isVisible}
+                            >
+                                M
+                            </button>
+                            <button
+                                style={{
+                                    height: '16px',
+                                    width: '16px',
+                                    margin: '4px 4px',
+                                    fontSize: '10px',
+                                    borderRadius: '3px',
+                                    padding: '0',
+                                    background: part.isVisible ? 'dodgerblue' : 'lightgray'
+                                }}
+                                onClick={() => part.isVisible = !part.isVisible}
+                            >
+                                S
+                            </button>
+                            <input 
+                                type="range" 
+                                name={part.instrument} 
+                                min="0" 
+                                max="100" 
+                                value={part.level * 100}
+                                onChange={(e) => this.handleLevelChange(part, e.target.value)}
+                            />
+                        </div>
                     </div>
                 )}
             </div>
