@@ -132,7 +132,7 @@ class ManagePiecesDialog extends React.Component {
                                 // className={ piece.id === this.state.selectedPieceId ? 'selected' : '' }
                                 key={i}
                             >
-                                <DeleteButton onClick={() => deleet()}/>
+                                <DeleteButton onClick={() => deleet(piece.id)}/>
                                 {piece.id === this.state.selectedPieceId ? (
                                     <input
                                         name="tempTitle"
