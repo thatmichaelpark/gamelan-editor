@@ -41,6 +41,7 @@ class Piece {
             beatsArray: [],
             gainNode,
             level,
+            isVisible: true,
             isMute: false,
             isSolo: false
         };
