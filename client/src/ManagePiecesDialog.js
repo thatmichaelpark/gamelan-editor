@@ -78,12 +78,13 @@ class ManagePiecesDialog extends React.Component {
         }
     }
     render() {
-        const rename = (piece) => {
-            this.setState({
-                selectedPieceId: piece.id,
-                tempTitle: piece.title
-            });
-        }
+        // Rename functionality has been disabled (moved to retitleDialog)
+        // const rename = (piece) => {
+        //     this.setState({
+        //         selectedPieceId: piece.id,
+        //         tempTitle: piece.title
+        //     });
+        // }
         const deleet = (id) => {
             piecesStore.delete(id)
             .then(() => {
@@ -145,7 +146,8 @@ class ManagePiecesDialog extends React.Component {
                                         value={this.state.tempTitle}
                                     />
                                 ) : (
-                                    <span onClick={() => rename(piece)}
+                                    <span 
+                                        // onClick={() => rename(piece)}
                                     >
                                         {piece.title}
                                     </span>

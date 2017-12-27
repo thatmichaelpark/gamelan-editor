@@ -8,6 +8,7 @@ import ManagePhrasesDialog from './ManagePhrasesDialog';
 import ManagePhrasePlaylistDialog from './ManagePhrasePlaylistDialog';
 import ManagePiecesDialog from './ManagePiecesDialog';
 import LoginDialog from './LoginDialog';
+import RetitleDialog from './RetitleDialog';
 import './App.css';
 import { currentPiece, piecesStore } from './stores/piecesStore';
 import Part from './Part';
@@ -52,6 +53,7 @@ class Main extends React.Component {
             managePhrasePlaylistDialogIsVisible: false,
             managePiecesDialogIsVisible: false,
             loginDialogIsVisible: false,
+            retitleDialogIsVisible: false
         }
     }
     handleClick = (e) => {
@@ -104,6 +106,9 @@ class Main extends React.Component {
         }
         this.setState({ managePiecesDialogIsVisible: true });
     }
+    showRetitleDialog = () => {
+        this.setState({ retitleDialogIsVisible: true });
+    }
     handlePlay = () => {
         beatStore.nBeats = currentPiece.assignBeats();
         beatStore.start();
@@ -153,6 +158,9 @@ class Main extends React.Component {
     }
     handleManagePieces = () => {
         this.setState({ managePiecesDialogIsVisible: false });
+    }
+    handleRetitle = () => {
+        this.setState({ retitleDialogIsVisible: false });
     }
     handleLogin = () => {
         this.setState({ loginDialogIsVisible: false });
@@ -227,6 +235,7 @@ class Main extends React.Component {
                             { text: 'Open', action: () => this.setState({ openDialogIsVisible: true }), disabled: beatStore.isPlaying},
                             { text: 'Save', action: this.handleSave, disabled: !(piecesStore.modified && currentPiece.id && currentPiece.userId === account.userId) },
                             { text: 'Save As', action: this.showSaveAsDialog, disabled: editMode.isPlay},
+                            { text: 'Retitle', action: this.showRetitleDialog, disabled: editMode.isPlay},
                             { text: 'Manage', action: this.showManagePiecesDialog, disabled: editMode.isPlay},
                         ]}
                     />
@@ -310,6 +319,7 @@ class Main extends React.Component {
                 <ManagePhrasesDialog isVisible={this.state.managePhrasesDialogIsVisible} onManagePhrases={this.handleManagePhrases}/>
                 <ManagePhrasePlaylistDialog isVisible={this.state.managePhrasePlaylistDialogIsVisible} onManagePhrasePlaylist={this.handleManagePhrasePlaylist}/>
                 <ManagePiecesDialog isVisible={this.state.managePiecesDialogIsVisible} onManagePieces={this.handleManagePieces}/>
+                <RetitleDialog isVisible={this.state.retitleDialogIsVisible} onRetitle={this.handleRetitle}/>
                 <LoginDialog isVisible={this.state.loginDialogIsVisible} onLogin={this.handleLogin}/>
                 <InstrumentLoadingProgress/>
             </div>
