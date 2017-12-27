@@ -48,8 +48,8 @@ class ManagePiecesDialog extends React.Component {
         super(props);
         this.state = {
             pieces: [],
-            selectedPieceId: -1,
-            tempTitle: ''
+            // selectedPieceId: -1,
+            // tempTitle: ''
         }
     }
     componentWillReceiveProps(nextProps) {
@@ -58,8 +58,8 @@ class ManagePiecesDialog extends React.Component {
             .then(pieces => {
                 this.setState({
                     pieces: pieces.filter(p => p.userId === account.userId),
-                    selectedPieceId: -1,
-                    tempTitle: ''
+                    // selectedPieceId: -1,
+                    // tempTitle: ''
                 });
             });
         }
@@ -93,35 +93,48 @@ class ManagePiecesDialog extends React.Component {
             .then(pieces => {
                 this.setState({
                     pieces: pieces.filter(p => p.userId === account.userId),
-                    selectedPieceId: -1,
-                    tempTitle: ''
+                    // selectedPieceId: -1,
+                    // tempTitle: ''
                 });
             })
             .catch(Boo.boo);
         }
-        const handleBlur = (piece) => {
-            if (this.state.tempTitle.trim() === '') {
-                Boo.boo({ message: "Title can't be blank"});
-                // this.setState({ tempTitle: piece.title });
-                return;
-            }
-            piece.title = this.state.tempTitle.trim();
-            piecesStore.savePiece({
-                id: piece.id,
-                title: piece.title
-            })
+        const togglePublic = (piece) => {
+            piece.isPublic = !piece.isPublic;
+            piecesStore.savePiece(piece)
             .then(() => {
                 return piecesStore.getPieces();
             })
             .then(pieces => {
                 this.setState({
                     pieces: pieces.filter(p => p.userId === account.userId),
-                    selectedPieceId: -1,
-                    tempTitle: ''
                 });
             })
             .catch(Boo.boo);
         }
+        // const handleBlur = (piece) => {
+        //     if (this.state.tempTitle.trim() === '') {
+        //         Boo.boo({ message: "Title can't be blank"});
+        //         // this.setState({ tempTitle: piece.title });
+        //         return;
+        //     }
+        //     piece.title = this.state.tempTitle.trim();
+        //     piecesStore.savePiece({
+        //         id: piece.id,
+        //         title: piece.title
+        //     })
+        //     .then(() => {
+        //         return piecesStore.getPieces();
+        //     })
+        //     .then(pieces => {
+        //         this.setState({
+        //             pieces: pieces.filter(p => p.userId === account.userId),
+        //             selectedPieceId: -1,
+        //             tempTitle: ''
+        //         });
+        //     })
+        //     .catch(Boo.boo);
+        // }
         const sortedPieces = this.state.pieces ? this.state.pieces.slice(0) : [];
 
         sortedPieces.sort((a, b) => a.title < b.title ? -1 : a.title > b.title ? 1 : 0);
@@ -137,7 +150,8 @@ class ManagePiecesDialog extends React.Component {
                                 key={i}
                             >
                                 <DeleteButton onClick={() => deleet(piece.id)}/>
-                                {piece.id === this.state.selectedPieceId ? (
+                                <input type="checkbox" checked={piece.isPublic} onChange={() => togglePublic(piece)}/>
+                                {/* {piece.id === this.state.selectedPieceId ? (
                                     <input
                                         name="tempTitle"
                                         onBlur={() => handleBlur(piece)}
@@ -147,17 +161,17 @@ class ManagePiecesDialog extends React.Component {
                                     />
                                 ) : (
                                     <span 
-                                        // onClick={() => rename(piece)}
-                                    >
+                                        onClick={() => rename(piece)}
+                                    > */}
                                         {piece.title}
-                                    </span>
-                                )}
+                                    {/* </span>
+                                )} */}
                             </p>
                         )}
                     </div>
                     <div className="dialog-buttonrow">
                         <button className="dialog-button ok" onClick={this.handleClick} name="ok">OK</button>
-                        <button className="dialog-button cancel" onClick={this.handleClick} name="cancel">Cancel</button>
+                        {/* <button className="dialog-button cancel" onClick={this.handleClick} name="cancel">Cancel</button> */}
                     </div>
                 </div>
             </div>

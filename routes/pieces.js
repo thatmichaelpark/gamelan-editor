@@ -58,11 +58,11 @@ router.post('/pieces', checkAuth, (req, res, next) => {
     });
 });
 
-// patch: should ensure that user is piece's owner and that title occurs among the user's pieces at
+// put: should ensure that user is piece's owner and that title occurs among the user's pieces at
 // most one time, in the piece being patched (it might occur 0 times if the patch changes the title)
 
-router.patch('/pieces/:id', checkAuth, (req, res, next) => {
-    const { title, scale, bpm } = req.body.piece;
+router.put('/pieces/:id', checkAuth, (req, res, next) => {
+    const { title, scale, bpm, isPublic } = req.body.piece;
     const parts = JSON.stringify(req.body.piece.parts);
     const phraseInfos = JSON.stringify(req.body.piece.phraseInfos);
     const phrasePlaylist = JSON.stringify(req.body.piece.phrasePlaylist);
@@ -82,13 +82,12 @@ router.patch('/pieces/:id', checkAuth, (req, res, next) => {
         .where('user_id', userId);              // in user's pieces
     })
     .then((ids) => {
-        console.log('ids', ids);
         if (ids.length > 1 || (ids.length === 1 && ids[0].id !== Number(req.params.id))) {
             throw boom.create(400, 'Duplicate title');
         }
 
         return knex('pieces')
-            .update(decamelizeKeys({title, scale, bpm, parts, phraseInfos, phrasePlaylist, tempoPoints}), ['id', 'user_id'])
+            .update(decamelizeKeys({title, scale, bpm, parts, phraseInfos, phrasePlaylist, tempoPoints, isPublic}), ['id', 'user_id'])
             .where('id', req.params.id);
     })
     .then((ids) => {

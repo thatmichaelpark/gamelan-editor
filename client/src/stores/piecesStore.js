@@ -328,7 +328,7 @@ class PiecesStore {
         });
     }
     savePiece(piece) {
-        return axios.patch(`/api/pieces/${piece.id}`, { piece });
+        return axios.put(`/api/pieces/${piece.id}`, { piece });
     }
     save() {
         return this.savePiece(this.currentPiece)
