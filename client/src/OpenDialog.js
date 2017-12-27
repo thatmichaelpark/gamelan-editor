@@ -2,6 +2,7 @@ import React from 'react';
 import { piecesStore } from './stores/piecesStore';
 import usersStore from './stores/usersStore';
 import { observer } from 'mobx-react';
+import account from './stores/accountStore';
 
 @observer
 class OpenDialog extends React.Component {
@@ -46,7 +47,10 @@ class OpenDialog extends React.Component {
         this.handleClick({ target: { name: 'open' } }); // fake click event
     }
     render() {
-        const sortedPieces = this.state.pieces ? this.state.pieces.slice(0) : [];
+        const sortedPieces = this.state.pieces ? 
+            this.state.pieces.filter(piece => account.isLoggedIn ? true : piece.isPublic)
+            :
+            [];
 
         sortedPieces.sort((a, b) => {
             const aName = usersStore.nameById(a.userId);

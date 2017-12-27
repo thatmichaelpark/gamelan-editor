@@ -12,7 +12,7 @@ const boom = require('boom');
 const {checkAuth} = require('./checkAuth');
 
 router.get('/pieces', (req, res, next) => {
-    knex('pieces').select('id', 'title', 'scale', 'user_id')
+    knex('pieces').select('id', 'title', 'scale', 'user_id', 'is_public')
     .then((results) => {
         res.send(camelizeKeys(results));
     }).catch((err) => {
