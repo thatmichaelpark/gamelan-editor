@@ -11,10 +11,17 @@ class PieceDisplay extends React.Component {
             svgTop: 0,
             svgRight: 0,
             svgBottom: 0,
-            svgLeft: 0
+            svgLeft: 0,
+            svgWidth: 0
         };
         this.height = 100; // px
         this.margin = 40; // px on left and right
+    }
+    componentWillReceiveProps(nextProps) {
+        if (!this.props.isVisible && nextProps.isVisible) {
+            this.updateSvgRect();
+            setTimeout(this.updateSvgRect, 300);
+        }
     }
     componentDidMount() {
         this.updateSvgRect();
