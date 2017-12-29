@@ -233,7 +233,7 @@ class Main extends React.Component {
                         menuItems={[
                             { text: 'New', action: () => this.setState({ newDialogIsVisible: true }), disabled: editMode.isPlay},
                             { text: 'Open', action: () => this.setState({ openDialogIsVisible: true }), disabled: beatStore.isPlaying},
-                            { text: 'Save', action: this.handleSave, disabled: !(piecesStore.modified && currentPiece.id && currentPiece.userId === account.userId) },
+                            { text: 'Save', action: this.handleSave, disabled: editMode.isPlay || !(piecesStore.modified && currentPiece.id && currentPiece.userId === account.userId) },
                             { text: 'Save As', action: this.showSaveAsDialog, disabled: editMode.isPlay},
                             { text: 'Retitle', action: this.showRetitleDialog, disabled: editMode.isPlay},
                             { text: 'Manage', action: this.showManagePiecesDialog, disabled: editMode.isPlay},
