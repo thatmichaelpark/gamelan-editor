@@ -79,6 +79,7 @@ class BeatStore {
     start = () => {
         if (!this.isPlaying) {
             this.isPlaying = true;
+            this.nBeats = currentPiece.assignBeats();
             this.prevTimestamp = initialTimestamp;
             this.realBeat0 = this.realBeat1 = this.realBeat;
             this.rafRequest = requestAnimationFrame(this.tick);
