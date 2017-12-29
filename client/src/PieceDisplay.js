@@ -48,7 +48,7 @@ class PieceDisplay extends React.Component {
     handleClick = (e) => {
         const t = this.x2t(e.clientX);
         if (0 <= t && t <= 1) {
-            beatStore.realBeat = t * this.totalBeats;
+            beatStore.realBeat = t * currentPiece.nBeats;
             beatStore.realBeat0 = beatStore.realBeat1 = beatStore.realBeat;
         }
     }
@@ -103,7 +103,6 @@ class PieceDisplay extends React.Component {
         if (currentPiece.isUnusable) {
             return <div></div>;
         }
-        this.totalBeats = currentPiece.phrasePlaylist.reduce((acc, id) => acc + currentPiece.phraseInfos.find(p => p.id === id).length, 0);
 
         return (
             <div
@@ -133,7 +132,7 @@ class PieceDisplay extends React.Component {
                                 boxSizing: 'border-box',
                                 border: '1px solid gray',
                                 background: 'rgb(230, 240, 250)',
-                                width: `${currentPiece.phraseInfos.find(p => p.id === id).length / this.totalBeats * 100}%`,
+                                width: `${currentPiece.phraseInfos.find(p => p.id === id).length / currentPiece.nBeats * 100}%`,
                                 height: '100%'
                             }}
                         >
@@ -185,11 +184,11 @@ class PieceDisplay extends React.Component {
                             </text>
                         </g>
                     )}
-                    {currentPiece.phrasePlaylist.length !== 0 && this.totalBeats &&
+                    {currentPiece.phrasePlaylist.length !== 0 && currentPiece.nBeats &&
                         <line 
-                            x1={this.t2x(beatStore.realBeat / this.totalBeats)} 
+                            x1={this.t2x(beatStore.realBeat / currentPiece.nBeats)} 
                             y1={0}
-                            x2={this.t2x(beatStore.realBeat / this.totalBeats)} 
+                            x2={this.t2x(beatStore.realBeat / currentPiece.nBeats)} 
                             y2={this.height} 
                             stroke={'green'}
                             strokeWidth={4}

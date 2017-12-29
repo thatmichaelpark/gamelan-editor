@@ -23,7 +23,6 @@ const initialTimestamp = -2; // gives requestAnimationFrame a few frames to warm
 class BeatStore {
     @observable realBeat; // floating-point beat [0..nBeats)
     @observable beat; // integer part of realBeat or -1 if not playing
-    @observable nBeats; // length of piece in beats (probably should live on currentPiece)
     prevTimestamp = initialTimestamp;
     rafRequest = 0; // current requestAnimationFrame request
     @observable isPlaying = false;
@@ -53,11 +52,11 @@ class BeatStore {
             console.log(Math.round(dt * 1000), 'ms');;;
         }
         
-        const timeScaler = interpolator(currentPiece.tempoPoints, this.realBeat / this.nBeats)
+        const timeScaler = interpolator(currentPiece.tempoPoints, this.realBeat / currentPiece.nBeats)
                             * currentPiece.bpm / 60;
         // #seconds * timeScaler => #beats
         this.realBeat += dt * timeScaler;
-        if (this.realBeat >= this.nBeats) {
+        if (this.realBeat >= currentPiece.nBeats) {
             this.stop();
             return;
         }
@@ -66,7 +65,7 @@ class BeatStore {
         this.realBeat1 = Math.max(this.realBeat0, this.realBeat1); // just in case time went backwards
 
         // for integer beats b in [realBeat0..realBeat1) playBeat(b)
-        for (let b = Math.ceil(this.realBeat0); b < this.realBeat1 && b < this.nBeats; ++b) {
+        for (let b = Math.ceil(this.realBeat0); b < this.realBeat1 && b < currentPiece.nBeats; ++b) {
             const t = (b - this.realBeat) / timeScaler;
             currentPiece.playBeat(b, audioTime + t);
         }
@@ -80,7 +79,7 @@ class BeatStore {
     start = () => {
         if (!this.isPlaying) {
             this.isPlaying = true;
-            this.nBeats = currentPiece.assignBeats();
+            currentPiece.assignBeats();
             displayStuff.selectedPartIndex = -1; // selected cell was interfering with compact display when playing
             this.prevTimestamp = initialTimestamp;
             this.realBeat0 = this.realBeat1 = this.realBeat;

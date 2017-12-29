@@ -174,6 +174,10 @@ class Piece {
         // now startBeat is the length of the piece in beats.
         return startBeat;
     }
+    @computed
+    get nBeats() {
+        return this.phrasePlaylist.reduce((acc, id) => acc + this.phraseInfos.find(p => p.id === id).length, 0);
+    }
     playBeat(beat, time) {
         const notes = this.noteList[beat];
 
