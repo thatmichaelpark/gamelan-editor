@@ -71,6 +71,9 @@ class PieceDisplay extends React.Component {
         if (this.dragging) {
             let t = this.x2t(e.clientX);
             let f = this.y2f(e.clientY);
+            if (0.98 <= f && f <= 1.02) {
+                f = 1;
+            }
             const points = currentPiece.tempoPoints.slice();
 
             if (i === 0) {
