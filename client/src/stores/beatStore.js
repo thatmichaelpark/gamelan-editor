@@ -1,5 +1,6 @@
 import { observable } from 'mobx';
 import { currentPiece } from './piecesStore';
+import displayStuff from './displayStuff';
 import audioContext from '../audioContext';
 
 function interpolator(pointsList, t) {
@@ -80,6 +81,7 @@ class BeatStore {
         if (!this.isPlaying) {
             this.isPlaying = true;
             this.nBeats = currentPiece.assignBeats();
+            displayStuff.selectedPartIndex = -1; // selected cell was interfering with compact display when playing
             this.prevTimestamp = initialTimestamp;
             this.realBeat0 = this.realBeat1 = this.realBeat;
             this.rafRequest = requestAnimationFrame(this.tick);
