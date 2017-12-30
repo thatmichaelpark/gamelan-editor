@@ -55,23 +55,33 @@ class PieceDisplay extends React.Component {
             this.mouseCircleIndex = e.target.dataset.index;
         }
         else if (this.mouseTag === 'line') {
-            console.log('line');
-            // create new circle
-            // this.mouseCircleIndex = new circle
-            // this.mouseTag = 'circle'
+            let t = this.x2t(e.clientX);
+            let f = this.y2f(e.clientY);
+            this.mouseCircleIndex = (function createNewCircle() {
+                const points = currentPiece.tempoPoints.slice();
+                let newIndex = -1;
+
+                for (let i = 0; i < points.length - 1; ++i) {
+                    if (points[i].t < t && t < points[i + 1].t) {
+                        newIndex = i + 1;
+                        points.splice(newIndex, 0, {t, f});
+                        currentPiece.tempoPoints.replace(points);
+                        break;
+                    }
+                }
+                return newIndex;
+            })();
+            this.mouseTag = this.mouseCircleIndex >= 0 ? 'circle' : '';
         }
         else if (this.mouseTag === 'svg') {
             beatStore.stop();
         }
         else {
-            console.log('???', this.mouseTag); // probably 'text'
             this.mouseTag = '';
         }
-        console.log('mouse down on', this.mouseTag);
     }
     handleMouseMove = (e) => {
         if (this.mouseTag === 'circle') {
-            console.log('dragging', this.mouseTag);
             let i = Number(this.mouseCircleIndex);
             let t = this.x2t(e.clientX);
             let f = this.y2f(e.clientY);
@@ -99,19 +109,14 @@ class PieceDisplay extends React.Component {
             currentPiece.tempoPoints.replace(points);
         }
         else if (this.mouseTag === 'svg') {
-            console.log('dragging', this.mouseTag);
+            // update play position
         }
     }
     handleMouseUp = (e) => {
         if (this.mouseTag === 'svg') {
             // start playing if not already playing
         }
-        console.log('mouse up on', this.mouseTag);
         this.mouseTag = '';
-    }
-    handleMouseLeave = (e) => {
-        console.log('mouse leave on', e.target.tagName, '(', this.mouseTag, ')');
-        this.handleMouseUp(e);
     }
     // handleClick = (e) => {
     //     const t = this.x2t(e.clientX);
@@ -148,7 +153,6 @@ class PieceDisplay extends React.Component {
         if (currentPiece.isUnusable) {
             return <div></div>;
         }
-console.log('render');
         return (
             <div
                 style={{
@@ -191,7 +195,7 @@ console.log('render');
                     onMouseDown={this.handleMouseDown}
                     onMouseMove={this.handleMouseMove}
                     onMouseUp={this.handleMouseUp}
-                    onMouseLeave={this.handleMouseLeave}
+                    onMouseLeave={this.handleMouseUp}
                     ref={svgElement => this.svgElement = svgElement}
                 >
                     {currentPiece.phrasePlaylist.length !== 0 && currentPiece.tempoPoints.map((pt, i) => 
