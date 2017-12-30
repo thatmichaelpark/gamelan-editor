@@ -75,6 +75,7 @@ class PieceDisplay extends React.Component {
         }
         else if (this.mouseTag === 'svg') {
             beatStore.stop();
+            beatStore.setBeat(this.x2t(e.clientX) * currentPiece.nBeats);
         }
         else {
             this.mouseTag = '';
@@ -109,12 +110,12 @@ class PieceDisplay extends React.Component {
             currentPiece.tempoPoints.replace(points);
         }
         else if (this.mouseTag === 'svg') {
-            // update play position
+            beatStore.setBeat(this.x2t(e.clientX) * currentPiece.nBeats);
         }
     }
     handleMouseUp = (e) => {
         if (this.mouseTag === 'svg') {
-            // start playing if not already playing
+            beatStore.start();
         }
         this.mouseTag = '';
     }

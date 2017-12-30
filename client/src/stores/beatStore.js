@@ -105,6 +105,11 @@ class BeatStore {
         this.beat = -1;
         this.realBeat = 0;
     }
+    
+    setBeat = (beat) => {
+        beat = Math.min(Math.max(0, beat), currentPiece.nBeats);
+        this.realBeat = this.realBeat0 = this.realBeat1 = beat;
+    }
 }
 
 export default new BeatStore();
