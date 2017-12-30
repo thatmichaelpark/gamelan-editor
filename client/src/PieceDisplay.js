@@ -16,6 +16,8 @@ class PieceDisplay extends React.Component {
         };
         this.height = 100; // px
         this.margin = 40; // px on left and right
+        this.mouseTag = ''; // tag ('svg', 'line', 'circle') of element being moused
+        this.mouseCircleIndex = -1; // circle being moused (if tag = 'circle')
     }
     componentWillReceiveProps(nextProps) {
         if (!this.props.isVisible && nextProps.isVisible) {
@@ -45,37 +47,39 @@ class PieceDisplay extends React.Component {
     x2t = (x) => (x - this.margin) / (this.state.svgWidth - 2 * this.margin);
     y2f = (y) => (this.state.svgTop - y + this.height) / (this.height * 0.5);
 
-    handleClick = (e) => {
-        const t = this.x2t(e.clientX);
-        if (0 <= t && t <= 1) {
-            beatStore.realBeat = t * currentPiece.nBeats;
-            beatStore.realBeat0 = beatStore.realBeat1 = beatStore.realBeat;
-        }
-    }
-    handleLineClick = (e) => {
-        const tempoPoints = currentPiece.tempoPoints.slice();
+    handleMouseDown = (e) => {
+        e.preventDefault();
 
-        tempoPoints.push({ t: this.x2t(e.clientX), f: this.y2f(e.clientY) });
-        tempoPoints.sort((a, b) => a.t - b.t);
-        currentPiece.tempoPoints.replace(tempoPoints);
-        e.stopPropagation();
+        this.mouseTag = e.target.tagName;
+        if (this.mouseTag === 'circle') {
+            this.mouseCircleIndex = e.target.dataset.index;
+        }
+        else if (this.mouseTag === 'line') {
+            console.log('line');
+            // create new circle
+            // this.mouseCircleIndex = new circle
+            // this.mouseTag = 'circle'
+        }
+        else if (this.mouseTag === 'svg') {
+            beatStore.stop();
+        }
+        else {
+            console.log('???', this.mouseTag); // probably 'text'
+            this.mouseTag = '';
+        }
+        console.log('mouse down on', this.mouseTag);
     }
-    handleCircleClick = (e) => {
-        e.stopPropagation();
-    }
-    handleCircleMouseDown = (e) => {
-        this.dragging = true;
-        e.stopPropagation();
-    }
-    handleCircleMouseMove = (e, i) => {
-        if (this.dragging) {
+    handleMouseMove = (e) => {
+        if (this.mouseTag === 'circle') {
+            console.log('dragging', this.mouseTag);
+            let i = Number(this.mouseCircleIndex);
             let t = this.x2t(e.clientX);
             let f = this.y2f(e.clientY);
             if (0.98 <= f && f <= 1.02) {
                 f = 1;
             }
             const points = currentPiece.tempoPoints.slice();
-
+    
             if (i === 0) {
                 t = 0;
                 f = 1;
@@ -91,19 +95,60 @@ class PieceDisplay extends React.Component {
                 points.splice(i + 1, 1);
             }
             points[i] = {t, f};
+            this.mouseCircleIndex = i;
             currentPiece.tempoPoints.replace(points);
         }
-        e.stopPropagation();
+        else if (this.mouseTag === 'svg') {
+            console.log('dragging', this.mouseTag);
+        }
     }
-    handleCircleMouseUp = (e) => {
-        this.dragging = false;
-        e.stopPropagation();
+    handleMouseUp = (e) => {
+        if (this.mouseTag === 'svg') {
+            // start playing if not already playing
+        }
+        console.log('mouse up on', this.mouseTag);
+        this.mouseTag = '';
     }
+    handleMouseLeave = (e) => {
+        console.log('mouse leave on', e.target.tagName, '(', this.mouseTag, ')');
+        this.handleMouseUp(e);
+    }
+    // handleClick = (e) => {
+    //     const t = this.x2t(e.clientX);
+    //     if (0 <= t && t <= 1) {
+    //         beatStore.realBeat = t * currentPiece.nBeats;
+    //         beatStore.realBeat0 = beatStore.realBeat1 = beatStore.realBeat;
+    //     }
+    // }
+    // handleLineClick = (e) => {
+    //     const tempoPoints = currentPiece.tempoPoints.slice();
+    // 
+    //     tempoPoints.push({ t: this.x2t(e.clientX), f: this.y2f(e.clientY) });
+    //     tempoPoints.sort((a, b) => a.t - b.t);
+    //     currentPiece.tempoPoints.replace(tempoPoints);
+    //     e.stopPropagation();
+    // }
+    // handleCircleClick = (e) => {
+    //     e.stopPropagation();
+    // }
+    // handleCircleMouseDown = (e) => {
+    //     this.dragging = true;
+    //     e.stopPropagation();
+    // }
+    // handleCircleMouseMove = (e, i) => {
+    //     if (this.dragging) {
+    //     }
+    //     e.stopPropagation();
+    // }
+    // handleCircleMouseUp = (e) => {
+    //     this.dragging = false;
+    //     e.stopPropagation();
+    // }
     render() {
         if (currentPiece.isUnusable) {
             return <div></div>;
         }
-
+console.log('render');
         return (
             <div
                 style={{
@@ -143,17 +188,17 @@ class PieceDisplay extends React.Component {
                 <svg
                     width='100%'
                     height='100%'
-                    onClick={this.handleClick}
+                    onMouseDown={this.handleMouseDown}
+                    onMouseMove={this.handleMouseMove}
+                    onMouseUp={this.handleMouseUp}
+                    onMouseLeave={this.handleMouseLeave}
                     ref={svgElement => this.svgElement = svgElement}
-                    style={{
-                    }}
                 >
                     {currentPiece.phrasePlaylist.length !== 0 && currentPiece.tempoPoints.map((pt, i) => 
                         i !== currentPiece.tempoPoints.length - 1 &&
                         <line 
                             className='tempoLine'
                             key={i} 
-                            onClick={this.handleLineClick}
                             x1={this.t2x(pt.t)} 
                             y1={this.f2y(pt.f)} 
                             x2={this.t2x(currentPiece.tempoPoints[i + 1].t)} 
@@ -166,11 +211,7 @@ class PieceDisplay extends React.Component {
                                 className='tempoCircle'
                                 cx={this.t2x(pt.t)} 
                                 cy={this.f2y(pt.f)}
-                                onClick={this.handleCircleClick}
-                                onMouseDown={this.handleCircleMouseDown}
-                                onMouseMove={(e) => this.handleCircleMouseMove(e, i)}
-                                onMouseUp={this.handleCircleMouseUp}
-                                onMouseOut={this.handleCircleMouseUp}
+                                data-index={i}
                             />
                             <text
                                 x={this.t2x(pt.t)} 
