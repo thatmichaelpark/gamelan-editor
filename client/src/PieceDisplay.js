@@ -55,23 +55,28 @@ class PieceDisplay extends React.Component {
             this.mouseCircleIndex = e.target.dataset.index;
         }
         else if (this.mouseTag === 'line') {
-            let t = this.x2t(e.clientX);
-            let f = this.y2f(e.clientY);
-            this.mouseCircleIndex = (function createNewCircle() {
-                const points = currentPiece.tempoPoints.slice();
-                let newIndex = -1;
+            if (e.target.dataset.linetype === 'tempoLine') {
+                let t = this.x2t(e.clientX);
+                let f = this.y2f(e.clientY);
+                this.mouseCircleIndex = (function createNewCircle() {
+                    const points = currentPiece.tempoPoints.slice();
+                    let newIndex = -1;
 
-                for (let i = 0; i < points.length - 1; ++i) {
-                    if (points[i].t < t && t < points[i + 1].t) {
-                        newIndex = i + 1;
-                        points.splice(newIndex, 0, {t, f});
-                        currentPiece.tempoPoints.replace(points);
-                        break;
+                    for (let i = 0; i < points.length - 1; ++i) {
+                        if (points[i].t < t && t < points[i + 1].t) {
+                            newIndex = i + 1;
+                            points.splice(newIndex, 0, {t, f});
+                            currentPiece.tempoPoints.replace(points);
+                            break;
+                        }
                     }
-                }
-                return newIndex;
-            })();
-            this.mouseTag = this.mouseCircleIndex >= 0 ? 'circle' : '';
+                    return newIndex;
+                })();
+                this.mouseTag = this.mouseCircleIndex >= 0 ? 'circle' : '';
+            }
+            else {
+                this.mouseTag = 'svg';
+            }
         }
         else if (this.mouseTag === 'svg') {
             beatStore.stop();
@@ -119,37 +124,6 @@ class PieceDisplay extends React.Component {
         }
         this.mouseTag = '';
     }
-    // handleClick = (e) => {
-    //     const t = this.x2t(e.clientX);
-    //     if (0 <= t && t <= 1) {
-    //         beatStore.realBeat = t * currentPiece.nBeats;
-    //         beatStore.realBeat0 = beatStore.realBeat1 = beatStore.realBeat;
-    //     }
-    // }
-    // handleLineClick = (e) => {
-    //     const tempoPoints = currentPiece.tempoPoints.slice();
-    // 
-    //     tempoPoints.push({ t: this.x2t(e.clientX), f: this.y2f(e.clientY) });
-    //     tempoPoints.sort((a, b) => a.t - b.t);
-    //     currentPiece.tempoPoints.replace(tempoPoints);
-    //     e.stopPropagation();
-    // }
-    // handleCircleClick = (e) => {
-    //     e.stopPropagation();
-    // }
-    // handleCircleMouseDown = (e) => {
-    //     this.dragging = true;
-    //     e.stopPropagation();
-    // }
-    // handleCircleMouseMove = (e, i) => {
-    //     if (this.dragging) {
-    //     }
-    //     e.stopPropagation();
-    // }
-    // handleCircleMouseUp = (e) => {
-    //     this.dragging = false;
-    //     e.stopPropagation();
-    // }
     render() {
         if (currentPiece.isUnusable) {
             return <div></div>;
@@ -203,6 +177,7 @@ class PieceDisplay extends React.Component {
                         i !== currentPiece.tempoPoints.length - 1 &&
                         <line 
                             className='tempoLine'
+                            data-linetype='tempoLine'
                             key={i} 
                             x1={this.t2x(pt.t)} 
                             y1={this.f2y(pt.f)} 
@@ -232,6 +207,7 @@ class PieceDisplay extends React.Component {
                     )}
                     {currentPiece.phrasePlaylist.length !== 0 && currentPiece.nBeats &&
                         <line 
+                            data-linetype='playPosition'
                             x1={this.t2x(beatStore.realBeat / currentPiece.nBeats)} 
                             y1={0}
                             x2={this.t2x(beatStore.realBeat / currentPiece.nBeats)} 
