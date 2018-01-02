@@ -86,18 +86,11 @@ class GamelansStore {
                 ]
             },
             {
-                name: 'Gong ageng',
+                name: 'Gong',
                 nHands: 1,
                 damping: false,
                 tones: [
-                    { pitch: 'G', sample: null, filename: 'pelog/gong/gong pelog.mp3' }
-                ]
-            },
-            {
-                name: 'Gong suwuk',
-                nHands: 1,
-                damping: false,
-                tones: [
+                    { pitch: 'G', sample: null, filename: 'pelog/gong/gong pelog.mp3' },
                     { pitch: 'S', sample: null, filename: 'pelog/gong/gong suwuk p2.mp3' }
                 ]
             },
@@ -203,18 +196,11 @@ class GamelansStore {
                 ]
             },
             {
-                name: 'Gong ageng',
+                name: 'Gong',
                 nHands: 1,
                 damping: false,
                 tones: [
-                    { pitch: 'G', sample: null, filename: 'slendro/gong/gong ageng slendro.mp3' }
-                ]
-            },
-            {
-                name: 'Gong suwuk',
-                nHands: 1,
-                damping: false,
-                tones: [
+                    { pitch: 'G', sample: null, filename: 'slendro/gong/gong ageng slendro.mp3' },
                     { pitch: 'S', sample: null, filename: 'slendro/gong/gong suwuk s1.mp3' }
                 ]
             },
