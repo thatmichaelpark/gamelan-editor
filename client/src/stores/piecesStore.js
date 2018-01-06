@@ -358,7 +358,7 @@ class PiecesStore {
             this.currentPiece.title = result.data.title;
             this.currentPiece.scale = result.data.scale;
             result.data.parts.forEach(part => {
-                if (part.instrument === 'Gong Ageng') {
+                if (part.instrument === 'Gong ageng') {
                     part.instrument = 'Gong'; // HACK
                 }
                 part.beatsArray = [];
