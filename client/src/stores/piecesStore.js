@@ -358,6 +358,9 @@ class PiecesStore {
             this.currentPiece.title = result.data.title;
             this.currentPiece.scale = result.data.scale;
             result.data.parts.forEach(part => {
+                if (part.instrument === 'Gong ageng') {
+                    part.instrument = 'Gong'; // HACK
+                }
                 part.beatsArray = [];
                 part.gainNode = audioContext.createGain();
                 part.gainNode.connect(audioContext.destination);
@@ -382,11 +385,6 @@ class PiecesStore {
             this.savedPiece.phraseInfos = JSON.parse(JSON.stringify(this.currentPiece.phraseInfos));
             this.savedPiece.phrasePlaylist = JSON.parse(JSON.stringify(this.currentPiece.phrasePlaylist));
             this.savedPiece.tempoPoints = JSON.parse(JSON.stringify(this.currentPiece.tempoPoints));
-            this.currentPiece.parts.forEach(part => {
-                if (part.instrument === 'Gong ageng') {
-                    part.instrument = 'Gong'; // HACK
-                }
-            });
             this.currentPiece.loadInstruments();
         });
     }
