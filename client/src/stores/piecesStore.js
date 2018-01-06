@@ -386,7 +386,7 @@ class PiecesStore {
                 if (part.instrument === 'Gong ageng') {
                     part.instrument = 'Gong'; // HACK
                 }
-            }
+            });
             this.currentPiece.loadInstruments();
         });
     }
