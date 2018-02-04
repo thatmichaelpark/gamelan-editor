@@ -34,7 +34,14 @@ class Transport extends React.Component {
                 <div className="tempo">
                     <div style={{ fontSize: '50%' }}>Tempo</div>
                     <div>{currentPiece.bpm}</div>
-                    <input type="range" min="40" max="300" style={{ width: '180px' }} value={currentPiece.bpm} onChange={this.handleBpmChange}/>
+                    <input 
+                      max="600" 
+                      min="40" 
+                      onChange={this.handleBpmChange}
+                      style={{ width: '180px' }} 
+                      type="range" 
+                      value={currentPiece.bpm} 
+                    />
                 </div>
                 {currentPiece.parts.map((part, i) =>
                     <div className="level" key={i}>
