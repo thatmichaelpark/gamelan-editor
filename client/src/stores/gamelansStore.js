@@ -86,6 +86,20 @@ class GamelansStore {
                 ]
             },
             {
+                name: 'Demung',
+                nHands: 1,
+                damping: true,
+                tones: [
+                    { pitch: '1', sample: null, filename: 'pelog/demung/demung p1.mp3' },
+                    { pitch: '2', sample: null, filename: 'pelog/demung/demung p2.mp3' },
+                    { pitch: '3', sample: null, filename: 'pelog/demung/demung p3.mp3' },
+                    { pitch: '4', sample: null, filename: 'pelog/demung/demung p4.mp3' },
+                    { pitch: '5', sample: null, filename: 'pelog/demung/demung p5.mp3' },
+                    { pitch: '6', sample: null, filename: 'pelog/demung/demung p6.mp3' },
+                    { pitch: '7', sample: null, filename: 'pelog/demung/demung p7.mp3' }
+                ]
+            },
+            {
                 name: 'Gong',
                 nHands: 1,
                 damping: false,
@@ -193,6 +207,20 @@ class GamelansStore {
                     { pitch: '6', sample: null, filename: 'slendro/bonang panerus/bonang panerus s6.mp3' },
                     { pitch: '1̇', sample: null, filename: 'slendro/bonang panerus/bonang panerus s hi1.mp3' },
                     { pitch: '2̇', sample: null, filename: 'slendro/bonang panerus/bonang panerus s hi2.mp3' }
+                ]
+            },
+            {
+                name: 'Demung',
+                nHands: 1,
+                damping: true,
+                tones: [
+                    { pitch: '6̣', sample: null, filename: 'slendro/demung/demung s lo6.mp3' },
+                    { pitch: '1', sample: null, filename: 'slendro/demung/demung s1.mp3' },
+                    { pitch: '2', sample: null, filename: 'slendro/demung/demung s2.mp3' },
+                    { pitch: '3', sample: null, filename: 'slendro/demung/demung s3.mp3' },
+                    { pitch: '5', sample: null, filename: 'slendro/demung/demung s5.mp3' },
+                    { pitch: '6', sample: null, filename: 'slendro/demung/demung s6.mp3' },
+                    { pitch: '1̇', sample: null, filename: 'slendro/demung/demung s hi1.mp3' }
                 ]
             },
             {
