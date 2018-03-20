@@ -346,7 +346,7 @@ class GamelansStore {
         else {
             const tone = instrument.tones.find(tone => tone.pitch === note);
             if (instrument.damping) {
-                const dampGain = this.dampGainMap.get(scale + instrumentName);
+                const dampGain = this.dampGainMap.get(part.id);
                 if (dampGain) {
                     damp(dampGain, time);
                 }
