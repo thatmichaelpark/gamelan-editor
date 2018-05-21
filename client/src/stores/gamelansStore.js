@@ -233,6 +233,17 @@ class GamelansStore {
                 ]
             },
             {
+                name: 'Gong+',
+                nHands: 1,
+                damping: false,
+                tones: [
+                    { pitch: 'G', sample: null, filename: 'slendro/gong/gong ageng slendro.mp3' },
+                    { pitch: 't', sample: null, filename: 'slendro/cirebon/ting.mp3' },
+                    { pitch: 'b', sample: null, filename: 'slendro/cirebon/bluk.mp3' },
+                    { pitch: 'P', sample: null, filename: 'slendro/pul/pul s5.mp3' }
+                ]
+            },
+            {
                 name: 'Nong',
                 nHands: 1,
                 damping: false,

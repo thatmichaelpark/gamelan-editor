@@ -2,7 +2,7 @@ import { computed, observable } from 'mobx';
 import { currentPiece } from './piecesStore';
 
 class DisplayStuff {
-    @observable displayMode = 'byPhrases' // byParts | byPhrases | compact
+    @observable displayMode = 'byPhrasefs' // byParts | byPhrases | compact
     @observable displayPhraseIndex = 0; // for compact mode
     @observable selectedPartIndex = 0;
     @observable selectedPhraseIndex = 0;
